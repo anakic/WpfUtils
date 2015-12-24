@@ -1,0 +1,16 @@
+﻿<Window x:Class="Thingie.WPF.Controls.PropertiesEditor.EditObjectDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:pe="clr-namespace:Thingie.WPF.Controls.PropertiesEditor"
+    xmlns:res="clr-namespace:Thingie.WPF.Resources"
+    SizeToContent="Height" Width="500" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ShowInTaskbar="False" Title="{x:Static res:Localizations.Editing}">
+    <StackPanel>
+        <pe:PropertiesEditorUC Target="{Binding}" x:Name="pe"/>
+        <StackPanel HorizontalAlignment="Right" DockPanel.Dock="Bottom" Orientation="Horizontal" Grid.Row="4" Grid.Column="1">
+            <Button Content="{x:Static res:Localizations.Ok}" Margin="0,5" IsDefault="True" x:Name="btnOk" Click="btnOk_Click" MinWidth="75"
+                    Command="{x:Static pe:PropertiesEditorUC.CommittCommand}" CommandTarget="{Binding ElementName=pe, Mode=OneWay}"/>
+            <Button Content="{x:Static res:Localizations.Cancel}" Margin="5" IsCancel="True" x:Name="btnCancel" Click="btnCancel_Click" MinWidth="75"
+                    Command="{x:Static pe:PropertiesEditorUC.CancelCommand}" CommandTarget="{Binding ElementName=pe, Mode=OneWay}"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

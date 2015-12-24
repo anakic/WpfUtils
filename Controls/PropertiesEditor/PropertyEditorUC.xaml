@@ -1,0 +1,197 @@
+﻿<UserControl x:Class="Thingie.WPF.Controls.PropertiesEditor.PropertiesEditorUC"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:pi="clr-namespace:Thingie.WPF.Controls.PropertiesEditor.Proxies"
+    xmlns:ce="clr-namespace:Thingie.WPF.Controls.PropertiesEditor.CustomEditing"
+    xmlns:loc="clr-namespace:Thingie.WPF.Controls.PropertiesEditor"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    xmlns:locctrl="clr-namespace:Thingie.WPF.Controls"
+    xmlns:locconv="clr-namespace:Thingie.WPF.Converters"
+    xmlns:rizwpf="clr-namespace:Thingie.WPF"
+    xmlns:beh="clr-namespace:Thingie.WPF.Behaviors"
+    xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Validation.ErrorTemplate="{x:Null}">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="loc:PropertiesEditorUC.CustomEditCommand" Executed="CommandBinding_Executed"/>
+    </UserControl.CommandBindings>
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="propsCVS" Source="{Binding}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Category"/>
+            </CollectionViewSource.GroupDescriptions>
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Order"/>
+                <scm:SortDescription PropertyName="Category"/>
+                <scm:SortDescription PropertyName="Name"/>
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
+    <Grid Grid.IsSharedSizeScope="True">
+        <Grid.Resources>
+            
+            <!-- 0. container template za property template -->
+            <DataTemplate x:Key="PropertyItemTemplate">
+                <Border x:Name="row" CornerRadius="2,0,0,2" Margin="2,0,0,1" ToolTip="{Binding Description}">
+                    <Grid HorizontalAlignment="Stretch" Margin="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="firstCol"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Border Padding="2,0" Margin="1,2,4,1" x:Name="borderName" CornerRadius="2">
+                            <TextBlock Text="{Binding Name}" Grid.Column="0" VerticalAlignment="Center" x:Name="lblPropertyName"/>
+                        </Border>
+                        <GridSplitter Width="5" HorizontalAlignment="Right" Background="#01000000" Focusable="False"/>
+                        <ContentControl Grid.Column="1" HorizontalAlignment="Stretch" Content="{Binding}" Focusable="False">
+                            <ContentControl.ContentTemplateSelector>
+                                <loc:ProxyTemplateSelector/>
+                            </ContentControl.ContentTemplateSelector>
+                        </ContentControl>
+                    </Grid>
+                </Border>
+                <DataTemplate.Triggers>
+                    <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                        <Setter Property="Background" Value="#15000000" TargetName="row"></Setter>
+                    </Trigger>
+                    <DataTrigger Binding="{Binding ValidationResult.IsValid}" Value="False">
+                        <Setter Property="Background" Value="Red" TargetName="borderName"></Setter>
+                        <Setter Property="Foreground" Value="White" TargetName="lblPropertyName"></Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ValidationResult.IsValid}" Value="False">
+                        <Setter Property="ToolTip" Value="{Binding ValidationResult.ErrorContent}" TargetName="row"></Setter>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+
+
+            <!-- readonly text -->
+            <DataTemplate DataType="{x:Type pi:ReadonlyPropertyProxy}" x:Key="readonlyProxy">
+                <TextBox HorizontalAlignment="Stretch" x:Name="PART_EDIT" IsReadOnly="True" Background="#FFFFE0">
+                    <TextBox.Text>
+                        <Binding Path="Value" ValidatesOnExceptions="True">
+                        </Binding>
+                    </TextBox.Text>
+                </TextBox>
+            </DataTemplate>
+
+            <!-- plain text -->
+            <DataTemplate DataType="{x:Type pi:TextPropertyProxy}" x:Key="textProxy">
+                <TextBox HorizontalAlignment="Stretch" x:Name="PART_EDIT" MaxHeight="100" beh:TextBoxBehaviors.CancelKey="Escape" AcceptsReturn="{Binding AcceptsReturn}" AcceptsTab="{Binding AcceptsTab}" Text="{Binding Value}"/>
+            </DataTemplate>
+
+            <!-- shortcut -->
+            <DataTemplate DataType="{x:Type pi:TextPropertyProxy}" x:Key="shortcutProxy">
+                <locctrl:ShortcutTextbox HorizontalAlignment="Stretch" x:Name="PART_EDIT" Text="{Binding Value}" Rules="{Binding Rules}"/>
+            </DataTemplate>
+
+            <!-- the 4 choice modes -->
+            <!-- 1. choice default mode-->
+            <DataTemplate DataType="{x:Type pi:ChoicePropertyProxy}" x:Key="choiceProxy">
+                <ComboBox DisplayMemberPath="{Binding DisplayMemberPath}" HorizontalAlignment="Stretch" x:Name="PART_EDIT"
+                    ItemsSource="{Binding Values}" SelectedItem="{Binding Value}"/>
+            </DataTemplate>
+            <!-- choice async mode-->
+            <DataTemplate DataType="{x:Type pi:ChoicePropertyProxy}" x:Key="choiceAsyncProxy">
+                <ComboBox DisplayMemberPath="{Binding DisplayMemberPath}" HorizontalAlignment="Stretch" x:Name="PART_EDIT" SelectedItem="{Binding Value}">
+                    <ItemsControl.ItemsSource>
+                        <PriorityBinding>
+                            <Binding Path="Values" IsAsync="True"></Binding>
+                            <Binding>
+                                <Binding.Source>
+                                    <x:Array Type="sys:String">
+                                        Loading...
+                                    </x:Array>
+                                </Binding.Source>
+                            </Binding>
+                        </PriorityBinding>
+                    </ItemsControl.ItemsSource>
+                </ComboBox>
+            </DataTemplate>
+            <!-- choice editable mode -->
+            <DataTemplate DataType="{x:Type pi:ChoicePropertyProxy}" x:Key="choiceEditableProxy">
+                <ComboBox DisplayMemberPath="{Binding DisplayMemberPath}" HorizontalAlignment="Stretch" x:Name="PART_EDIT"
+                    ItemsSource="{Binding Values}" IsEditable="True" Text="{Binding Value}"/>
+            </DataTemplate>
+            <!-- choice editable async mode -->
+            <DataTemplate DataType="{x:Type pi:ChoicePropertyProxy}" x:Key="choiceEditableAsyncProxy">
+                <ComboBox DisplayMemberPath="{Binding DisplayMemberPath}" HorizontalAlignment="Stretch" x:Name="PART_EDIT"
+                    IsEditable="True" Text="{Binding Value}">
+                    <ItemsControl.ItemsSource>
+                        <PriorityBinding>
+                            <Binding Path="Values" IsAsync="True"></Binding>
+                            <Binding>
+                                <Binding.Source>
+                                    <x:Array Type="sys:String">
+                                        Loading...
+                                    </x:Array>
+                                </Binding.Source>
+                            </Binding>
+                        </PriorityBinding>
+                    </ItemsControl.ItemsSource>
+                </ComboBox>
+            </DataTemplate>
+            
+            <!-- browse file -->
+            <DataTemplate DataType="{x:Type pi:BrowseFilePropertyProxy}" x:Key="fileProxy">
+                <locctrl:BrowseFileControl 
+                    CheckFileExists="{Binding ChekFileExists, Mode=OneTime}" 
+                    Path="{Binding Value}" Filter="{Binding Filter}" 
+                    x:Name="PART_EDIT"/>
+            </DataTemplate>
+            
+            <!-- browse folder -->
+            <DataTemplate DataType="{x:Type pi:BrowseFolderPropertyProxy}" x:Key="folderProxy">
+                <locctrl:BrowseFolderControl Path="{Binding Value}" x:Name="PART_EDIT"/>
+            </DataTemplate>
+            
+            <!-- bool -->
+            <DataTemplate DataType="{x:Type pi:BoolPropertyProxy}" x:Key="boolProxy">
+                <CheckBox IsChecked="{Binding Value}" VerticalAlignment="Center" x:Name="PART_EDIT"/>
+            </DataTemplate>
+            
+            <!-- custom -->
+            <DataTemplate DataType="{x:Type pi:CustomPropertyProxy}" x:Key="customProxy">
+                <Grid HorizontalAlignment="Stretch">
+                    <TextBox HorizontalAlignment="Stretch" Padding="0,0,24,0" x:Name="PART_EDIT" beh:TextBoxBehaviors.CancelKey="Escape">
+                        <TextBox.Text>
+                            <Binding Path="Value" ValidatesOnExceptions="True">
+                                <Binding.Converter>
+                                    <locconv:StringTypeConverter/>
+                                </Binding.Converter>
+                            </Binding>
+                        </TextBox.Text>
+                    </TextBox>
+                    <Button Width="{Binding Source={RelativeSource Self}, Path=Height}" MinHeight="10" Content="..." Margin="-25,1,1,1" HorizontalAlignment="Right" Command="loc:PropertiesEditorUC.CustomEditCommand" CommandParameter="{Binding}"/>
+                </Grid>
+            </DataTemplate>
+            
+        </Grid.Resources>
+        <ItemsControl ItemsSource="{Binding Source={StaticResource propsCVS}}" HorizontalContentAlignment="Stretch" ItemTemplate="{StaticResource PropertyItemTemplate}" AlternationCount="2">
+            <ItemsControl.Style>
+                <Style TargetType="{x:Type ItemsControl}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type ItemsControl}">
+                                <Border>
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ItemsControl.Style>
+            <ItemsControl.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate DataType="Group">
+                            <StackPanel Orientation="Horizontal" Background="LightGray" >
+                                <TextBlock Text="{Binding Name}" Foreground="Green" FontWeight="Bold" Margin="5,2"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ItemsControl.GroupStyle>
+        </ItemsControl>
+    </Grid>
+</UserControl>
