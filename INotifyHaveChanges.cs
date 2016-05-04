@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
+﻿using System.ComponentModel;
 
 namespace Thingie.WPF
 {
-    public interface INotifyHaveChanges : INotifyPropertyChanged
+	public interface INotifyHaveChanges : INotifyPropertyChanged
     {
         bool HasChanges { get; }
     }

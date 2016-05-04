@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace Thingie.WPF.Behaviors
 {
-    public class ButtonBehaviors
+	public class ButtonBehaviors
     {
         public static bool GetFocusOnClick(DependencyObject obj)
         {

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Controls;
 using System.Globalization;
 using System.Data.SqlClient;
 
 namespace Thingie.WPF.Validators
 {
-    public class ConnectionStringValidationRule : ValidationRule
+	public class ConnectionStringValidationRule : ValidationRule
     {
         DateTime _lastValidationTime;
         string _lastValidationValue;

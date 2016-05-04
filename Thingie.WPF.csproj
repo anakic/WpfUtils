@@ -91,6 +91,7 @@
     <Compile Include="Behaviors\DataGridBehaviors.cs" />
     <Compile Include="Attributes\ProxyFactoryAttribute.cs" />
     <Compile Include="Behaviors\HyperlinkBehavior.cs" />
+    <Compile Include="Behaviors\TabItemBehavior.cs" />
     <Compile Include="Behaviors\WindowBehaviors.cs" />
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\EditableShortcutAttribute.cs" />
     <Compile Include="Controls\PropertiesEditor\Proxies\ShortcutPropertyProxy.cs" />

@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory.Attributes
 {
-    /// <summary>
-    /// Marks the specified attribute as editable via the specified custom control type.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
+	/// <summary>
+	/// Marks the specified attribute as editable via the specified custom control type.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
     public class EditableCustomAttribute : EditableAttribute
     {
         /// <summary>

@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Markup;
 
 namespace Thingie.WPF.MarkupExtensions
 {
-    public enum MethodNotFoundBehavior
+	public enum MethodNotFoundBehavior
     {
         ThrowException,
         LogToTrace,

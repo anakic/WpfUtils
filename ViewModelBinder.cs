@@ -1,18 +1,17 @@
 ﻿namespace Thingie.WPF
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Reflection;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Controls.Primitives;
-    using System.Windows.Data;
-    using System.Windows.Documents;
-    using System.Windows.Input;
-    using System.Windows.Markup;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Reflection;
+	using System.Windows;
+	using System.Windows.Controls;
+	using System.Windows.Controls.Primitives;
+	using System.Windows.Data;
+	using System.Windows.Documents;
+	using System.Windows.Input;
 
-    public static class ViewModelBinder
+	public static class ViewModelBinder
     {
         private static readonly BooleanToVisibilityConverter _booleanToVisibilityConverter = new BooleanToVisibilityConverter();
 

@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Thingie.WPF.Attributes
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple=false, Inherited=true)]
+	[AttributeUsage(AttributeTargets.Class, AllowMultiple=false, Inherited=true)]
     public class ViewAttribute : Attribute
     {
         Type _typeOfView;

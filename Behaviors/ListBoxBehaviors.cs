@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.ComponentModel;
 using System.Collections.Specialized;
 
 namespace Thingie.WPF.Behaviors
 {
-    public class ListBoxBehaviors
+	public class ListBoxBehaviors
     {
         public static bool GetAutoScrollLastIntoView(DependencyObject obj)
         {

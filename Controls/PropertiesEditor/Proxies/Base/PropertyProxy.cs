@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.ComponentModel;
-using System.Windows.Input;
-using Thingie.WPF.Resources;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.Proxies.Base
 {
-    public class PropertyProxy : ChangeNotifierBase
+	public class PropertyProxy : ChangeNotifierBase
     {
         public int Order { get; set; }
 

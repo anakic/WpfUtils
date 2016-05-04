@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Controls;
 using System.Text.RegularExpressions;
 using System.Collections;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory.Attributes
 {
-    /// <summary>
-    /// Marks the specified property as mandatory. An empty value will be treated as invalid.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
+	/// <summary>
+	/// Marks the specified property as mandatory. An empty value will be treated as invalid.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
     public class RequiredAttribute : ValidationAttributeBase
     {
         public override ValidationResult Validate(object obj)

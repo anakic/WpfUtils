@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Thingie.WPF
+﻿namespace Thingie.WPF
 {
-    public sealed class Progress : ChangeNotifierBase
+	public sealed class Progress : ChangeNotifierBase
     {
         private string _title;
         public string Title

@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Controls;
-using Thingie.WPF.Resources;
 using System.Globalization;
 
 namespace Thingie.WPF.Validators
 {
-    public class TypeValueRule : ValidationRule
+	public class TypeValueRule : ValidationRule
     {
         public Type DestinationType { get; set; }
 

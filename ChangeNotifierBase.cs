@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ComponentModel;
 using System.Linq.Expressions;
 using System.Diagnostics;
@@ -9,7 +6,7 @@ using System.Reflection;
 
 namespace Thingie.WPF
 {
-    [Serializable]
+	[Serializable]
     public class ChangeNotifierBase : INotifyPropertyChanged
     {
         #region INotifyPropertyChanged Members
@@ -34,13 +31,9 @@ namespace Thingie.WPF
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            this.VerifyPropertyName(propertyName);
-
-            if (this.PropertyChanged != null)
-            {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
+			VerifyPropertyName(propertyName);
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 
         [Conditional("DEBUG")]
         [DebuggerStepThrough]

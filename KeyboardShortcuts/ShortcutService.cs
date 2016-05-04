@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -11,7 +10,7 @@ using Thingie.WPF.Attributes;
 
 namespace Thingie.WPF.KeyboardShortcuts
 {
-    public class ShortcutHandle
+	public class ShortcutHandle
     {
         public string Name { get; set; }
         public string Category { get; set; }

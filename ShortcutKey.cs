@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 
 namespace Thingie.WPF
 {
-    //typeconverter for shortcutkey
-    internal class KeyboardShortcutTypeConverter : StringConverter
+	//typeconverter for shortcutkey
+	internal class KeyboardShortcutTypeConverter : StringConverter
     {
         public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
         {

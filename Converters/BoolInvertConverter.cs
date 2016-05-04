@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Data;
 using System.Windows.Markup;
 
 namespace Thingie.WPF.Converters
 {
-    public class BoolInvertConverter : MarkupExtension, IValueConverter
+	public class BoolInvertConverter : MarkupExtension, IValueConverter
     {
         #region IValueConverter Members
 

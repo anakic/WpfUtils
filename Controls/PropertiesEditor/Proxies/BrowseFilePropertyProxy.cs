@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Thingie.WPF.Controls.PropertiesEditor.Proxies.Base;
+﻿using Thingie.WPF.Controls.PropertiesEditor.Proxies.Base;
 using System.Windows.Controls;
 using System.IO;
-using System.Text.RegularExpressions;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.Proxies
 {
-    public class BrowseFilePropertyProxy : EditablePropertyProxy
+	public class BrowseFilePropertyProxy : EditablePropertyProxy
     {
         public bool CheckFileExists { get; set; }
 

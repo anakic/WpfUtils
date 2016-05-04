@@ -1,15 +1,12 @@
 ﻿using Thingie.WPF.Controls.PropertiesEditor.Proxies;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Thingie.WPF.Controls
 {
-    class ShortcutTextbox : TextBox
+	class ShortcutTextbox : TextBox
     {
         public static readonly DependencyProperty RulesProperty = DependencyProperty.Register("Rules", typeof(IShortcutRules), typeof(ShortcutTextbox), new PropertyMetadata(new DefaultShortcutRules()));
         public IShortcutRules Rules

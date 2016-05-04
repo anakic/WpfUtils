@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Collections;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory.Attributes
 {
-    /// <summary>
-    /// Marks the specified property as an editable choice. A combobox style
-    /// editor will be used for editing the property.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
+	/// <summary>
+	/// Marks the specified property as an editable choice. A combobox style
+	/// editor will be used for editing the property.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
     public class EditableChoiceAttribute : EditableAttribute
     {
         public IEnumerable Choices { get; private set; }

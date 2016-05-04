@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows.Media;
 using System.IO;
 using System.Windows.Media.Imaging;
@@ -9,7 +7,7 @@ using System.Reflection;
 
 namespace Thingie.WPF.Attributes
 {
-    public class IconAttribute : Attribute
+	public class IconAttribute : Attribute
     {
         string _iconUri;
         Assembly _assembly;

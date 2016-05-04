@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Thingie.WPF.ViewModels;
 
 namespace Thingie.WPF
 {
-    /// <summary>
-    /// Observable collection of ViewModels that pushes changes to a related collection of models
-    /// </summary>
-    /// <typeparam name="TViewModel">Type of ViewModels in collection</typeparam>
-    /// <typeparam name="TModel">Type of models in underlying collection</typeparam>
-    public class VmCollection<TViewModel, TModel> : ObservableCollection<TViewModel>
+	/// <summary>
+	/// Observable collection of ViewModels that pushes changes to a related collection of models
+	/// </summary>
+	/// <typeparam name="TViewModel">Type of ViewModels in collection</typeparam>
+	/// <typeparam name="TModel">Type of models in underlying collection</typeparam>
+	public class VmCollection<TViewModel, TModel> : ObservableCollection<TViewModel>
         where TViewModel : class
         where TModel : class
     {

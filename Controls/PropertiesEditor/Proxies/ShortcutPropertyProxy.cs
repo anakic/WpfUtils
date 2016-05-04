@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.Proxies
 {
-    //options for how the UI will treat the stroke
-    public enum ShortcutAction
+	//options for how the UI will treat the stroke
+	public enum ShortcutAction
     {
         Accept,
         DeleteContent,

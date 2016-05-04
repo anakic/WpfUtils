@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory.Attributes
 {
-    /// <summary>
-    /// Marks the specified property or class as Viewable in a property grid.
-    /// The property/ies will be displayed as a readonly string (converted by
-    /// using the appropriate converter based on the type of the property) 
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
+	/// <summary>
+	/// Marks the specified property or class as Viewable in a property grid.
+	/// The property/ies will be displayed as a readonly string (converted by
+	/// using the appropriate converter based on the type of the property) 
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
     public class ViewableAttribute : Attribute
     {
         //za naknadnu implementaciju... ako zatreba.

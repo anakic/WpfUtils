@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Markup;
 using System.Windows.Data;
 using System.Text.RegularExpressions;
@@ -9,7 +7,7 @@ using System.ComponentModel;
 
 namespace Thingie.WPF.Converters
 {
-    public class MapConverter : MarkupExtension, IValueConverter
+	public class MapConverter : MarkupExtension, IValueConverter
     {
         public string DefaultString { get; set; }
 

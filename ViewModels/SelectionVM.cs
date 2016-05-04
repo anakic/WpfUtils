@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Thingie.WPF.ViewModels
+﻿namespace Thingie.WPF.ViewModels
 {
-    public sealed class SelectionVM<T> : VMBase<T> where T:class
+	public sealed class SelectionVM<T> : VMBase<T> where T:class
     {
         private bool _IsSelected;
         public bool IsSelected

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Globalization;
 using Thingie.WPF.Controls.PropertiesEditor.Proxies.Base;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.Proxies
 {
-    class ReadonlyPropertyProxy : PropertyProxy
+	class ReadonlyPropertyProxy : PropertyProxy
     {
         public override object Value
         {

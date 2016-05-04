@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Markup;
 using System.Resources;
 using System.Windows.Data;
-using System.Reflection;
 
 namespace Thingie.WPF.Converters
 {
-    public class ResourceLookupConverter : MarkupExtension, IValueConverter
+	public class ResourceLookupConverter : MarkupExtension, IValueConverter
     {
         ResourceManager _resMan;
 

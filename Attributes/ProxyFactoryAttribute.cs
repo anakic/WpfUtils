@@ -1,12 +1,10 @@
 ﻿using Thingie.WPF.Controls.PropertiesEditor;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Thingie.WPF.Attributes
 {
-    public sealed class ProxyFactoryAttribute : Attribute
+	public sealed class ProxyFactoryAttribute : Attribute
     {
         public Type ProxyFactoryType { get; set; }
 

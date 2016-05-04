@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Documents;
 
 namespace Thingie.WPF.Behaviors
 {
-    public static class HyperlinkBehavior
+	public static class HyperlinkBehavior
     {
         public static bool GetLaunchesDefaultBrowser(DependencyObject obj)
         {

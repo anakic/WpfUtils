@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Reflection;
 using Thingie.WPF.Controls.PropertiesEditor.DefaultFactory.Attributes;
 using Thingie.WPF.Controls.PropertiesEditor.Proxies;
 using Thingie.WPF.Resources;
 using Thingie.WPF.Controls.PropertiesEditor.Proxies.Base;
-using Thingie.WPF.Controls.PropertiesEditor.CustomEditing;
 using Thingie.WPF.Attributes;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory
 {
-    /// <summary>
-    /// The default implementation of the IPropertyProxyFactory interface. This implementation
-    /// uses attributes specified (Viewable, Editable, ChoiceEditable...) on types and properties
-    /// to generate the appropriate property proxies. 
-    /// </summary>
-    public class DefaultPropertyItemsFactory : IPropertyProxyFactory
+	/// <summary>
+	/// The default implementation of the IPropertyProxyFactory interface. This implementation
+	/// uses attributes specified (Viewable, Editable, ChoiceEditable...) on types and properties
+	/// to generate the appropriate property proxies. 
+	/// </summary>
+	public class DefaultPropertyItemsFactory : IPropertyProxyFactory
     {
         public virtual IEnumerable<PropertyProxy> CreatePropertyItems(object target)
         {

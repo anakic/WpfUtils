@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 
 namespace Thingie.WPF.Behaviors
 {
-    public class WindowBehaviors
+	public class WindowBehaviors
     {
         public static bool GetCancelOnEsc(DependencyObject obj)
         {

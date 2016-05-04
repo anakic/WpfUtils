@@ -1,12 +1,10 @@
 ﻿namespace Thingie.WPF
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Reflection;
-    using System.Windows.Input;
+	using System;
+	using System.Reflection;
+	using System.Windows.Input;
 
-    public class ReflectiveCommand : ICommand
+	public class ReflectiveCommand : ICommand
     {
         private readonly PropertyInfo _canExecute;
         private readonly MethodInfo _execute;

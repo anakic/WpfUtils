@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Reflection;
 
 namespace Thingie.WPF.Attributes
 {
-    public static class ResxHelperClass
+	public static class ResxHelperClass
     {
         public static string GetKeyFromResx(Type resxClass, string key)
         {

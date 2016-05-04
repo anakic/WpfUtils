@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using Thingie.WPF.Controls.PropertiesEditor;
 using Thingie.WPF.Controls.PropertiesEditor.Proxies;
 using Thingie.WPF.Controls.PropertiesEditor.Proxies.Base;
 
 namespace Thingie.WPF.KeyboardShortcuts
 {
-    internal sealed class ShortcutServiceProxyFactory : IPropertyProxyFactory
+	internal sealed class ShortcutServiceProxyFactory : IPropertyProxyFactory
     {
         public IEnumerable<PropertyProxy> CreatePropertyItems(object target)
         {

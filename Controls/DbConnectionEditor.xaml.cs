@@ -1,19 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Data.Sql;
 using System.Data;
-using Thingie.WPF.Controls.PropertiesEditor;
 using System.Text.RegularExpressions;
 using System.Data.SqlClient;
 using System.ComponentModel;
@@ -23,10 +14,10 @@ using Thingie.WPF.Controls.PropertiesEditor.CustomEditing;
 
 namespace Thingie.WPF.Controls
 {
-    /// <summary>
-    /// Interaction logic for DbConnectionEditor.xaml
-    /// </summary>
-    public partial class DbConnectionEditor : UserControl, ICustomEditor
+	/// <summary>
+	/// Interaction logic for DbConnectionEditor.xaml
+	/// </summary>
+	public partial class DbConnectionEditor : UserControl, ICustomEditor
     {
         DbConnectionData _connData;
         DbConnectionEditorVM _vm;
@@ -339,9 +330,8 @@ namespace Thingie.WPF.Controls
         {
             string propName = ((propFunc.Body as MemberExpression).Member as PropertyInfo).Name;
 
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propName));
-        }
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
+		}
 
         #endregion
     }

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Data;
 using System.Windows.Markup;
 
 namespace Thingie.WPF.Converters
 {
-    public class SingleItemToListConverter : MarkupExtension, IValueConverter
+	public class SingleItemToListConverter : MarkupExtension, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {

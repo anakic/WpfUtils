@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Thingie.WPF.Controls.PropertiesEditor.CustomEditing;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.Proxies
 {
-    public class CustomPropertyProxy : TextPropertyProxy
+	public class CustomPropertyProxy : TextPropertyProxy
     {
         public ICustomEditor CustomEditorControl
         {

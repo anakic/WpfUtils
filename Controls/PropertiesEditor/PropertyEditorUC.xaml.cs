@@ -1,22 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Reflection;
 using System.ComponentModel;
-using System.Linq.Expressions;
 using Thingie.WPF.Controls.PropertiesEditor.Proxies;
 using Thingie.WPF.Controls.PropertiesEditor.DefaultFactory;
-using Thingie.WPF.Validators;
 using Thingie.WPF.Controls.PropertiesEditor.Proxies.Base;
 using Thingie.WPF.Controls.PropertiesEditor.CustomEditing;
 using System.Globalization;
@@ -24,7 +15,7 @@ using Thingie.WPF.Attributes;
 
 namespace Thingie.WPF.Controls.PropertiesEditor
 {
-    class ProxyTemplateSelector : DataTemplateSelector
+	class ProxyTemplateSelector : DataTemplateSelector
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {

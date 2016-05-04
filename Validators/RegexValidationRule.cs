@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Text.RegularExpressions;
 
 namespace Thingie.WPF.Validators
 {
-    public sealed class RegexValidationRule : ValidationRule
+	public sealed class RegexValidationRule : ValidationRule
     {
         public RegexValidationRule()
         {

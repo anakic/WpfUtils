@@ -1,14 +1,10 @@
 ﻿using Thingie.WPF.Controls;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Documents;
 
 namespace Thingie.WPF.Adorners
 {
-    public class BusyAdorner : Adorner
+	public class BusyAdorner : Adorner
     {
         private static readonly DependencyProperty CtrlAdornerProperty = DependencyProperty.RegisterAttached("CtrlAdorner", typeof(BusyAdorner), typeof(BusyAdorner), new UIPropertyMetadata(null));
         public static readonly DependencyProperty ShowAdornerProperty = DependencyProperty.RegisterAttached("ShowAdorner", typeof(bool), typeof(BusyAdorner), new UIPropertyMetadata(false, OnShowAdornerChanged));

@@ -1,17 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
-using System.Linq.Expressions;
-using System.Reflection;
-using Thingie.WPF.Resources;
 using System.Windows.Controls;
 using Thingie.WPF.Controls.PropertiesEditor.DefaultFactory.Attributes;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.Proxies.Base
 {
-    public class EditablePropertyProxy : PropertyProxy
+	public class EditablePropertyProxy : PropertyProxy
     {
         object _intermediateValue;
 

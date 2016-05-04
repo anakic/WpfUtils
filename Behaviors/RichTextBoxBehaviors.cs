@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
+﻿using System.IO;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows;
 
 namespace Thingie.WPF.Behaviors
 {
-    public class RichTextBoxBehaviors
+	public class RichTextBoxBehaviors
     {
         public static string GetRTF(DependencyObject obj)
         {
