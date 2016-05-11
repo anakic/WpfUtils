@@ -4,6 +4,7 @@ using System.Windows.Markup;
 using System.Windows.Data;
 using System.Text.RegularExpressions;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace Thingie.WPF.Converters
 {
@@ -72,7 +73,7 @@ namespace Thingie.WPF.Converters
                 if (targetType == typeof(object))
                     return retValAsString;
                 else
-                    return TypeDescriptor.GetConverter(targetType).ConvertFromString(retValAsString);
+                    return TypeDescriptor.GetConverter(targetType).ConvertFromString(null, CultureInfo.InvariantCulture, retValAsString);
             }
         }
 
