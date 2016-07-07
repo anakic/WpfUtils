@@ -91,6 +91,7 @@
     <Compile Include="Behaviors\DataGridBehaviors.cs" />
     <Compile Include="Attributes\ProxyFactoryAttribute.cs" />
     <Compile Include="Behaviors\HyperlinkBehavior.cs" />
+    <Compile Include="Behaviors\VirtualToggleButtonBehavior.cs" />
     <Compile Include="Behaviors\WindowBehaviors.cs" />
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\EditableShortcutAttribute.cs" />
     <Compile Include="Controls\PropertiesEditor\Proxies\ShortcutPropertyProxy.cs" />
@@ -179,6 +180,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Converters\ResourceLookupConverter.cs" />
+    <Compile Include="ViewModels\SelectionHierarchicVM.cs" />
     <Compile Include="ViewModels\SelectionVM.cs" />
     <Compile Include="TreeViewHelper.cs" />
     <Compile Include="Validators\ConnectionStringValidationRule.cs" />
