@@ -23,14 +23,18 @@ namespace Thingie.WPF.Behaviors
         private static void CancelOnEscPropertySet(DependencyObject target, DependencyPropertyChangedEventArgs args)
         {
             Window w = (target as Window);
-            w.KeyUp += (s, e) => {
-                if (e.Key == System.Windows.Input.Key.Escape && Keyboard.Modifiers == ModifierKeys.None)
+            if (w != null)
+            {
+                w.KeyUp += (s, e) =>
                 {
-                    w.DialogResult = false;
-                    w.Close();
-                }
-                    
-            };
+                    if (e.Key == System.Windows.Input.Key.Escape && Keyboard.Modifiers == ModifierKeys.None)
+                    {
+                        w.DialogResult = false;
+                        w.Close();
+                    }
+
+                };
+            }
         }
     }
 }
