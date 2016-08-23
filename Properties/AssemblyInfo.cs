@@ -8,9 +8,9 @@ using System.Windows;
 [assembly: AssemblyTitle("Thingie.WPF")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("ThingieWare")]
+[assembly: AssemblyCompany("Windy Range Software")]
 [assembly: AssemblyProduct("Thingie.WPF")]
-[assembly: AssemblyCopyright("Copyright © 2014 ThingieWare ")]
+[assembly: AssemblyCopyright("Copyright © 2016 Windy Range Software")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
