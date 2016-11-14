@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -10,18 +11,20 @@ using Thingie.WPF.Attributes;
 
 namespace Thingie.WPF.KeyboardShortcuts
 {
-	public class ShortcutHandle
+    public class ShortcutHandle
     {
         public string Name { get; set; }
         public string Category { get; set; }
+
         public Key Key { get; set; }
         public ModifierKeys ModifierKeys { get; set; }
         public FrameworkElement Scope { get; private set; }
+
         public Func<bool> CanExecute { get; private set; }
         public Action Execute { get; private set; }
 
         public ShortcutHandle(string name, Key key)
-            :this (name, key, ModifierKeys.None)
+            : this(name, key, ModifierKeys.None)
         { }
         public ShortcutHandle(string name, Key key, ModifierKeys modifierKeys)
         {
@@ -35,6 +38,7 @@ namespace Thingie.WPF.KeyboardShortcuts
         {
             Claim(execute, null, scope);
         }
+
         public void Claim(Action execute, Func<bool> canExecute, FrameworkElement scope)
         {
             Scope = scope;
@@ -76,47 +80,32 @@ namespace Thingie.WPF.KeyboardShortcuts
 
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            int PreviousStateBit = 31;
-            bool KeyWasAlreadyPressed = false;
-
-            Int64 bitmask = (Int64)Math.Pow(2, (PreviousStateBit - 1));
-
             try
             {
-                if (nCode < 0)
+                if (nCode == HC_ACTION)
                 {
-                    return CallNextHookEx(_hookID, nCode, wParam, lParam);
+                    var shortcutHandle = Shortcuts.FirstOrDefault(sh =>
+                        sh.Execute != null &&
+                        sh.KeyGesture.Key != Key.None &&
+                        Keyboard.IsKeyDown(sh.KeyGesture.Key) &&
+                        Keyboard.Modifiers == sh.KeyGesture.ModifierKeys &&
+                        (sh.Scope == null || IsInScope((DependencyObject)Keyboard.FocusedElement, sh.Scope)));
+
+                    if (shortcutHandle != null)
+                    {
+                        if (shortcutHandle.CanExecute == null || shortcutHandle.CanExecute())
+                            shortcutHandle.Execute();
+                        return (IntPtr)(int)-1;
+                    }
+                    else
+                        return CallNextHookEx(_hookID, nCode, wParam, lParam);
                 }
                 else
-                {
-                    if (nCode == HC_ACTION)
-                    {
-                        Keys keyData = (Keys)wParam;
-                        KeyWasAlreadyPressed = ((Int64)lParam & bitmask) > 0;
-
-                        foreach (ShortcutHandle shortcutHandle in Shortcuts.Where(sh => sh.Execute != null && sh.Key != Key.None))
-                        {
-                            if (Keyboard.IsKeyDown(shortcutHandle.KeyGesture.Key)
-                                && Keyboard.Modifiers == shortcutHandle.KeyGesture.ModifierKeys)
-                            {
-                                bool isInScope = shortcutHandle.Scope == null || IsInScope((DependencyObject)Keyboard.FocusedElement, shortcutHandle.Scope);
-                                if (isInScope)
-                                {
-                                    if (shortcutHandle.CanExecute == null || shortcutHandle.CanExecute())
-                                        shortcutHandle.Execute();
-                                    return (IntPtr)(int)-1;
-                                }
-                            }
-                        }
-                    }
-
                     return CallNextHookEx(_hookID, nCode, wParam, lParam);
-                }
             }
             catch (Exception ex)
             {
-
-                System.Windows.Forms.MessageBox.Show(ex.Message);
+                Trace.WriteLine(ex.Message);
                 return CallNextHookEx(_hookID, nCode, wParam, lParam);
             }
         }
