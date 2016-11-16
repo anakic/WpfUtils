@@ -18,8 +18,8 @@ namespace Thingie.WPF.KeyboardShortcuts
 
         public Key Key { get; set; }
         public ModifierKeys ModifierKeys { get; set; }
-        public FrameworkElement Scope { get; private set; }
 
+        public Func<bool> IsApplicable { get; private set; }
         public Func<bool> CanExecute { get; private set; }
         public Action Execute { get; private set; }
 
@@ -34,16 +34,11 @@ namespace Thingie.WPF.KeyboardShortcuts
             this.Category = "General shortcuts";
         }
 
-        public void Claim(Action execute, FrameworkElement scope)
+        public void Claim(Action execute, Func<bool> isApplicable, Func<bool> canExecute)
         {
-            Claim(execute, null, scope);
-        }
-
-        public void Claim(Action execute, Func<bool> canExecute, FrameworkElement scope)
-        {
-            Scope = scope;
             CanExecute = canExecute;
             Execute = execute;
+            IsApplicable = isApplicable;
         }
 
         //sluzi samo za komunikaciju sa property gridom (da objedini dva property-a u jedan, tako da key i modifier mogu editirati u istom retku u gridu)
@@ -88,13 +83,14 @@ namespace Thingie.WPF.KeyboardShortcuts
                         sh.Execute != null &&
                         sh.KeyGesture.Key != Key.None &&
                         Keyboard.IsKeyDown(sh.KeyGesture.Key) &&
-                        Keyboard.Modifiers == sh.KeyGesture.ModifierKeys &&
-                        (sh.Scope == null || IsInScope((DependencyObject)Keyboard.FocusedElement, sh.Scope)));
+                        Keyboard.Modifiers == sh.KeyGesture.ModifierKeys && 
+                        sh.IsApplicable());
 
                     if (shortcutHandle != null)
                     {
                         if (shortcutHandle.CanExecute == null || shortcutHandle.CanExecute())
                             shortcutHandle.Execute();
+
                         return (IntPtr)(int)-1;
                     }
                     else
@@ -107,21 +103,6 @@ namespace Thingie.WPF.KeyboardShortcuts
             {
                 Trace.WriteLine(ex.Message);
                 return CallNextHookEx(_hookID, nCode, wParam, lParam);
-            }
-        }
-
-        private static bool IsInScope(DependencyObject element, DependencyObject scope)
-        {
-            if (scope == null)
-                return true;
-            else
-            {
-                if (element == null)
-                    return false;
-                else if (element == scope)
-                    return true;
-                else
-                    return IsInScope(VisualTreeHelper.GetParent(element), scope);
             }
         }
 
