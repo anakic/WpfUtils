@@ -90,6 +90,7 @@
     <Compile Include="Adorners\WatermarkAdorner.cs" />
     <Compile Include="Behaviors\DataGridBehaviors.cs" />
     <Compile Include="Attributes\ProxyFactoryAttribute.cs" />
+    <Compile Include="Behaviors\GrayoutImageBehavior.cs" />
     <Compile Include="Behaviors\HyperlinkBehavior.cs" />
     <Compile Include="Behaviors\VirtualToggleButtonBehavior.cs" />
     <Compile Include="Behaviors\WindowBehaviors.cs" />
