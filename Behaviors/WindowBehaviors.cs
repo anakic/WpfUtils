@@ -29,7 +29,14 @@ namespace Thingie.WPF.Behaviors
                 {
                     if (e.Key == System.Windows.Input.Key.Escape && Keyboard.Modifiers == ModifierKeys.None)
                     {
-                        w.DialogResult = false;
+                        try
+                        {
+                            w.DialogResult = false;
+                        }
+                        catch
+                        {
+                            //will fail if modal, but there's no way to determine if it is modal so using try-catch
+                        }
                         w.Close();
                     }
 
