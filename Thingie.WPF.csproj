@@ -153,7 +153,6 @@
     <Compile Include="Controls\PropertiesEditor\CustomEditing\ICustomEditor.cs" />
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\EditableCustomAttribute.cs" />
     <Compile Include="Controls\PropertiesEditor\IPropertyProxyFactory.cs" />
-    <Compile Include="Controls\PropertiesEditor\Proxies\MultiChoicePropertyProxy.cs" />
     <Compile Include="Controls\PropertiesEditor\Proxies\ReadonlyPropertyProxy.cs" />
     <Compile Include="Controls\PropertiesEditor\Proxies\TextPropertyProxy.cs" />
     <Compile Include="Controls\PropertiesEditor\Proxies\Base\PropertyProxy.cs" />
