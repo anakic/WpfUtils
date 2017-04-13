@@ -32,38 +32,38 @@ namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory
             PropertyProxy proxy;
 
             //1. pronadji (ako postoji) relevantni editor atribut na propertyju
-            ViewableAttribute editorAtt = null;
+            ViewableAttribute viewableAtt = null;
             if (property.IsDefined(typeof(ViewableAttribute), true))
-                editorAtt = (ViewableAttribute)property.GetCustomAttributes(typeof(ViewableAttribute), true)[0];
+                viewableAtt = (ViewableAttribute)property.GetCustomAttributes(typeof(ViewableAttribute), true)[0];
 
             //2. odluci kojeg tipa ce bit proxy za property na temelju atributa
-            if (editorAtt != null)
+            if (viewableAtt != null)
             {
-                if (editorAtt is EditableCustomAttribute)
-                    proxy = new CustomPropertyProxy((editorAtt as EditableCustomAttribute).ControlType);
-                else if (editorAtt is EditableTextAttribute)
+                if (viewableAtt is EditableCustomAttribute)
+                    proxy = new CustomPropertyProxy((viewableAtt as EditableCustomAttribute).ControlType);
+                else if (viewableAtt is EditableTextAttribute)
                 {
-                    EditableTextAttribute edTextAtt = editorAtt as EditableTextAttribute;
+                    EditableTextAttribute edTextAtt = viewableAtt as EditableTextAttribute;
                     proxy = new TextPropertyProxy() { Big = edTextAtt.Big, AcceptsReturn = edTextAtt.AcceptsReturn, AcceptsTab = edTextAtt.AcceptsTab };
                 }
-                else if (editorAtt is EditableFilePathAttribute)
+                else if (viewableAtt is EditableFilePathAttribute)
                 {
-                    EditableFilePathAttribute pathAtt = editorAtt as EditableFilePathAttribute;
+                    EditableFilePathAttribute pathAtt = viewableAtt as EditableFilePathAttribute;
                     proxy = new BrowseFilePropertyProxy() { CheckFileExists = pathAtt.CheckExists, Filter = pathAtt.Filter };
                 }
-                else if (editorAtt is EditableFolderPathAttribute)
+                else if (viewableAtt is EditableFolderPathAttribute)
                 {
-                    EditableFolderPathAttribute pathAtt = editorAtt as EditableFolderPathAttribute;
+                    EditableFolderPathAttribute pathAtt = viewableAtt as EditableFolderPathAttribute;
                     proxy = new BrowseFolderPropertyProxy() { CheckFolderExists = pathAtt.CheckExists };
                 }
-                else if (editorAtt is EditableMultiChoiceAttribute)
+                else if (viewableAtt is EditableMultiChoiceAttribute)
                 {
                     throw new NotImplementedException("Radi remake-a ChoicePropertyProxy-a ovo vise ne radi, popraviti kada zatreba!");
                     //proxy = new CustomPropertyProxy(typeof(ListEditor), (editorAtt as EditableChoiceAttribute).GetChoices(target), (editorAtt as EditableChoiceAttribute).DisplayMemberPath);
                 }
-                else if (editorAtt is EditableChoiceAttribute)
+                else if (viewableAtt is EditableChoiceAttribute)
                 {
-                    EditableChoiceAttribute choiceAtt = editorAtt as EditableChoiceAttribute;
+                    EditableChoiceAttribute choiceAtt = viewableAtt as EditableChoiceAttribute;
                     if (choiceAtt.Choices != null)
                         proxy = new ChoicePropertyProxy(choiceAtt.Choices);
                     else if (choiceAtt.ChoicesProperty != null)
@@ -76,15 +76,14 @@ namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory
                     choiceProxy.IsEditable = choiceAtt.IsTextEditable;
                     choiceProxy.IsAsync = choiceAtt.IsAsync;
                 }
-                else if (editorAtt is EditableShortcutAttribute)
+                else if (viewableAtt is EditableShortcutAttribute)
                 {
                     proxy = new ShortcutPropertyProxy();
                 }
-                else if (editorAtt is EditableAttribute)
+                else if (viewableAtt is EditableAttribute)
                     proxy = GetDefaultProxyForProperty(property);
                 else //if (editorAtt is ViewableAttribute)
                     proxy = new ReadonlyPropertyProxy(); ;
-
             }
             else
             {
@@ -114,6 +113,10 @@ namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory
                 proxy.Order = orderAttribute.Order;
             else
                 proxy.Order = int.MaxValue;
+
+            //editability condition
+            if (viewableAtt is EditableAttribute editableAtt && !string.IsNullOrWhiteSpace(editableAtt.When))
+                (proxy as EditablePropertyProxy).SetAvailabilityCondition(editableAtt.When);
 
             return proxy;
         }

@@ -1,26 +1,27 @@
 ﻿using System;
+using System.Reflection;
 using System.Windows.Controls;
 using Thingie.WPF.Controls.PropertiesEditor.DefaultFactory.Attributes;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.Proxies.Base
 {
-	public class EditablePropertyProxy : PropertyProxy
+    public class EditablePropertyProxy : PropertyProxy
     {
         object _intermediateValue;
 
         ValidationResult _ValidationResult = null;
         public ValidationResult ValidationResult
         {
-            get 
+            get
             {
                 if (_ValidationResult == null)
                     _ValidationResult = CheckValidity(Value);
-                return _ValidationResult; 
+                return _ValidationResult;
             }
-            set 
+            set
             {
                 _ValidationResult = value;
-                OnPropertyChanged(() => this.ValidationResult); 
+                OnPropertyChanged(() => this.ValidationResult);
             }
         }
 
@@ -49,7 +50,7 @@ namespace Thingie.WPF.Controls.PropertiesEditor.Proxies.Base
         {
             get
             {
-                object retVal=null;
+                object retVal = null;
                 if (HasUnsavedChanges)
                     retVal = _intermediateValue;
                 else
@@ -58,7 +59,7 @@ namespace Thingie.WPF.Controls.PropertiesEditor.Proxies.Base
                     {
                         retVal = Property.GetValue(Target, null);
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         ValidationResult = new ValidationResult(false, ex.Message);
                     }
@@ -82,15 +83,35 @@ namespace Thingie.WPF.Controls.PropertiesEditor.Proxies.Base
             }
         }
 
+
         protected virtual ValidationResult CheckValidity(object val)
         {
             foreach (ValidationAttributeBase valAttribute in Property.GetCustomAttributes(typeof(ValidationAttributeBase), true))
             {
                 ValidationResult result = valAttribute.Validate(val);
-                if(result.IsValid==false)
+                if (result.IsValid == false)
                     return result;
             }
             return ValidationResult.ValidResult;
+        }
+
+        public bool IsAvailable
+        {
+            get { return _availabilityProperty == null || ((bool)_availabilityProperty.GetValue(Target) == _availabilityValue); }
+        }
+
+
+        bool _availabilityValue = true;
+        PropertyInfo _availabilityProperty;
+        public void SetAvailabilityCondition(string availabilityCondition)
+        {
+            string availabilityPropertyName = availabilityCondition;
+            if (availabilityCondition.StartsWith("!"))
+            {
+                _availabilityValue = false;
+                availabilityPropertyName = availabilityCondition.Substring(1);
+            }
+            _availabilityProperty = Target.GetType().GetProperty(availabilityPropertyName);
         }
 
         public virtual void Commit()
@@ -110,6 +131,13 @@ namespace Thingie.WPF.Controls.PropertiesEditor.Proxies.Base
             ValidationResult = null;
             //javlja da se value promjenio (jer je discardan intermediate val)
             OnPropertyChanged(() => this.Value);
+        }
+
+        protected override void OnTargetPropertyChanged(string property)
+        {
+            base.OnTargetPropertyChanged(property);
+            if (_availabilityProperty != null && property == _availabilityProperty.Name)
+                OnPropertyChanged(nameof(IsAvailable));
         }
     }
 }

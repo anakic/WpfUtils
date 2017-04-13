@@ -9,5 +9,6 @@ namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory.Attributes
 	[AttributeUsage(AttributeTargets.Class|AttributeTargets.Property, AllowMultiple=false)]
     public class EditableAttribute : ViewableAttribute
     {
+        public string When { get; set; }
     }
 }
