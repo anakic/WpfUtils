@@ -27,39 +27,40 @@
     </UserControl.Resources>
     <Grid Grid.IsSharedSizeScope="True">
         <Grid.Resources>
-            
+            <Style TargetType="FrameworkElement" x:Key="disabledControlStyle">
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Opacity" Value="0.4"></Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
             <!-- 0. container template za property template -->
             <DataTemplate x:Key="PropertyItemTemplate">
-                <Border x:Name="row" CornerRadius="2,0,0,2" Margin="2,0,0,1" ToolTip="{Binding Description}" IsEnabled="{Binding IsAvailable}">
-                    <Border.Style>
-                        <Style TargetType="Border">
-                            <Style.Triggers>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Opacity" Value="0.6"></Setter>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Border.Style>
+                <Border x:Name="row" CornerRadius="2,0,0,2" Margin="2,0,0,1">
                     <Grid HorizontalAlignment="Stretch" Margin="2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" SharedSizeGroup="firstCol"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="lastCol"/>
                         </Grid.ColumnDefinitions>
-                        <Border Padding="2,0" Margin="1,2,4,1" x:Name="borderName" CornerRadius="2">
-                            <TextBlock Text="{Binding Name}" Grid.Column="0" VerticalAlignment="Center" x:Name="lblPropertyName"></TextBlock>
+                        <Border Padding="2,0" Margin="1,2,4,1" x:Name="borderName" CornerRadius="2" Style="{StaticResource disabledControlStyle}" IsEnabled="{Binding IsAvailable}">
+                            <TextBlock Text="{Binding Name, Converter={locconv:StringCapitalizationSeparatorConverter}}" Grid.Column="0" VerticalAlignment="Center" x:Name="lblPropertyName"></TextBlock>
                         </Border>
                         <GridSplitter Width="5" HorizontalAlignment="Right" Background="#01000000" Focusable="False"/>
-                        <ContentControl Grid.Column="1" HorizontalAlignment="Stretch" Content="{Binding}" Focusable="False">
-                            <ContentControl.ContentTemplateSelector>
-                                <loc:ProxyTemplateSelector/>
-                            </ContentControl.ContentTemplateSelector>
-                        </ContentControl>
+                        <DockPanel Grid.Column="1" HorizontalAlignment="Stretch">
+                            <ContentControl HorizontalAlignment="Stretch" Content="{Binding}" Focusable="False" IsEnabled="{Binding IsAvailable}" Style="{StaticResource disabledControlStyle}">
+                                <ContentControl.ContentTemplateSelector>
+                                    <loc:ProxyTemplateSelector/>
+                                </ContentControl.ContentTemplateSelector>
+                            </ContentControl>
+                        </DockPanel>
+                        <Image Grid.Column="2" Height="10" Cursor="Help" DockPanel.Dock="Right" Margin="2" RenderOptions.BitmapScalingMode="HighQuality" Source="/Thingie.WPF;component/Resources/help.png" Visibility="{Binding Description, Converter={locconv:MapConverter '_null:Collapsed;_default:Visible'}}" ToolTip="{Binding Description}" ToolTipService.ShowDuration="60000"/>
                     </Grid>
                 </Border>
                 <DataTemplate.Triggers>
                     <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                        <Setter Property="Background" Value="#15000000" TargetName="row"></Setter>
+                        <Setter Property="Background" Value="#10000000" TargetName="row"></Setter>
                     </Trigger>
                     <DataTrigger Binding="{Binding ValidationResult.IsValid}" Value="False">
                         <Setter Property="Background" Value="Red" TargetName="borderName"></Setter>
@@ -138,7 +139,7 @@
                     </ItemsControl.ItemsSource>
                 </ComboBox>
             </DataTemplate>
-            
+
             <!-- browse file -->
             <DataTemplate DataType="{x:Type pi:BrowseFilePropertyProxy}" x:Key="fileProxy">
                 <locctrl:BrowseFileControl 
@@ -146,17 +147,17 @@
                     Path="{Binding Value}" Filter="{Binding Filter}" 
                     x:Name="PART_EDIT"/>
             </DataTemplate>
-            
+
             <!-- browse folder -->
             <DataTemplate DataType="{x:Type pi:BrowseFolderPropertyProxy}" x:Key="folderProxy">
                 <locctrl:BrowseFolderControl Path="{Binding Value}" x:Name="PART_EDIT"/>
             </DataTemplate>
-            
+
             <!-- bool -->
             <DataTemplate DataType="{x:Type pi:BoolPropertyProxy}" x:Key="boolProxy">
                 <CheckBox IsChecked="{Binding Value}" VerticalAlignment="Center" x:Name="PART_EDIT"/>
             </DataTemplate>
-            
+
             <!-- custom -->
             <DataTemplate DataType="{x:Type pi:CustomPropertyProxy}" x:Key="customProxy">
                 <Grid HorizontalAlignment="Stretch">
@@ -172,7 +173,7 @@
                     <Button Width="{Binding Source={RelativeSource Self}, Path=Height}" MinHeight="10" Content="..." Margin="-25,1,1,1" HorizontalAlignment="Right" Command="loc:PropertiesEditorUC.CustomEditCommand" CommandParameter="{Binding}"/>
                 </Grid>
             </DataTemplate>
-            
+
         </Grid.Resources>
         <ItemsControl ItemsSource="{Binding Source={StaticResource propsCVS}}" HorizontalContentAlignment="Stretch" ItemTemplate="{StaticResource PropertyItemTemplate}" AlternationCount="2">
             <ItemsControl.Style>
