@@ -1,25 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Markup;
 
 namespace Thingie.WPF.Converters
 {
-    public class StringCapitalizationSeparatorConverter : MarkupExtension, IValueConverter
+    public class EnumDescriptionConverter : MarkupExtension, IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            string str = value?.ToString() ?? "";
-            //just add a space if there are several capital letters in a row (likely an acronym)
-            str = Regex.Replace(str, "([a-z])([A-Z]{2,})", m => { return string.Format("{0} {1}", m.Groups[1].Value, m.Groups[2].Value); });
-            //add a space and tolower the next word
-            str = Regex.Replace(str, "([a-z])([A-Z])", m => { return string.Format("{0} {1}", m.Groups[1].Value, m.Groups[2].Value.ToLower()); });
-            return str;
+            if (value == null)
+                return null;
+
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+
+            DescriptionAttribute[] attributes =
+                (DescriptionAttribute[])fi.GetCustomAttributes(
+                typeof(DescriptionAttribute),
+                false);
+
+            if (attributes != null &&
+                attributes.Length > 0)
+                return attributes[0].Description;
+            else
+                return value.ToString();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

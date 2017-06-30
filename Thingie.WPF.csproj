@@ -97,6 +97,7 @@
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\EditableShortcutAttribute.cs" />
     <Compile Include="Controls\PropertiesEditor\Proxies\ShortcutPropertyProxy.cs" />
     <Compile Include="Controls\ShortcutTextbox.cs" />
+    <Compile Include="Converters\EnumDescriptionConverter.cs" />
     <Compile Include="Converters\SingleItemToListConverter.cs" />
     <Compile Include="Converters\StringCapitalizationSeparatorConverter.cs" />
     <Compile Include="DirHelpers.cs" />
