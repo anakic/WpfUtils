@@ -15,7 +15,7 @@ namespace Thingie.WPF.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
+            if (value == null || !value.GetType().IsEnum)
                 return null;
 
             FieldInfo fi = value.GetType().GetField(value.ToString());
