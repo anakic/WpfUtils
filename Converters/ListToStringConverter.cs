@@ -10,31 +10,53 @@ using System.Windows.Markup;
 
 namespace Thingie.WPF.Converters
 {
-	public class ListToStringConverter : MarkupExtension, IValueConverter
-	{
-		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			StringBuilder sb = new StringBuilder();
-			if (value is IEnumerable ie)
-			{
-				foreach (object x in ie)
-					sb.Append($"{x}, ");
-			}
+    public class ListToStringConverter : MarkupExtension, IValueConverter
+    {
+        public string Separator { get; set; } = ", ";
 
-			if (sb.Length > 0)
-				sb.Remove(sb.Length - 2, 2);
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            string separator = GetEscapedSeparator();
 
-			return sb.ToString();
-		}
+            StringBuilder sb = new StringBuilder();
+            if (value is IEnumerable ie)
+            {
+                foreach (object x in ie)
+                    sb.Append($"{x}{separator}");
+            }
 
-		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-		{
-			throw new NotImplementedException();
-		}
+            if (sb.Length > 0)
+                sb.Remove(sb.Length - separator.Length, separator.Length);
 
-		public override object ProvideValue(IServiceProvider serviceProvider)
-		{
-			return this;
-		}
-	}
+            return sb.ToString();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            string separator = GetEscapedSeparator();
+            string str = value as string;
+
+            var itemType = targetType.GetGenericArguments().Single();
+
+            IList list = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(itemType));
+
+            foreach (string itemStr in str.Split(new string[] { separator }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                var item = System.Convert.ChangeType(itemStr, itemType);
+                list.Add(item);
+            }
+
+            return list;
+        }
+
+        private string GetEscapedSeparator()
+        {
+            return Separator.Replace("\\r", "\r").Replace("\\n", "\n").Replace("\\t", "\t");
+        }
+
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            return this;
+        }
+    }
 }
