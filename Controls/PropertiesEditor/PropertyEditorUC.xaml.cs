@@ -112,11 +112,14 @@ namespace Thingie.WPF.Controls.PropertiesEditor
             _proxies.Where(pp=>pp is EditablePropertyProxy).Cast<EditablePropertyProxy>().ToList().ForEach(pp => pp.Commit());
         }
 
+        public bool HasErrors()
+        {
+            return _proxies != null && _proxies.OfType<EditablePropertyProxy>().Any(pp => !pp.ValidationResult.IsValid);
+        }
+
         void CommittCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = 
-                (_proxies != null) &&
-                (_proxies.Where(pp => pp is EditablePropertyProxy).Cast<EditablePropertyProxy>().All(pp => pp.ValidationResult.IsValid));
+            e.CanExecute = !HasErrors();
         }
 
         void CancelCommand_Executed(object sender, ExecutedRoutedEventArgs e)
