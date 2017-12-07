@@ -40,7 +40,7 @@ namespace Thingie.WPF.Converters
 
         private void FillMap()
         {
-            string mapItemsPattern = @"((?<item>([^;]|((?<=\\);))+)(;|$))+";
+            string mapItemsPattern = @"((?<item>([^;]|((?<=\\);))+)(;|$))*";
             string partsPattern = @"^(?<left>([^:]|(?<=\\))*):(?<right>.*)$";
 
             Match itemsMatch = Regex.Match(MapExpression, mapItemsPattern);
