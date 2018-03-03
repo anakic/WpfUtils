@@ -89,8 +89,10 @@ namespace Thingie.WPF.KeyboardShortcuts
                     if (shortcutHandle != null)
                     {
                         if (shortcutHandle.CanExecute == null || shortcutHandle.CanExecute())
+                        {
+                            BeforeExecuteShortcut(shortcutHandle);
                             shortcutHandle.Execute();
-
+                        }
                         return (IntPtr)(int)-1;
                     }
                     else
@@ -105,6 +107,8 @@ namespace Thingie.WPF.KeyboardShortcuts
                 return CallNextHookEx(_hookID, nCode, wParam, lParam);
             }
         }
+
+        protected virtual void BeforeExecuteShortcut(ShortcutHandle shortcutHandle) { }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId);
