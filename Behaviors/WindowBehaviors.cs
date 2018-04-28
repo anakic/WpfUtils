@@ -3,6 +3,11 @@ using System.Windows.Input;
 
 namespace Thingie.WPF.Behaviors
 {
+    public interface ICancelOnEscWindow
+    {
+        bool CanCancelOnEsc();
+    }
+
 	public class WindowBehaviors
     {
         public static bool GetCancelOnEsc(DependencyObject obj)
@@ -22,22 +27,24 @@ namespace Thingie.WPF.Behaviors
         
         private static void CancelOnEscPropertySet(DependencyObject target, DependencyPropertyChangedEventArgs args)
         {
-            Window w = (target as Window);
-            if (w != null)
+            if(target is Window w)
             {
                 w.KeyUp += (s, e) =>
                 {
                     if (e.Key == System.Windows.Input.Key.Escape && Keyboard.Modifiers == ModifierKeys.None)
                     {
-                        try
+                        if (w is ICancelOnEscWindow == false || w is ICancelOnEscWindow cew && cew.CanCancelOnEsc())
                         {
-                            w.DialogResult = false;
+                            try
+                            {
+                                w.DialogResult = false;
+                            }
+                            catch
+                            {
+                                //will fail if modal, but there's no way to determine if it is modal so using try-catch
+                            }
+                            w.Close();
                         }
-                        catch
-                        {
-                            //will fail if modal, but there's no way to determine if it is modal so using try-catch
-                        }
-                        w.Close();
                     }
 
                 };
