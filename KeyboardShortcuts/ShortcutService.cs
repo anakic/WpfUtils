@@ -78,27 +78,22 @@ namespace Thingie.WPF.KeyboardShortcuts
             try
             {
                 if (nCode == HC_ACTION)
-                {
-                    var shortcutHandle = Shortcuts.FirstOrDefault(sh =>
-                        sh.Execute != null &&
-                        sh.KeyGesture.Key != Key.None &&
-                        Keyboard.IsKeyDown(sh.KeyGesture.Key) &&
-                        Keyboard.Modifiers == sh.KeyGesture.ModifierKeys && 
-                        sh.IsApplicable());
+				{
+					ShortcutHandle shortcutHandle = FindShortcut();
 
-                    if (shortcutHandle != null)
-                    {
-                        if (shortcutHandle.CanExecute == null || shortcutHandle.CanExecute())
-                        {
-                            BeforeExecuteShortcut(shortcutHandle);
-                            shortcutHandle.Execute();
-                        }
-                        return (IntPtr)(int)-1;
-                    }
-                    else
-                        return CallNextHookEx(_hookID, nCode, wParam, lParam);
-                }
-                else
+					if (shortcutHandle != null)
+					{
+						if (shortcutHandle.CanExecute == null || shortcutHandle.CanExecute())
+						{
+							BeforeExecuteShortcut(shortcutHandle);
+							shortcutHandle.Execute();
+						}
+						return (IntPtr)(int)-1;
+					}
+					else
+						return CallNextHookEx(_hookID, nCode, wParam, lParam);
+				}
+				else
                     return CallNextHookEx(_hookID, nCode, wParam, lParam);
             }
             catch (Exception ex)
@@ -108,7 +103,17 @@ namespace Thingie.WPF.KeyboardShortcuts
             }
         }
 
-        protected virtual void BeforeExecuteShortcut(ShortcutHandle shortcutHandle) { }
+		private ShortcutHandle FindShortcut()
+		{
+			return Shortcuts.FirstOrDefault(sh =>
+									sh.Execute != null &&
+									sh.KeyGesture.Key != Key.None &&
+									Keyboard.IsKeyDown(sh.KeyGesture.Key) &&
+									Keyboard.Modifiers == sh.KeyGesture.ModifierKeys &&
+									sh.IsApplicable());
+		}
+
+		protected virtual void BeforeExecuteShortcut(ShortcutHandle shortcutHandle) { }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr SetWindowsHookEx(int idHook, LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId);

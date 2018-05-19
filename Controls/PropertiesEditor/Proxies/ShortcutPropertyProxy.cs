@@ -25,7 +25,7 @@ namespace Thingie.WPF.Controls.PropertiesEditor.Proxies
         {
             if (modifierKey != ModifierKeys.None)
             {
-                if (key == Key.Tab && (modifierKey != ModifierKeys.Windows))
+				if (key == Key.Tab && (modifierKey == ModifierKeys.Windows || modifierKey == ModifierKeys.Alt))
                     return ShortcutAction.Default;
                 else if (key != Key.LWin && key != Key.RWin && key != Key.System && key != Key.LeftAlt && key != Key.LeftShift && key != Key.LeftCtrl && key != Key.RightAlt && key != Key.RightShift && key != Key.RightCtrl)
                     return ShortcutAction.Accept;
