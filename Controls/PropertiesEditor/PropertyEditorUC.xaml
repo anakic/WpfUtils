@@ -144,13 +144,13 @@
             <DataTemplate DataType="{x:Type pi:BrowseFilePropertyProxy}" x:Key="fileProxy">
                 <locctrl:BrowseFileControl 
                     CheckFileExists="{Binding ChekFileExists, Mode=OneTime}" 
-                    Path="{Binding Value}" Filter="{Binding Filter}" 
+                    Path="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Filter="{Binding Filter}" 
                     x:Name="PART_EDIT"/>
             </DataTemplate>
 
             <!-- browse folder -->
             <DataTemplate DataType="{x:Type pi:BrowseFolderPropertyProxy}" x:Key="folderProxy">
-                <locctrl:BrowseFolderControl Path="{Binding Value}" x:Name="PART_EDIT"/>
+                <locctrl:BrowseFolderControl Path="{Binding Value, UpdateSourceTrigger=PropertyChanged}" x:Name="PART_EDIT"/>
             </DataTemplate>
 
             <!-- bool -->
