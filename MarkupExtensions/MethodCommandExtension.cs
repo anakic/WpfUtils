@@ -8,7 +8,7 @@ using System.Windows.Markup;
 
 namespace Thingie.WPF.MarkupExtensions
 {
-	public enum MethodNotFoundBehavior
+    public enum MethodNotFoundBehavior
     {
         ThrowException,
         LogToTrace,
@@ -59,12 +59,14 @@ namespace Thingie.WPF.MarkupExtensions
         {
             var targetProvider = (IProvideValueTarget)serviceProvider.GetService(typeof(IProvideValueTarget));
             _targetElement = targetProvider.TargetObject as FrameworkElement;
-            _targetProperty = targetProvider.TargetProperty.ToString();
-            _targetElement.DataContextChanged += (s, e) => { Init(); };
+            if (_targetElement != null)
+            {
+                _targetProperty = targetProvider.TargetProperty.ToString();
+                _targetElement.DataContextChanged += (s, e) => { Init(); };
 
-            if(_targetElement.DataContext != null)
-                Init();
-            
+                if (_targetElement.DataContext != null)
+                    Init();
+            }
             return this;
         }
 
