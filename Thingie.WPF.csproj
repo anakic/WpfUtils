@@ -212,6 +212,7 @@
     <Compile Include="ViewModelBinder.cs" />
     <Compile Include="ViewModels\VMBase.cs" />
     <Compile Include="VmCollection.cs" />
+    <Compile Include="Behaviors\BrowserBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\Settings.settings">
