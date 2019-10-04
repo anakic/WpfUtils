@@ -112,6 +112,12 @@
     <Compile Include="Behaviors\HyperlinkBehavior.cs" />
     <Compile Include="Behaviors\VirtualToggleButtonBehavior.cs" />
     <Compile Include="Behaviors\WindowBehaviors.cs" />
+    <Compile Include="Controls\ObjectExplorer\ContextCommand.cs" />
+    <Compile Include="Controls\ObjectExplorer\NodeVM.cs" />
+    <Compile Include="Controls\ObjectExplorer\ObjectExplorerUC.xaml.cs">
+      <DependentUpon>ObjectExplorerUC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ObjectExplorer\SortConverter.cs" />
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\EditableShortcutAttribute.cs" />
     <Compile Include="Controls\PropertiesEditor\Proxies\ShortcutPropertyProxy.cs" />
     <Compile Include="Controls\ShortcutTextbox.cs" />
@@ -232,6 +238,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\FlagsEnumPicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ObjectExplorer\ObjectExplorerUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
