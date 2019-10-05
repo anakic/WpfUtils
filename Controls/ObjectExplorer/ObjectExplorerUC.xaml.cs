@@ -29,22 +29,13 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             var control = (target as ObjectExplorerUC);
 
             if (args.NewValue == null)
-            {
                 control.tree.DataContext = control.rootNode = null;
-            }
             else
             {
-                List<NodeVM> newList = new List<NodeVM>(args.NewValue as IEnumerable<NodeVM>);
-
-                var root = new NodeVM("Root", default(Uri), "", "", newList, new ContextCommand[0]);
-
-                // we want to preserve old nodes where possible to maintain non-persisted properties such as IsExpanded
-                //if (control.rootNode == null)
-                control.tree.DataContext = control.rootNode = root;
-                //else
-                //    control.rootNode.Update(root);
+                control.rootNode = new NodeVM(null, default(Uri), "", "");
+                control.rootNode.Nodes.AddRange(args.NewValue as IEnumerable<NodeVM>);
+                control.tree.DataContext = control.rootNode;
             }
-
         }
 
         private NodeVM rootNode;

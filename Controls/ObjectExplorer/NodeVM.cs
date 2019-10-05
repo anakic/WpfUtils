@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Thingie.WPF.Controls.ObjectExplorer
 {
@@ -50,18 +48,18 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public Uri ImageURI { get => imageUri; set { imageUri = value; OnPropertyChanged(nameof(ImageURI)); } }
         public string Text { get => text; set { if (text != value) { RenameAction?.Invoke(value); text = value; OnPropertyChanged(nameof(Text)); } } }
         public virtual string ToolTip { get; set; }
-        public List<NodeVM> Nodes { get => nodes; private set { nodes = value; OnPropertyChanged(nameof(Nodes)); } }
-        public virtual List<ContextCommand> ContextCommands { get; }
+        public List<NodeVM> Nodes { get => nodes; set { nodes = value; OnPropertyChanged(nameof(Nodes)); } }
+        public virtual List<ContextCommand> ContextCommands { get; set; }
         #endregion
 
-        public NodeVM(object source, Uri imageUri, string text, string description = null, IEnumerable<NodeVM> childNodes = null, IEnumerable<ContextCommand> contextCommands = null)
+        public NodeVM(object source, Uri imageUri, string text, string description = null, params ContextCommand [] contextCommands)
         {
             Source = source;
             ImageURI = imageUri;
             Text = text;
             ToolTip = description;
             ContextCommands = new List<ContextCommand>(contextCommands ?? new ContextCommand[0]);
-            Nodes = new List<NodeVM>(childNodes ?? new NodeVM[0]);
+            Nodes = new List<NodeVM>();
         }
 
         #region filter
@@ -89,28 +87,6 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             }
 
             IsVisible = satisfiesFilterDirectly || hasChildrenThatSatisfyFilter;
-        }
-        #endregion
-
-        #region updating nodes, but keeping old nodes that are still valid (to preserve non persisted properties, e.g. IsExpanded)
-        public void Update(NodeVM newVersion)
-        {
-            var list = new List<NodeVM>();
-            foreach (NodeVM newChild in newVersion.Nodes)
-            {
-                var originalChild = Nodes.SingleOrDefault(n => n.Source == newChild.Source);
-
-                if (originalChild != null)
-                {
-                    originalChild.Update(newChild);
-                    list.Add(originalChild);
-                }
-                else
-                {
-                    list.Add(newChild);
-                }
-            }
-            this.Nodes = list;
         }
         #endregion
 
