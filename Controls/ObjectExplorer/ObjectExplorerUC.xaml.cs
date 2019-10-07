@@ -196,9 +196,12 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         private void TextBox_LostFocus(object sender, System.Windows.RoutedEventArgs e)
         {
             var node = (tree.SelectedItem as NodeVM);
-            ((TextBox)sender).GetBindingExpression(TextBox.TextProperty).UpdateSource();
-            node.IsEditing = false;
-            tree.Items.Refresh();
+            if (node != null)
+            {
+                ((TextBox)sender).GetBindingExpression(TextBox.TextProperty).UpdateSource();
+                node.IsEditing = false;
+                tree.Items.Refresh();
+            }
         }
     }
 }
