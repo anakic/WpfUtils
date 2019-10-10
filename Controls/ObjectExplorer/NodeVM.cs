@@ -48,6 +48,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public Uri ImageURI { get => imageUri; set { imageUri = value; OnPropertyChanged(nameof(ImageURI)); } }
         public string Text { get => text; set { if (text != value) { RenameAction?.Invoke(value); text = value; OnPropertyChanged(nameof(Text)); } } }
         public virtual string ToolTip { get; set; }
+        public object Badge { get; set; }
         public List<NodeVM> Nodes { get => nodes; set { nodes = value; OnPropertyChanged(nameof(Nodes)); } }
         public virtual List<ContextCommand> ContextCommands { get; set; }
         #endregion

@@ -63,6 +63,7 @@
                                         <Style TargetType="MenuItem">
                                             <Setter Property="Padding" Value="2"/>
                                             <Setter Property="Command" Value="{Binding}" />
+                                            <Setter Property="CommandParameter" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType=TreeViewItem}}" />
                                             <Setter Property="Header" Value="{Binding Text}" />
                                             <Setter Property="Icon" Value="{StaticResource miIcon}"/>
                                         </Style>
@@ -80,6 +81,8 @@
                             </StackPanel.ToolTip>
                             <Image Source="{Binding ImageURI}" Width="16" Height="16" Margin="0,0,2,0" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
                             <TextBlock Text="{Binding Text}" VerticalAlignment="Center"
+									   Visibility="{Binding IsEditing, Converter={conv:MapConverter 'false:Visible;true:Collapsed;'}}"/>
+                            <TextBlock Text="{Binding Badge}" VerticalAlignment="Center" Margin="4,0,0,0"
 									   Visibility="{Binding IsEditing, Converter={conv:MapConverter 'false:Visible;true:Collapsed;'}}"/>
                             <TextBox Text="{Binding Text}" VerticalAlignment="Center" 
                                      Visibility="{Binding IsEditing, Converter={conv:MapConverter 'true:Visible;false:Collapsed;'}}"
