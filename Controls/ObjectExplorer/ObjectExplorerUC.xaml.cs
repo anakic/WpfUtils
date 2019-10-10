@@ -84,7 +84,9 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                     Math.Abs(position.Y - _startPoint.Y) >
                         SystemParameters.MinimumVerticalDragDistance)
                 {
-                    StartDrag(e);
+                    // todo: only do this if dragging TreeViewItem (this is interefering with scroll)
+                    if((e.OriginalSource as FrameworkElement).TemplatedParent is System.Windows.Controls.Primitives.ScrollBar == false)
+                        StartDrag(e);
                 }
             }
         }
