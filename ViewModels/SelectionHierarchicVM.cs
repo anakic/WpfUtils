@@ -26,12 +26,12 @@ namespace Thingie.WPF.ViewModels
             Children = new List<SelectionHierarchicVM>();
         }
 
-        public void Initialize()
+        public void InitializeHierarchy()
         {
             foreach (SelectionHierarchicVM child in Children)
             {
                 child._parent = this;
-                child.Initialize();
+                child.InitializeHierarchy();
             }
         }
 
