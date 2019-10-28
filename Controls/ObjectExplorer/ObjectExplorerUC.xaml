@@ -75,14 +75,14 @@
                 </TreeView.ItemContainerStyle>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding VisibleNodes, Converter={StaticResource sortConverter}}">
-                        <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="60000" MouseLeftButtonUp="tree_MouseLeftButtonDown" Margin="2">
+                        <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="60000" MouseLeftButtonUp="tree_MouseLeftButtonDown" Margin="2" MouseDown="StackPanel_MouseDown" AllowDrop="True" Drop="StackPanel_Drop" DragOver="StackPanel_DragOver">
                             <StackPanel.ToolTip>
                                 <TextBlock MaxWidth="500" Text="{Binding ToolTip}" TextWrapping="Wrap" Visibility="{Binding ToolTip, Converter={conv:MapConverter '_null:Collapsed;:Collapsed;_default:Visible'}}"/>
                             </StackPanel.ToolTip>
                             <Image Source="{Binding ImageURI}" Width="16" Height="16" Margin="0,0,2,0" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <TextBlock Text="{Binding Text}" VerticalAlignment="Center"
+                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center"
 									   Visibility="{Binding IsEditing, Converter={conv:MapConverter 'false:Visible;true:Collapsed;'}}"/>
-                            <TextBlock Text="{Binding Badge}" VerticalAlignment="Center" Margin="4,0,0,0"
+                            <TextBlock Text="{Binding Badge}" Opacity="0.5" VerticalAlignment="Center" Margin="4,0,0,0"
 									   Visibility="{Binding IsEditing, Converter={conv:MapConverter 'false:Visible;true:Collapsed;'}}"/>
                             <TextBox Text="{Binding Text}" VerticalAlignment="Center" 
                                      Visibility="{Binding IsEditing, Converter={conv:MapConverter 'true:Visible;false:Collapsed;'}}"

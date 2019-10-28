@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,6 +16,17 @@ namespace Thingie.WPF.Controls.ObjectExplorer
     /// </summary>
     public partial class ObjectExplorerUC : UserControl
     {
+        private class RootNodeVM : NodeVM
+        {
+            public override Uri ImageURI => default(Uri);
+
+            public override string Name => null;
+
+            public override string ToolTip => null;
+        }
+
+        ConditionalWeakTable<object, NodeVM> NodesCache = new ConditionalWeakTable<object, NodeVM>();
+
         public IEnumerable<object> Items
         {
             get { return (IEnumerable<object>)GetValue(ItemsProperty); }
@@ -52,8 +65,8 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             else
             {
                 // a root node to host content
-                control.rootNode = new NodeVM(default(Uri), null);
-                control.rootNode.Nodes.AddRange(Nodes);
+                control.rootNode = new RootNodeVM();
+                control.rootNode.Nodes = Nodes;
                 control.tree.DataContext = control.rootNode;
             }
         }
@@ -66,7 +79,12 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             List<NodeVM> nodes = new List<NodeVM>();
             foreach (var obj in objects)
             {
-                var node = NodeFactory.GetNode(obj);
+                NodeVM node;
+                if (NodesCache.TryGetValue(obj, out node) == false)
+                {
+                    node = NodeFactory.GetNode(obj);
+                    NodesCache.Add(obj, node);
+                }
                 node.Nodes = GetNodes(NodeFactory.GetChildObjects(obj));
                 nodes.Add(node);
             }
@@ -121,18 +139,13 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         private void StartDrag(MouseEventArgs e)
         {
-            NodeVM node = ((e.OriginalSource as FrameworkElement).DataContext as NodeVM);
+            var source = (e.OriginalSource as FrameworkElement);
+            NodeVM node = (tree.SelectedItem as NodeVM);
             if (node != null)
             {
                 _IsDragging = true;
-
                 DataObject data = new DataObject("Node", node);
-
-                DragDropEffects dde = DragDropEffects.Move;
-                if (e.RightButton == MouseButtonState.Pressed)
-                    dde = DragDropEffects.All;
-
-                DragDropEffects de = DragDrop.DoDragDrop(this.tree, data, dde);
+                DragDropEffects de = DragDrop.DoDragDrop(source, data, DragDropEffects.All);
                 _IsDragging = false;
             }
         }
@@ -140,9 +153,9 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         private void tree_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             NodeVM n = (sender as FrameworkElement).DataContext as NodeVM;
-            if (n != null && Keyboard.Modifiers == ModifierKeys.Control && n.SelectAction != null)
+            if (n != null && Keyboard.Modifiers == ModifierKeys.Control && n.CanSelect())
             {
-                n.SelectAction();
+                n.Select();
             }
         }
 
@@ -169,7 +182,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             if (e.Key == Key.F2)
             {
                 var node = (tree.SelectedItem as NodeVM);
-                if (node?.RenameAction != null)
+                if (node?.CanRename() == true)
                     node.IsEditing = true;
             }
         }
@@ -231,6 +244,39 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 ((TextBox)sender).GetBindingExpression(TextBox.TextProperty).UpdateSource();
                 node.IsEditing = false;
                 tree.Items.Refresh();
+            }
+        }
+
+        private void StackPanel_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var node = (tree.SelectedItem as NodeVM);
+
+            if (e.ClickCount == 2 && node.CanActivate())
+                node.Activate();
+        }
+
+        private void StackPanel_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent("Node"))
+            {
+                var node = (NodeVM)e.Data.GetData("Node");
+                var proposedParentNode = (sender as StackPanel).DataContext as NodeVM;
+                Trace.WriteLine($"{node}->{proposedParentNode}");
+            }
+        }
+
+        private void StackPanel_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent("Node"))
+            {
+                var node = (NodeVM)e.Data.GetData("Node");
+                var proposedParentNode = (sender as StackPanel).DataContext as NodeVM;
+
+                if (node.CanMove(proposedParentNode))
+                    e.Effects = DragDropEffects.Move;
+                else
+                    e.Effects = DragDropEffects.None;
+                e.Handled = true;
             }
         }
     }

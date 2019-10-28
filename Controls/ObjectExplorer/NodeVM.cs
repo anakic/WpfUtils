@@ -5,21 +5,17 @@ using System.Linq;
 
 namespace Thingie.WPF.Controls.ObjectExplorer
 {
-    public class NodeVM : INotifyPropertyChanged
+    public abstract class NodeVM : INotifyPropertyChanged
     {
-        private string text;
-        private Uri imageUri;
-
-        bool isEditing;
-        public bool IsEditing { get => isEditing; set { isEditing = value; OnPropertyChanged(nameof(IsEditing)); } }
-
         #region private fields
-        List<NodeVM> nodes;
+        IEnumerable<NodeVM> nodes = new List<NodeVM>();
         #endregion
 
         #region user interaction properties
+        private bool isEditing;
         private bool isExpanded;
         private bool satisfiesFilter = true;
+        
         public virtual bool IsVisible
         {
             get { return satisfiesFilter; }
@@ -32,34 +28,38 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 }
             }
         }
+
+        public bool IsEditing { get => isEditing; set { isEditing = value; OnPropertyChanged(nameof(IsEditing)); } }
+        
         public virtual bool IsExpanded { get => isExpanded; set { isExpanded = value; OnPropertyChanged(nameof(IsExpanded)); } }
+        
         public virtual IEnumerable<NodeVM> VisibleNodes => Nodes.Where(n => n.IsVisible);
         #endregion
 
         #region actions
-        public Action<string> RenameAction { get; set; }
-        public Action SelectAction { get; set; }
+        public virtual bool CanRename() => false;
+        public virtual void Rename(string newName) { }
 
+        public virtual bool CanSelect() => false;
+        public virtual void Select() { }
+
+        public virtual bool CanActivate() => false;
+        public virtual void Activate() {  }
+
+        public virtual bool CanMove(NodeVM proposedParent) => false;
+        public virtual void Move(NodeVM newParent) {  }
         #endregion
 
         #region core properties
-        public int Order { get; set; }
-        public Uri ImageURI { get => imageUri; set { imageUri = value; OnPropertyChanged(nameof(ImageURI)); } }
-        public string Text { get => text; set { if (text != value) { RenameAction?.Invoke(value); text = value; OnPropertyChanged(nameof(Text)); } } }
-        public virtual string ToolTip { get; set; }
-        public object Badge { get; set; }
-        public List<NodeVM> Nodes { get => nodes; set { nodes = value; OnPropertyChanged(nameof(Nodes)); } }
-        public virtual List<ContextCommand> ContextCommands { get; set; }
+        public abstract Uri ImageURI { get; }
+        public abstract string Name { get; }
+        public virtual string ToolTip { get; }
+        public virtual object Badge { get; }
+        public virtual int Order { get; } = 1;
+        public virtual IEnumerable<ContextCommand> ContextCommands { get; } = new List<ContextCommand>();
         #endregion
 
-        public NodeVM(Uri imageUri, string text, string description = null, params ContextCommand [] contextCommands)
-        {
-            ImageURI = imageUri;
-            Text = text;
-            ToolTip = description;
-            ContextCommands = new List<ContextCommand>(contextCommands ?? new ContextCommand[0]);
-            Nodes = new List<NodeVM>();
-        }
+        internal IEnumerable<NodeVM> Nodes { get => nodes; set { nodes = value; OnPropertyChanged(nameof(Nodes)); } }
 
         #region filter
         public void Filter(string search)
@@ -70,7 +70,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         protected void DoFilter(IEnumerable<string> path, IEnumerable<string> filterSegments)
         {
-            List<string> myPath = new List<string>(path) { Text };
+            List<string> myPath = new List<string>(path) { Name };
 
             bool satisfiesFilterDirectly = filterSegments.All(seg => myPath.Any(p => p.ToUpper().Contains(seg.ToUpper())));
 
@@ -89,18 +89,13 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         }
         #endregion
 
-        public override string ToString()
-        {
-            return Text;
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        internal void Visit(Action<NodeVM> n)
+        public void Visit(Action<NodeVM> n)
         {
             n(this);
 
@@ -110,5 +105,11 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                     child.Visit(n);
             }
         }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+
     }
 }
