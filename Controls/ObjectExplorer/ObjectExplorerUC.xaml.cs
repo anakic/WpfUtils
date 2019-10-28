@@ -14,35 +14,63 @@ namespace Thingie.WPF.Controls.ObjectExplorer
     /// </summary>
     public partial class ObjectExplorerUC : UserControl
     {
-        public IEnumerable<NodeVM> Nodes
+        public IEnumerable<object> Items
         {
-            get { return (IEnumerable<NodeVM>)GetValue(NodesProperty); }
-            set { SetValue(NodesProperty, value); }
+            get { return (IEnumerable<object>)GetValue(ItemsProperty); }
+            set { SetValue(ItemsProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Nodes.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty NodesProperty =
-            DependencyProperty.Register("Nodes", typeof(IEnumerable<NodeVM>), typeof(ObjectExplorerUC), new PropertyMetadata(new PropertyChangedCallback(NodesPropertySet)));
+        // Using a DependencyProperty as the backing store for Items. This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ItemsProperty =
+            DependencyProperty.Register("Items", typeof(IEnumerable<object>), typeof(ObjectExplorerUC));
 
-        private static void NodesPropertySet(DependencyObject target, DependencyPropertyChangedEventArgs args)
+
+        public INodeFactory NodeFactory
         {
-            var control = (target as ObjectExplorerUC);
-
-            if (args.NewValue == null)
-                control.tree.DataContext = control.rootNode = null;
-            else
-            {
-                control.rootNode = new NodeVM(null, default(Uri), "", "");
-                control.rootNode.Nodes.AddRange(args.NewValue as IEnumerable<NodeVM>);
-                control.tree.DataContext = control.rootNode;
-            }
+            get { return (INodeFactory)GetValue(NodeFactoryProperty); }
+            set { SetValue(NodeFactoryProperty, value); }
         }
+        public static readonly DependencyProperty NodeFactoryProperty =
+            DependencyProperty.Register(nameof(NodeFactory), typeof(INodeFactory), typeof(ObjectExplorerUC));
 
         private NodeVM rootNode;
 
         public ObjectExplorerUC()
         {
             InitializeComponent();
+            this.Loaded += ObjectExplorerUC_Loaded;
+        }
+
+        private void ObjectExplorerUC_Loaded(object sender, RoutedEventArgs e)
+        {
+            var control = this;
+
+            var Nodes = GetNodes(Items);
+
+            if (Nodes == null)
+                control.tree.DataContext = control.rootNode = null;
+            else
+            {
+                // a root node to host content
+                control.rootNode = new NodeVM(default(Uri), null);
+                control.rootNode.Nodes.AddRange(Nodes);
+                control.tree.DataContext = control.rootNode;
+            }
+        }
+
+        private List<NodeVM> GetNodes(IEnumerable<object> objects)
+        {
+            if (objects == null)
+                return new List<NodeVM>();
+
+            List<NodeVM> nodes = new List<NodeVM>();
+            foreach (var obj in objects)
+            {
+                var node = NodeFactory.GetNode(obj);
+                node.Nodes = GetNodes(NodeFactory.GetChildObjects(obj));
+                nodes.Add(node);
+            }
+            return nodes;
         }
 
         private void btnClearFilter_Click(object sender, RoutedEventArgs e)

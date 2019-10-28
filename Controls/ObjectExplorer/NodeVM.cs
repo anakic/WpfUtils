@@ -44,7 +44,6 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         #region core properties
         public int Order { get; set; }
-        public object Source { get; set; }
         public Uri ImageURI { get => imageUri; set { imageUri = value; OnPropertyChanged(nameof(ImageURI)); } }
         public string Text { get => text; set { if (text != value) { RenameAction?.Invoke(value); text = value; OnPropertyChanged(nameof(Text)); } } }
         public virtual string ToolTip { get; set; }
@@ -53,9 +52,8 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public virtual List<ContextCommand> ContextCommands { get; set; }
         #endregion
 
-        public NodeVM(object source, Uri imageUri, string text, string description = null, params ContextCommand [] contextCommands)
+        public NodeVM(Uri imageUri, string text, string description = null, params ContextCommand [] contextCommands)
         {
-            Source = source;
             ImageURI = imageUri;
             Text = text;
             ToolTip = description;
