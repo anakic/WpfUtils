@@ -59,7 +59,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public virtual IEnumerable<ContextCommand> ContextCommands { get; } = new List<ContextCommand>();
         #endregion
 
-        internal IEnumerable<NodeVM> Nodes { get => nodes; set { nodes = value; OnPropertyChanged(nameof(Nodes)); } }
+        public IEnumerable<NodeVM> Nodes { get => nodes; set { nodes = value; OnPropertyChanged(nameof(Nodes)); } }
 
         #region filter
         public void Filter(string search)
