@@ -8,6 +8,8 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 {
     public interface INodeSource
     {
+        int? GetRecycleHashCode(object obj);
+
         IEnumerable<object> GetItems();
 
         NodeVM GetNode(object obj);

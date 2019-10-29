@@ -47,6 +47,9 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         public virtual bool CanMove(NodeVM proposedParent) => false;
         public virtual void Move(NodeVM newParent) {  }
+
+        public virtual bool CanDelete() => false;
+        public virtual void Delete() { }
         #endregion
 
         #region core properties
@@ -69,7 +72,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         protected void DoFilter(IEnumerable<string> path, IEnumerable<string> filterSegments)
         {
-            List<string> myPath = new List<string>(path) { Name };
+            List<string> myPath = new List<string>(path) { Name ?? "" };
 
             bool satisfiesFilterDirectly = filterSegments.All(seg => myPath.Any(p => p.ToUpper().Contains(seg.ToUpper())));
 

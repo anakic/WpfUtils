@@ -25,7 +25,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             public override string ToolTip => null;
         }
 
-        ConditionalWeakTable<object, NodeVM> NodesCache = new ConditionalWeakTable<object, NodeVM>();
+        Dictionary<int, NodeVM> NodesCache = new Dictionary<int, NodeVM>();
 
         public IEnumerable<object> Items
         {
@@ -84,10 +84,14 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             foreach (var obj in objects)
             {
                 NodeVM node;
-                if (NodesCache.TryGetValue(obj, out node) == false)
+                int? recycleHashCode = NodesSource.GetRecycleHashCode(obj);
+                if (recycleHashCode.HasValue && NodesCache.ContainsKey(recycleHashCode.Value))
+                    node = NodesCache[recycleHashCode.Value];
+                else
                 {
                     node = NodesSource.GetNode(obj);
-                    NodesCache.Add(obj, node);
+                    if(recycleHashCode.HasValue)
+                        NodesCache.Add(recycleHashCode.Value, node);
                 }
                 node.Nodes = GetNodes(NodesSource.GetChildObjects(obj));
                 nodes.Add(node);
@@ -189,6 +193,12 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 if (node?.CanRename() == true)
                     node.IsEditing = true;
             }
+            else if (e.Key == Key.Delete && e.OriginalSource is TextBox != true)
+            {
+                var node = (tree.SelectedItem as NodeVM);
+                if (node.CanDelete())
+                    node.Delete();
+            }
         }
 
 
@@ -265,7 +275,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             {
                 var node = (NodeVM)e.Data.GetData("Node");
                 var proposedParentNode = (sender as StackPanel).DataContext as NodeVM;
-                Trace.WriteLine($"{node}->{proposedParentNode}");
+                node.Move(proposedParentNode);
             }
         }
 
