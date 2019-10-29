@@ -62,7 +62,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         {
             var control = this;
 
-            var Nodes = GetNodes(NodesSource.GetItems());
+            var Nodes = GetNodes(NodesSource?.GetItems());
 
             if (Nodes == null)
                 control.tree.DataContext = control.rootNode = null;
