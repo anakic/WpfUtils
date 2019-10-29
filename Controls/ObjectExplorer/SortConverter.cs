@@ -15,8 +15,8 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         {
             var collection = (value as IEnumerable<object>).ToList();
             ListCollectionView view = new ListCollectionView(collection);
-            view.SortDescriptions.Add(new SortDescription("Order", ListSortDirection.Ascending));
-            view.SortDescriptions.Add(new SortDescription("Text", ListSortDirection.Ascending));
+            view.SortDescriptions.Add(new SortDescription(nameof(NodeVM.Order), ListSortDirection.Ascending));
+            view.SortDescriptions.Add(new SortDescription(nameof(NodeVM.Name), ListSortDirection.Ascending));
             return view;
         }
 

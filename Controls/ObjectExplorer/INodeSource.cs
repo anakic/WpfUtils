@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Thingie.WPF.Controls.ObjectExplorer
 {
-    public interface INodeFactory
+    public interface INodeSource
     {
+        IEnumerable<object> GetItems();
+
         NodeVM GetNode(object obj);
 
         IEnumerable<object> GetChildObjects(object obj);

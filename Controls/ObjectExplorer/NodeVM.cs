@@ -38,7 +38,6 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         #region actions
         public virtual bool CanRename() => false;
-        public virtual void Rename(string newName) { }
 
         public virtual bool CanSelect() => false;
         public virtual void Select() { }
@@ -52,7 +51,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         #region core properties
         public abstract Uri ImageURI { get; }
-        public abstract string Name { get; }
+        public abstract string Name { get; set; }
         public virtual string ToolTip { get; }
         public virtual object Badge { get; }
         public virtual int Order { get; } = 1;

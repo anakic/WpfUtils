@@ -113,7 +113,7 @@
     <Compile Include="Behaviors\VirtualToggleButtonBehavior.cs" />
     <Compile Include="Behaviors\WindowBehaviors.cs" />
     <Compile Include="Controls\ObjectExplorer\ContextCommand.cs" />
-    <Compile Include="Controls\ObjectExplorer\INodeFactory.cs" />
+    <Compile Include="Controls\ObjectExplorer\INodeSource.cs" />
     <Compile Include="Controls\ObjectExplorer\NodeVM.cs" />
     <Compile Include="Controls\ObjectExplorer\ObjectExplorerUC.xaml.cs">
       <DependentUpon>ObjectExplorerUC.xaml</DependentUpon>

@@ -20,7 +20,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         {
             public override Uri ImageURI => default(Uri);
 
-            public override string Name => null;
+            public override string Name { get; set; }
 
             public override string ToolTip => null;
         }
@@ -38,27 +38,31 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             DependencyProperty.Register("Items", typeof(IEnumerable<object>), typeof(ObjectExplorerUC));
 
 
-        public INodeFactory NodeFactory
+        public INodeSource NodesSource
         {
-            get { return (INodeFactory)GetValue(NodeFactoryProperty); }
-            set { SetValue(NodeFactoryProperty, value); }
+            get { return (INodeSource)GetValue(NodesSourceProperty); }
+            set { SetValue(NodesSourceProperty, value); }
         }
-        public static readonly DependencyProperty NodeFactoryProperty =
-            DependencyProperty.Register(nameof(NodeFactory), typeof(INodeFactory), typeof(ObjectExplorerUC));
+        public static readonly DependencyProperty NodesSourceProperty =
+            DependencyProperty.Register(nameof(NodesSource), typeof(INodeSource), typeof(ObjectExplorerUC), new PropertyMetadata(new PropertyChangedCallback(NodeSourceSet)));
+
+        public static void NodeSourceSet(DependencyObject target, DependencyPropertyChangedEventArgs args)
+        {
+            (target as ObjectExplorerUC).Update();
+        }
 
         private NodeVM rootNode;
 
         public ObjectExplorerUC()
         {
             InitializeComponent();
-            this.Loaded += ObjectExplorerUC_Loaded;
         }
 
-        private void ObjectExplorerUC_Loaded(object sender, RoutedEventArgs e)
+        private void Update()
         {
             var control = this;
 
-            var Nodes = GetNodes(Items);
+            var Nodes = GetNodes(NodesSource.GetItems());
 
             if (Nodes == null)
                 control.tree.DataContext = control.rootNode = null;
@@ -82,10 +86,10 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 NodeVM node;
                 if (NodesCache.TryGetValue(obj, out node) == false)
                 {
-                    node = NodeFactory.GetNode(obj);
+                    node = NodesSource.GetNode(obj);
                     NodesCache.Add(obj, node);
                 }
-                node.Nodes = GetNodes(NodeFactory.GetChildObjects(obj));
+                node.Nodes = GetNodes(NodesSource.GetChildObjects(obj));
                 nodes.Add(node);
             }
             return nodes;
