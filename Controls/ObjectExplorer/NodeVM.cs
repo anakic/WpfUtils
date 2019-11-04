@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 
@@ -7,13 +8,12 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 {
     public abstract class NodeVM : INotifyPropertyChanged
     {
-        #region private fields
-        IEnumerable<NodeVM> nodes = new List<NodeVM>();
-        #endregion
+        private ObservableCollection<NodeVM> nodes;
 
         #region user interaction properties
         private bool isEditing;
         private bool isExpanded;
+        private bool isSelected;
         private bool satisfiesFilter = true;
         
         public virtual bool IsVisible
@@ -32,6 +32,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public bool IsEditing { get => isEditing; set { isEditing = value; OnPropertyChanged(nameof(IsEditing)); } }
         
         public virtual bool IsExpanded { get => isExpanded; set { isExpanded = value; OnPropertyChanged(nameof(IsExpanded)); } }
+        public virtual bool IsSelected { get => isSelected; set { isSelected = value; OnPropertyChanged(nameof(IsSelected)); } }
         
         public virtual IEnumerable<NodeVM> VisibleNodes => Nodes.Where(n => n.IsVisible);
         #endregion
@@ -61,7 +62,19 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public virtual IEnumerable<ContextCommand> ContextCommands { get; } = new List<ContextCommand>();
         #endregion
 
-        public IEnumerable<NodeVM> Nodes { get => nodes; set { nodes = value; OnPropertyChanged(nameof(Nodes)); } }
+        public ObservableCollection<NodeVM> Nodes 
+        { get
+            {
+                if (nodes == null)
+                {
+                    nodes = new ObservableCollection<NodeVM>(GetInitialNodes());
+                    nodes.CollectionChanged += (s, e) => OnPropertyChanged(nameof(VisibleNodes));
+                }
+                return nodes;
+            } 
+        }
+
+        protected virtual IEnumerable<NodeVM> GetInitialNodes() => new NodeVM[0];
 
         #region filter
         public void Filter(string search)
@@ -112,6 +125,5 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         {
             return Name;
         }
-
     }
 }

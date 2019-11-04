@@ -23,28 +23,25 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             public override string Name { get; set; }
 
             public override string ToolTip => null;
+
+            protected override IEnumerable<NodeVM> GetInitialNodes() => nodes;
+
+            IEnumerable<NodeVM> nodes;
+            public RootNodeVM(IEnumerable<NodeVM> nodes)
+            {
+                this.nodes = nodes;
+            }
         }
 
-        Dictionary<int, NodeVM> NodesCache = new Dictionary<int, NodeVM>();
-
-        public IEnumerable<object> Items
+        public IEnumerable<NodeVM> Nodes
         {
-            get { return (IEnumerable<object>)GetValue(ItemsProperty); }
-            set { SetValue(ItemsProperty, value); }
+            get { return (IEnumerable<NodeVM>)GetValue(NodesProperty); }
+            set { SetValue(NodesProperty, value); }
         }
 
         // Using a DependencyProperty as the backing store for Items. This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty ItemsProperty =
-            DependencyProperty.Register("Items", typeof(IEnumerable<object>), typeof(ObjectExplorerUC));
-
-
-        public INodeSource NodesSource
-        {
-            get { return (INodeSource)GetValue(NodesSourceProperty); }
-            set { SetValue(NodesSourceProperty, value); }
-        }
-        public static readonly DependencyProperty NodesSourceProperty =
-            DependencyProperty.Register(nameof(NodesSource), typeof(INodeSource), typeof(ObjectExplorerUC), new PropertyMetadata(new PropertyChangedCallback(NodeSourceSet)));
+        public static readonly DependencyProperty NodesProperty =
+            DependencyProperty.Register("Nodes", typeof(IEnumerable<NodeVM>), typeof(ObjectExplorerUC), new PropertyMetadata(new PropertyChangedCallback(NodeSourceSet)));
 
         public static void NodeSourceSet(DependencyObject target, DependencyPropertyChangedEventArgs args)
         {
@@ -60,43 +57,17 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         private void Update()
         {
-            var control = this;
-
-            var Nodes = GetNodes(NodesSource?.GetItems());
+            if (rootNode != null)
+                rootNode.Visit(n => { if (n is IDisposable disp) disp.Dispose(); });
 
             if (Nodes == null)
-                control.tree.DataContext = control.rootNode = null;
+                tree.DataContext = rootNode = null;
             else
             {
                 // a root node to host content
-                control.rootNode = new RootNodeVM();
-                control.rootNode.Nodes = Nodes;
-                control.tree.DataContext = control.rootNode;
+                rootNode = new RootNodeVM(Nodes);
+                tree.DataContext = rootNode;
             }
-        }
-
-        private List<NodeVM> GetNodes(IEnumerable<object> objects)
-        {
-            if (objects == null)
-                return new List<NodeVM>();
-
-            List<NodeVM> nodes = new List<NodeVM>();
-            foreach (var obj in objects)
-            {
-                NodeVM node;
-                int? recycleHashCode = NodesSource.GetRecycleHashCode(obj);
-                if (recycleHashCode.HasValue && NodesCache.ContainsKey(recycleHashCode.Value))
-                    node = NodesCache[recycleHashCode.Value];
-                else
-                {
-                    node = NodesSource.GetNode(obj);
-                    if(recycleHashCode.HasValue)
-                        NodesCache.Add(recycleHashCode.Value, node);
-                }
-                node.Nodes = GetNodes(NodesSource.GetChildObjects(obj));
-                nodes.Add(node);
-            }
-            return nodes;
         }
 
         private void btnClearFilter_Click(object sender, RoutedEventArgs e)
@@ -218,8 +189,13 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             if (e.Key == Key.Enter)
             {
                 var node = (tree.SelectedItem as NodeVM);
-                textBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
                 node.IsEditing = false;
+                var be = textBox.GetBindingExpression(TextBox.TextProperty);
+                if (be.IsDirty)
+                {
+                    be.UpdateSource();
+                    Dispatcher.BeginInvoke(new Action(() => tree.Items.Refresh()));
+                }
                 e.Handled = true;
             }
             else if (e.Key == Key.Escape)
@@ -255,9 +231,15 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             var node = (tree.SelectedItem as NodeVM);
             if (node != null)
             {
-                ((TextBox)sender).GetBindingExpression(TextBox.TextProperty).UpdateSource();
                 node.IsEditing = false;
-                tree.Items.Refresh();
+
+                var textBox = ((TextBox)sender);
+                var be = textBox.GetBindingExpression(TextBox.TextProperty);
+                if (be.IsDirty)
+                {
+                    be.UpdateSource();
+                    Dispatcher.BeginInvoke(new Action(() => tree.Items.Refresh()));
+                }
             }
         }
 

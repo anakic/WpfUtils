@@ -51,6 +51,7 @@
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="TreeViewItem">
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                         <Setter Property="ContextMenu">
                             <Setter.Value>
                                 <ContextMenu ItemsSource="{Binding ContextCommands}" Visibility="{Binding ContextCommands.Count, Converter={conv:MapConverter 0:Collapsed;_default:Visible}}">
