@@ -56,9 +56,9 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         #region core properties
         public abstract Uri ImageURI { get; }
         public abstract string Name { get; set; }
-        public virtual string ToolTip { get; }
+        public virtual string ToolTip { get => Name; }
         public virtual object Badge { get; }
-        public virtual int Order { get; } = 1;
+        public int Order { get; set; } = 1;
         public virtual IEnumerable<ContextCommand> ContextCommands { get; } = new List<ContextCommand>();
         #endregion
 
