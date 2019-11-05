@@ -110,7 +110,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                         SystemParameters.MinimumVerticalDragDistance)
                 {
                     // todo: only do this if dragging TreeViewItem (this is interefering with scroll)
-                    if((e.OriginalSource as FrameworkElement).TemplatedParent is System.Windows.Controls.Primitives.ScrollBar == false)
+                    if ((e.OriginalSource as FrameworkElement).TemplatedParent is System.Windows.Controls.Primitives.ScrollBar == false)
                         StartDrag(e);
                 }
             }
@@ -201,8 +201,12 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             else if (e.Key == Key.Escape)
             {
                 var node = (tree.SelectedItem as NodeVM);
-                textBox.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
-                textBox.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+                var be = textBox.GetBindingExpression(TextBox.TextProperty);
+                if (be.IsDirty)
+                {
+                    be.UpdateTarget();
+                    be.UpdateSource();
+                }
                 node.IsEditing = false;
                 e.Handled = true;
             }
