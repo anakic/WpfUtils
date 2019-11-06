@@ -85,7 +85,7 @@
 									   Visibility="{Binding IsEditing, Converter={conv:MapConverter 'false:Visible;true:Collapsed;'}}"/>
                             <TextBlock Text="{Binding Badge}" Opacity="0.5" VerticalAlignment="Center" Margin="4,0,0,0"
 									   Visibility="{Binding IsEditing, Converter={conv:MapConverter 'false:Visible;true:Collapsed;'}}"/>
-                            <TextBox Text="{Binding Name}" VerticalAlignment="Center" 
+                            <TextBox Text="{Binding Name, ValidatesOnExceptions=True}" VerticalAlignment="Center" 
                                      Visibility="{Binding IsEditing, Converter={conv:MapConverter 'true:Visible;false:Collapsed;'}}"
                                      IsVisibleChanged="TextBox_IsVisibleChanged" BorderThickness="0" PreviewKeyDown="TextBox_PreviewKeyDown" LostFocus="TextBox_LostFocus"/>
                         </StackPanel>

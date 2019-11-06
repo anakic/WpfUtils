@@ -194,7 +194,14 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 if (be.IsDirty)
                 {
                     be.UpdateSource();
-                    Dispatcher.BeginInvoke(new Action(() => tree.Items.Refresh()));
+                    if (be.HasValidationError)
+                    {
+                        ShowError(be.ValidationError.Exception.Message);
+                        be.UpdateTarget();
+                        be.UpdateSource();
+                    }
+                    else
+                        Dispatcher.BeginInvoke(new Action(() => tree.Items.Refresh()));
                 }
                 e.Handled = true;
             }
@@ -242,7 +249,14 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 if (be.IsDirty)
                 {
                     be.UpdateSource();
-                    Dispatcher.BeginInvoke(new Action(() => tree.Items.Refresh()));
+                    if (be.HasValidationError)
+                    {
+                        ShowError(be.ValidationError.Exception.Message);
+                        be.UpdateTarget();
+                        be.UpdateSource();
+                    }
+                    else
+                        Dispatcher.BeginInvoke(new Action(() => tree.Items.Refresh()));
                 }
             }
         }
@@ -261,8 +275,21 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             {
                 var node = (NodeVM)e.Data.GetData("Node");
                 var proposedParentNode = (sender as StackPanel).DataContext as NodeVM;
-                node.Move(proposedParentNode);
+                try
+                {
+                    node.Move(proposedParentNode);
+                }
+                catch (Exception ex)
+                {
+                    ShowError(ex.Message);
+                }
             }
+        }
+
+        // todo: allow using an event for handling errors
+        private void ShowError(string message)
+        {
+            MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void StackPanel_DragOver(object sender, DragEventArgs e)
