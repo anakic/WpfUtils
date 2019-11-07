@@ -57,9 +57,6 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         private void Update()
         {
-            if (rootNode != null)
-                rootNode.Visit(n => { if (n is IDisposable disp) disp.Dispose(); });
-
             if (Nodes == null)
                 tree.DataContext = rootNode = null;
             else
