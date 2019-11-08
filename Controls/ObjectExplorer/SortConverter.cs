@@ -13,11 +13,17 @@ namespace Thingie.WPF.Controls.ObjectExplorer
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var collection = (value as IEnumerable<object>).ToList();
-            ListCollectionView view = new ListCollectionView(collection);
-            view.SortDescriptions.Add(new SortDescription(nameof(NodeVM.Order), ListSortDirection.Ascending));
-            view.SortDescriptions.Add(new SortDescription(nameof(NodeVM.Name), ListSortDirection.Ascending));
-            return view;
+            if (value != null)
+            {
+                var collection = (value as IEnumerable<object>).ToList();
+                ListCollectionView view = new ListCollectionView(collection);
+                view.SortDescriptions.Add(new SortDescription(nameof(NodeVM.Order), ListSortDirection.Ascending));
+                view.SortDescriptions.Add(new SortDescription(nameof(NodeVM.Name), ListSortDirection.Ascending));
+                view.Filter = (obj => (obj as NodeVM).IsVisible);
+                return view;
+            }
+            else
+                return null;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

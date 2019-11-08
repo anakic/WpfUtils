@@ -43,7 +43,7 @@
             </Button.Content>
         </Button>
         <AdornerDecorator Grid.Row="2" Margin="5,0,5,5">
-            <TreeView ItemsSource="{Binding VisibleNodes, Converter={StaticResource sortConverter}}" BorderThickness="0"
+            <TreeView ItemsSource="{Binding Nodes, Converter={StaticResource sortConverter}}" BorderThickness="0"
                 x:Name="tree" VirtualizingStackPanel.IsVirtualizing="True" Background="Transparent" Focusable="False"
                 PreviewMouseMove="tree_PreviewMouseMove" PreviewMouseLeftButtonDown="tree_PreviewMouseLeftButtonDown"
                 PreviewKeyDown="TreeView_KeyDown"
@@ -75,7 +75,7 @@
                     </Style>
                 </TreeView.ItemContainerStyle>
                 <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding VisibleNodes, Converter={StaticResource sortConverter}}">
+                    <HierarchicalDataTemplate ItemsSource="{Binding Nodes, Converter={StaticResource sortConverter}}">
                         <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="60000" MouseLeftButtonUp="tree_MouseLeftButtonDown" Margin="2" MouseDown="StackPanel_MouseDown" AllowDrop="True" Drop="StackPanel_Drop" DragOver="StackPanel_DragOver">
                             <StackPanel.ToolTip>
                                 <TextBlock MaxWidth="500" Text="{Binding ToolTip}" TextWrapping="Wrap" Visibility="{Binding ToolTip, Converter={conv:MapConverter '_null:Collapsed;:Collapsed;_default:Visible'}}"/>

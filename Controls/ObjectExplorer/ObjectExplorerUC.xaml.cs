@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,12 +25,9 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
             public override string ToolTip => null;
 
-            protected override IEnumerable<NodeVM> GetInitialNodes() => nodes;
-
-            IEnumerable<NodeVM> nodes;
             public RootNodeVM(IEnumerable<NodeVM> nodes)
             {
-                this.nodes = nodes;
+                nodes.ToList().ForEach(AddNode);
             }
         }
 
