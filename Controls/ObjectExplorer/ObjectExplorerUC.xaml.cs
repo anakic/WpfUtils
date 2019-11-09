@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -21,13 +22,19 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         {
             public override Uri ImageURI => default(Uri);
 
-            public override string Name { get; set; }
-
             public override string ToolTip => null;
 
-            public RootNodeVM(IEnumerable<NodeVM> nodes)
+            protected override void PopulateNodes(ObservableCollection<NodeVM> nodes)
             {
-                nodes.ToList().ForEach(AddNode);
+                Nodes.Clear();
+                nodes.ToList().ForEach(Nodes.Add);
+            }
+
+            IEnumerable<NodeVM> nodes;
+            public RootNodeVM(IEnumerable<NodeVM> nodes)
+                : base("")
+            {
+                this.nodes = nodes;
             }
         }
 
@@ -61,6 +68,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             {
                 // a root node to host content
                 rootNode = new RootNodeVM(Nodes);
+                rootNode.Visit(n => n.Initialize());
                 tree.DataContext = rootNode;
             }
         }

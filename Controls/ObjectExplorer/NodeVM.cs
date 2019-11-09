@@ -9,9 +9,8 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 {
     public abstract class NodeVM : INotifyPropertyChanged
     {
-        // nodes are initialized lazily when the Nodes property getter is executed
-        protected bool NodesInitialized { get; private set; } = false;
-        private List<NodeVM> nodes = new List<NodeVM>();
+        string name;
+        private ObservableCollection<NodeVM> nodes;
 
         #region user interaction properties
         private bool isEditing;
@@ -44,8 +43,16 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public virtual bool IsSelected { get => isSelected; set { isSelected = value; OnPropertyChanged(nameof(IsSelected)); } }
         #endregion
 
+        public NodeVM(string name)
+        {
+            this.name = name;
+        }
+
+        public virtual void Initialize() { }
+
         #region actions
         public virtual bool CanRename() => false;
+        protected virtual void DoRename(string oldName, string newName) { }
 
         public virtual bool CanSelect() => false;
         public virtual void Select() { }
@@ -60,50 +67,56 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public virtual void Delete() { }
         #endregion
 
+        public string Name
+        {
+            get => name; 
+            set
+            {
+                if (CanRename())
+                {
+                    var oldName = name;
+                    name = value;
+                    try
+                    {
+                        DoRename(oldName, name);
+                        OnPropertyChanged(Name);
+                    }
+                    catch
+                    {
+                        name = oldName;
+                        throw;
+                    }
+                }
+                else
+                    throw new InvalidOperationException("Unable to rename");
+            }
+        }
+
         #region core properties
         public abstract Uri ImageURI { get; }
-        public abstract string Name { get; set; }
         public virtual string ToolTip { get => Name; }
         public virtual object Badge { get; }
         public int Order { get; set; } = 1;
         public virtual IEnumerable<ContextCommand> ContextCommands { get; } = new List<ContextCommand>();
         #endregion
 
-        public IEnumerable<NodeVM> Nodes
+        public NodeVM Parent { get; private set; }
+
+        public ObservableCollection<NodeVM> Nodes
         {
             get
             {
-                if (!NodesInitialized) 
+                if (nodes == null)
                 {
-                    InitNodes();
-                    NodesInitialized = true;
+                    nodes = new ObservableCollection<NodeVM>();
+                    nodes.CollectionChanged += (s, e) => { e.NewItems.OfType<NodeVM>().ToList().ForEach(n => n.Parent = this); };
+                    PopulateNodes(nodes as ObservableCollection<NodeVM>);
                 }
-                return nodes.AsEnumerable();
+                return nodes;
             }
         }
 
-        protected virtual void InitNodes() { }
-
-        public void AddNode(NodeVM node)
-        {
-            if (NodesInitialized)
-            {
-                node.Parent = this;
-                nodes.Add(node);
-                UpdateVisibility();
-            }
-        }
-
-        public void RemoveNode(NodeVM node)
-        {
-            if (NodesInitialized)
-            {
-                nodes.Remove(node);
-                UpdateVisibility();
-            }
-        }
-
-        public NodeVM Parent { get; private set; }
+        protected virtual void PopulateNodes(ObservableCollection<NodeVM> nodes) { }
 
         #region filter
         public void Filter(string search)
