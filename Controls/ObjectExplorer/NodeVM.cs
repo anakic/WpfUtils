@@ -34,7 +34,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         protected void UpdateVisibility()
         {
             OnPropertyChanged(nameof(IsVisible));
-            //Parent?.OnPropertyChanged(nameof(Nodes)); // re-apply filtering on parent Nodes collection
+            Parent?.OnPropertyChanged(nameof(Nodes)); // re-apply filtering on parent Nodes collection
         }
 
         public bool IsEditing { get => isEditing; set { isEditing = value; OnPropertyChanged(nameof(IsEditing)); } }
