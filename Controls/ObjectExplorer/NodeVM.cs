@@ -34,7 +34,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         protected void UpdateVisibility()
         {
             OnPropertyChanged(nameof(IsVisible));
-            Parent?.OnPropertyChanged(nameof(Nodes)); // re-apply filtering on parent Nodes collection
+            //Parent?.OnPropertyChanged(nameof(Nodes)); // re-apply filtering on parent Nodes collection
         }
 
         public bool IsEditing { get => isEditing; set { isEditing = value; OnPropertyChanged(nameof(IsEditing)); } }
@@ -67,6 +67,8 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public virtual void Delete() { }
         #endregion
 
+        public virtual string DisplayText { get => Name; }
+
         public string Name
         {
             get => name; 
@@ -80,6 +82,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                     {
                         DoRename(oldName, name);
                         OnPropertyChanged(Name);
+                        OnPropertyChanged(DisplayText);
                     }
                     catch
                     {
@@ -109,7 +112,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 if (nodes == null)
                 {
                     nodes = new ObservableCollection<NodeVM>();
-                    nodes.CollectionChanged += (s, e) => { e.NewItems.OfType<NodeVM>().ToList().ForEach(n => n.Parent = this); };
+                    nodes.CollectionChanged += (s, e) => { if (e.NewItems != null) e.NewItems.OfType<NodeVM>().ToList().ForEach(n => n.Parent = this); };
                     PopulateNodes(nodes as ObservableCollection<NodeVM>);
                 }
                 return nodes;

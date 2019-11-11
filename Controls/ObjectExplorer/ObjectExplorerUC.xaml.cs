@@ -26,15 +26,15 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
             protected override void PopulateNodes(ObservableCollection<NodeVM> nodes)
             {
-                Nodes.Clear();
-                nodes.ToList().ForEach(Nodes.Add);
+                nodes.Clear();
+                childNodes.ToList().ForEach(Nodes.Add);
             }
 
-            IEnumerable<NodeVM> nodes;
+            IEnumerable<NodeVM> childNodes;
             public RootNodeVM(IEnumerable<NodeVM> nodes)
                 : base("")
             {
-                this.nodes = nodes;
+                this.childNodes = nodes;
             }
         }
 
@@ -202,6 +202,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                         ShowError(be.ValidationError.Exception.Message);
                         be.UpdateTarget();
                         be.UpdateSource();
+                        Validation.ClearInvalid(be);
                     }
                     else
                         Dispatcher.BeginInvoke(new Action(() => tree.Items.Refresh()));
@@ -257,6 +258,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                         ShowError(be.ValidationError.Exception.Message);
                         be.UpdateTarget();
                         be.UpdateSource();
+                        Validation.ClearInvalid(be);
                     }
                     else
                         Dispatcher.BeginInvoke(new Action(() => tree.Items.Refresh()));

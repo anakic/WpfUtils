@@ -81,7 +81,7 @@
                                 <TextBlock MaxWidth="500" Text="{Binding ToolTip}" TextWrapping="Wrap" Visibility="{Binding ToolTip, Converter={conv:MapConverter '_null:Collapsed;:Collapsed;_default:Visible'}}"/>
                             </StackPanel.ToolTip>
                             <Image Source="{Binding ImageURI}" Width="16" Height="16" Margin="0,0,2,0" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
-                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center"
+                            <TextBlock Text="{Binding DisplayText}" VerticalAlignment="Center"
 									   Visibility="{Binding IsEditing, Converter={conv:MapConverter 'false:Visible;true:Collapsed;'}}"/>
                             <TextBlock Text="{Binding Badge}" Opacity="0.5" VerticalAlignment="Center" Margin="4,0,0,0"
 									   Visibility="{Binding IsEditing, Converter={conv:MapConverter 'false:Visible;true:Collapsed;'}}"/>
