@@ -132,12 +132,16 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             }
         }
 
-        private void tree_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void node_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             NodeVM n = (sender as FrameworkElement).DataContext as NodeVM;
-            if (n != null && Keyboard.Modifiers == ModifierKeys.Control && n.CanSelect())
+            if (n != null)
             {
-                n.Select();
+                if (Keyboard.Modifiers == ModifierKeys.Control && n.CanSelect())
+                    n.Select();
+
+                if (e.ClickCount == 2 && n.CanActivate())
+                    n.Activate();
             }
         }
 
@@ -264,14 +268,6 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                         Dispatcher.BeginInvoke(new Action(() => tree.Items.Refresh()));
                 }
             }
-        }
-
-        private void StackPanel_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            var node = (tree.SelectedItem as NodeVM);
-
-            if (e.ClickCount == 2 && node.CanActivate())
-                node.Activate();
         }
 
         private void StackPanel_Drop(object sender, DragEventArgs e)

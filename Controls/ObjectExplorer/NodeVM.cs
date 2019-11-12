@@ -69,7 +69,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         public virtual string DisplayText { get => Name; }
 
-        public string Name
+        public virtual string Name
         {
             get => name; 
             set
@@ -100,7 +100,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public virtual string ToolTip { get => Name; }
         public virtual object Badge { get; }
         public int Order { get; set; } = 1;
-        public virtual IEnumerable<ContextCommand> ContextCommands { get; } = new List<ContextCommand>();
+        public ObservableCollection<ContextCommand> ContextCommands { get; } = new ObservableCollection<ContextCommand>();
         #endregion
 
         public NodeVM Parent { get; private set; }

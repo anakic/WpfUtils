@@ -52,6 +52,7 @@
                     <Style TargetType="TreeViewItem">
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                        <EventSetter Event="PreviewMouseDown" Handler="node_PreviewMouseLeftButtonDown"/>
                         <Setter Property="ContextMenu">
                             <Setter.Value>
                                 <ContextMenu ItemsSource="{Binding ContextCommands}" Visibility="{Binding ContextCommands.Count, Converter={conv:MapConverter 0:Collapsed;_default:Visible}}">
@@ -76,7 +77,7 @@
                 </TreeView.ItemContainerStyle>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Nodes, Converter={StaticResource sortConverter}}">
-                        <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="60000" MouseLeftButtonUp="tree_MouseLeftButtonDown" Margin="2" MouseDown="StackPanel_MouseDown" AllowDrop="True" Drop="StackPanel_Drop" DragOver="StackPanel_DragOver">
+                        <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="60000" Margin="2" AllowDrop="True" Drop="StackPanel_Drop" DragOver="StackPanel_DragOver">
                             <StackPanel.ToolTip>
                                 <TextBlock MaxWidth="500" Text="{Binding ToolTip}" TextWrapping="Wrap" Visibility="{Binding ToolTip, Converter={conv:MapConverter '_null:Collapsed;:Collapsed;_default:Visible'}}"/>
                             </StackPanel.ToolTip>
