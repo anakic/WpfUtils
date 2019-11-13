@@ -105,6 +105,14 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         public NodeVM Parent { get; private set; }
 
+        public T FindNode<T>() where T: NodeVM
+        {
+            if (this is T p)
+                return p;
+            else
+                return Parent?.FindNode<T>();
+        }
+
         public ObservableCollection<NodeVM> Nodes
         {
             get
