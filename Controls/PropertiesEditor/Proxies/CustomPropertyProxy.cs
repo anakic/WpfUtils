@@ -13,8 +13,8 @@ namespace Thingie.WPF.Controls.PropertiesEditor.Proxies
             }
         }
 
-        Type _customEditorControlType;
-        object[] _constructorArgs;
+        readonly Type _customEditorControlType;
+        readonly object[] _constructorArgs;
 
         public CustomPropertyProxy(Type customEditorControlType, params object[] constructorArgs)
         {

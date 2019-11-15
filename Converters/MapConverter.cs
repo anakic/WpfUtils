@@ -25,7 +25,7 @@ namespace Thingie.WPF.Converters
             NullString = "_null";
         }
 
-        Dictionary<string, string> _propValMap = new Dictionary<string, string>();
+        readonly Dictionary<string, string> _propValMap = new Dictionary<string, string>();
         private string _mapExpression;
         [ConstructorArgument("expression")]
         public string MapExpression

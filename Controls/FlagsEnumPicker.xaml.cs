@@ -71,7 +71,7 @@ namespace Thingie.WPF.Controls
             }
         }
 
-        Type _enumType;
+        readonly Type _enumType;
         public FlagsEnumVM(Type enumType, object value)
         {
             _enumType = enumType;

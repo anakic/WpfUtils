@@ -10,8 +10,7 @@ namespace Thingie.WPF.Validators
         DateTime _lastValidationTime;
         string _lastValidationValue;
         ValidationResult _lastResult;
-
-        int _refreshInterval = 5;
+        readonly int _refreshInterval = 5;
 
         public override ValidationResult Validate(object value, CultureInfo cultureInfo)
         {

@@ -30,7 +30,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 childNodes.ToList().ForEach(Nodes.Add);
             }
 
-            IEnumerable<NodeVM> childNodes;
+            readonly IEnumerable<NodeVM> childNodes;
             public RootNodeVM(IEnumerable<NodeVM> nodes)
                 : base("")
             {

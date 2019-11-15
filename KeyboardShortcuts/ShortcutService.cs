@@ -60,8 +60,8 @@ namespace Thingie.WPF.KeyboardShortcuts
 
         #region winapi stuff
         public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
-        private LowLevelKeyboardProc _proc;
-        private IntPtr _hookID = IntPtr.Zero;
+        private readonly LowLevelKeyboardProc _proc;
+        private readonly IntPtr _hookID = IntPtr.Zero;
 
         //Declare the mouse hook constant.
         //For other hook types, you can obtain these values from Winuser.h in the Microsoft SDK.            

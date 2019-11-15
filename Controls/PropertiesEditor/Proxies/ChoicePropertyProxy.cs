@@ -12,14 +12,14 @@ namespace Thingie.WPF.Controls.PropertiesEditor.Proxies
         public string DisplayMemberPath { get; set; }
         public IEnumerable Values { get { return _getChoicesFunc(); } }
 
-        Func<IEnumerable> _getChoicesFunc;
+        readonly Func<IEnumerable> _getChoicesFunc;
 
         public ChoicePropertyProxy(IEnumerable choices)
         {
             _getChoicesFunc = () => choices;
         }
 
-        string _choicePropertyName;
+        readonly string _choicePropertyName;
         public ChoicePropertyProxy(string choicePropertyName)
         {
             _choicePropertyName = choicePropertyName;

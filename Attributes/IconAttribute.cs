@@ -9,8 +9,8 @@ namespace Thingie.WPF.Attributes
 {
 	public class IconAttribute : Attribute
     {
-        string _iconUri;
-        Assembly _assembly;
+        readonly string _iconUri;
+        readonly Assembly _assembly;
 
         public IconAttribute(string iconUri, Type typeInAssembly)
         {

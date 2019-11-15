@@ -53,7 +53,7 @@ namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory.Attributes
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class RegexAttribute : ValidationAttributeBase
     {
-        string _pattern;
+        readonly string _pattern;
 
         public RegexAttribute(string pattern)
         {
@@ -78,8 +78,8 @@ namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory.Attributes
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
     public class RangeAttribute : ValidationAttributeBase
     {
-        double _min, _max;
-        bool _includeMin, _includeMax;
+        readonly double _min, _max;
+        readonly bool _includeMin, _includeMax;
 
         public RangeAttribute(double min, double max, bool includeMin, bool includeMax)
         {

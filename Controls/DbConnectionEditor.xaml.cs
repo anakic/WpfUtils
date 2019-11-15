@@ -208,7 +208,7 @@ namespace Thingie.WPF.Controls
 
     public class DbConnectionEditorVM : INotifyPropertyChanged
     {
-        DbConnectionData _connData;
+        readonly DbConnectionData _connData;
 
         public string SelectedInstance
         {
