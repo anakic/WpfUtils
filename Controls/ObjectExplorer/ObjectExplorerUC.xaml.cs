@@ -165,16 +165,21 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         private void TreeView_KeyDown(object sender, KeyEventArgs e)
         {
+            var node = (tree.SelectedItem as NodeVM);
+
             if (e.Key == Key.F2)
             {
-                var node = (tree.SelectedItem as NodeVM);
                 if (node?.CanRename() == true)
                     node.IsEditing = true;
             }
+            else if (e.Key == Key.Space)
+            {
+                if (node?.CanSelect() == true)
+                    node.Select();
+            }
             else if (e.Key == Key.Delete && e.OriginalSource is TextBox != true)
             {
-                var node = (tree.SelectedItem as NodeVM);
-                if (node.CanDelete())
+                if (node?.CanDelete() == true)
                     node.Delete();
             }
         }
@@ -195,9 +200,10 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 TextBox textBox = (sender as TextBox);
+                var node = (tree.SelectedItem as NodeVM);
+
                 if (e.Key == Key.Enter)
                 {
-                    var node = (tree.SelectedItem as NodeVM);
                     node.IsEditing = false;
                     var be = textBox.GetBindingExpression(TextBox.TextProperty);
                     if (be.IsDirty)
@@ -219,7 +225,6 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 }
                 else if (e.Key == Key.Escape)
                 {
-                    var node = (tree.SelectedItem as NodeVM);
                     var be = textBox.GetBindingExpression(TextBox.TextProperty);
                     if (be.IsDirty)
                     {
