@@ -192,82 +192,90 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            TextBox textBox = (sender as TextBox);
-            if (e.Key == Key.Enter)
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                var node = (tree.SelectedItem as NodeVM);
-                node.IsEditing = false;
-                var be = textBox.GetBindingExpression(TextBox.TextProperty);
-                if (be.IsDirty)
+                TextBox textBox = (sender as TextBox);
+                if (e.Key == Key.Enter)
                 {
-                    be.UpdateSource();
-                    if (be.HasValidationError)
+                    var node = (tree.SelectedItem as NodeVM);
+                    node.IsEditing = false;
+                    var be = textBox.GetBindingExpression(TextBox.TextProperty);
+                    if (be.IsDirty)
                     {
-                        ShowError(be.ValidationError.Exception.Message);
+                        be.UpdateSource();
+                        if (be.HasValidationError)
+                        {
+                            ShowError(be.ValidationError.Exception.Message);
+                            be.UpdateTarget();
+                            be.UpdateSource();
+                            Validation.ClearInvalid(be);
+                        }
+                        else
+                        {
+                            tree.Items.Refresh();
+                        }
+                    }
+                    e.Handled = true;
+                }
+                else if (e.Key == Key.Escape)
+                {
+                    var node = (tree.SelectedItem as NodeVM);
+                    var be = textBox.GetBindingExpression(TextBox.TextProperty);
+                    if (be.IsDirty)
+                    {
                         be.UpdateTarget();
                         be.UpdateSource();
-                        Validation.ClearInvalid(be);
                     }
-                    else
-                        Dispatcher.BeginInvoke(new Action(() => tree.Items.Refresh()));
+                    node.IsEditing = false;
+                    e.Handled = true;
                 }
-                e.Handled = true;
-            }
-            else if (e.Key == Key.Escape)
-            {
-                var node = (tree.SelectedItem as NodeVM);
-                var be = textBox.GetBindingExpression(TextBox.TextProperty);
-                if (be.IsDirty)
+                else if (e.Key == Key.Subtract || e.Key == Key.Add)
                 {
-                    be.UpdateTarget();
-                    be.UpdateSource();
+                    e.Handled = true;
+
+                    var text = e.Key == Key.Subtract ? "-" : "+";
+                    var target = Keyboard.FocusedElement;
+                    var routedEvent = TextCompositionManager.TextInputEvent;
+
+                    target.RaiseEvent(
+                        new TextCompositionEventArgs
+                            (
+                                 InputManager.Current.PrimaryKeyboardDevice,
+                                new TextComposition(InputManager.Current, target, text)
+                            )
+                        {
+                            RoutedEvent = routedEvent
+                        });
                 }
-                node.IsEditing = false;
-                e.Handled = true;
-            }
-            else if (e.Key == Key.Subtract || e.Key == Key.Add)
-            {
-                e.Handled = true;
-
-                var text = e.Key == Key.Subtract ? "-" : "+";
-                var target = Keyboard.FocusedElement;
-                var routedEvent = TextCompositionManager.TextInputEvent;
-
-                target.RaiseEvent(
-                    new TextCompositionEventArgs
-                        (
-                             InputManager.Current.PrimaryKeyboardDevice,
-                            new TextComposition(InputManager.Current, target, text)
-                        )
-                    {
-                        RoutedEvent = routedEvent
-                    });
-            }
+            }));
         }
 
         private void TextBox_LostFocus(object sender, System.Windows.RoutedEventArgs e)
         {
-            var node = (tree.SelectedItem as NodeVM);
-            if (node != null)
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                node.IsEditing = false;
-
-                var textBox = ((TextBox)sender);
-                var be = textBox.GetBindingExpression(TextBox.TextProperty);
-                if (be.IsDirty)
+                var node = (tree.SelectedItem as NodeVM);
+                if (node != null)
                 {
-                    be.UpdateSource();
-                    if (be.HasValidationError)
+                    node.IsEditing = false;
+
+                    var textBox = ((TextBox)sender);
+                    var be = textBox.GetBindingExpression(TextBox.TextProperty);
+                    if (be.IsDirty)
                     {
-                        ShowError(be.ValidationError.Exception.Message);
-                        be.UpdateTarget();
                         be.UpdateSource();
-                        Validation.ClearInvalid(be);
+                        if (be.HasValidationError)
+                        {
+                            ShowError(be.ValidationError.Exception.Message);
+                            be.UpdateTarget();
+                            be.UpdateSource();
+                            Validation.ClearInvalid(be);
+                        }
+                        else
+                            tree.Items.Refresh();
                     }
-                    else
-                        Dispatcher.BeginInvoke(new Action(() => tree.Items.Refresh()));
                 }
-            }
+            }));
         }
 
         private void StackPanel_Drop(object sender, DragEventArgs e)
