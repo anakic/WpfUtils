@@ -10,6 +10,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
     public abstract class NodeVM : INotifyPropertyChanged
     {
         string name;
+        int order = 1;
         private ObservableCollection<NodeVM> nodes;
 
         #region user interaction properties
@@ -81,8 +82,9 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                     try
                     {
                         DoRename(oldName, name);
-                        OnPropertyChanged(Name);
-                        OnPropertyChanged(DisplayText);
+                        OnPropertyChanged(nameof(Name));
+                        OnPropertyChanged(nameof(DisplayText));
+                        Parent.OnPropertyChanged(nameof(Nodes));
                     }
                     catch
                     {
@@ -99,7 +101,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public abstract Uri ImageURI { get; }
         public virtual string ToolTip { get => Name; }
         public virtual object Badge { get; }
-        public int Order { get; set; } = 1;
+        public int Order { get => order; set { order = value; OnPropertyChanged(nameof(Order)); Parent?.OnPropertyChanged(nameof(Nodes)); } }
         public ObservableCollection<ContextCommand> ContextCommands { get; } = new ObservableCollection<ContextCommand>();
         #endregion
 
