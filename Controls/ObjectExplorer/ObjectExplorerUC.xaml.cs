@@ -134,6 +134,8 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         private void node_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            // todo: this bubbles, check if source == e.originalsource and cancel if not
+
             NodeVM n = (sender as FrameworkElement).DataContext as NodeVM;
             if (n != null)
             {
