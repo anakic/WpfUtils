@@ -315,7 +315,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 var node = (NodeVM)e.Data.GetData("Node");
                 var proposedParentNode = (sender as StackPanel).DataContext as NodeVM;
 
-                if (node.CanMove(proposedParentNode))
+                if (node.CanMoveInternal(proposedParentNode) && node.CanMove(proposedParentNode))
                     e.Effects = DragDropEffects.Move;
                 else
                     e.Effects = DragDropEffects.None;

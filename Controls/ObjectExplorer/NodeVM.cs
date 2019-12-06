@@ -13,6 +13,13 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         int order = 1;
         private ObservableCollection<NodeVM> nodes;
 
+
+        /// <summary>
+        /// If true, child Nodes will not be movable outside of this folder.
+        /// </summary>
+        public virtual bool IsScopeRoot => false;
+
+
         #region user interaction properties
         private bool isEditing;
         private bool isExpanded;
@@ -64,6 +71,9 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public virtual bool CanMove(NodeVM proposedParent) => false;
         public virtual void Move(NodeVM newParent) { }
 
+
+
+
         public virtual bool CanDelete() => false;
         public virtual void Delete() { }
         #endregion
@@ -72,7 +82,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         public virtual string Name
         {
-            get => name; 
+            get => name;
             set
             {
                 if (CanRename())
@@ -107,7 +117,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         public NodeVM Parent { get; private set; }
 
-        public T FindNode<T>() where T: NodeVM
+        public T FindNode<T>() where T : NodeVM
         {
             if (this is T p)
                 return p;
@@ -180,5 +190,39 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         {
             return Name;
         }
+
+        #region helpers
+
+        // Internal prerequisites for allowing a node move. These need to be satisfied before CanMove is checked.
+        internal bool CanMoveInternal(NodeVM proposedParent)
+        {
+            return 
+                proposedParent != this // cannot move to self
+                && proposedParent != this.Parent // cannot move to the same parent
+                && FindScopeRoot(this) == FindScopeRoot(proposedParent) // move must be inside the same scope
+                && IsAncestorOf(this, proposedParent) == false; // cannot move to its own descendant
+        }
+
+        private NodeVM FindScopeRoot(NodeVM node)
+        {
+            if (node == null)
+                return null;
+            else if (node.IsScopeRoot)
+                return node;
+            else
+                return FindScopeRoot(node.Parent);
+        }
+
+        private bool IsAncestorOf(NodeVM node, NodeVM other)
+        {
+            if (other.Parent == null)
+                return false;
+            else if (other.Parent == node)
+                return true;
+            else
+                return IsAncestorOf(node, other.Parent);
+        }
+
+        #endregion
     }
 }
