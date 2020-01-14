@@ -11,7 +11,7 @@ using Thingie.WPF.Attributes;
 
 namespace Thingie.WPF.KeyboardShortcuts
 {
-    public class ShortcutHandle
+    public abstract class ShortcutHandle
     {
         public string Name { get; set; }
         public string Category { get; set; }
@@ -19,13 +19,10 @@ namespace Thingie.WPF.KeyboardShortcuts
         public Key Key { get; set; }
         public ModifierKeys ModifierKeys { get; set; }
 
-        public Func<bool> IsApplicable { get; private set; }
-        public Func<bool> CanExecute { get; private set; }
-        public Action Execute { get; private set; }
-
         public ShortcutHandle(string name, Key key)
             : this(name, key, ModifierKeys.None)
         { }
+
         public ShortcutHandle(string name, Key key, ModifierKeys modifierKeys)
         {
             Key = key;
@@ -34,16 +31,12 @@ namespace Thingie.WPF.KeyboardShortcuts
             this.Category = "General shortcuts";
         }
 
-        public void Claim(Action execute, Func<bool> isApplicable, Func<bool> canExecute)
-        {
-            CanExecute = canExecute;
-            Execute = execute;
-            IsApplicable = isApplicable;
-        }
+        public abstract bool CanExecute();
+        public abstract bool IsInScope();
+        public abstract void Execute();
 
         //sluzi samo za komunikaciju sa property gridom (da objedini dva property-a u jedan, tako da key i modifier mogu editirati u istom retku u gridu)
         internal ShortcutGesture KeyGesture { get { return new ShortcutGesture(Key, ModifierKeys); } set { Key = value.Key; ModifierKeys = value.ModifierKeys; } }
-
     }
 
     [ProxyFactory(typeof(ShortcutServiceProxyFactory))]
@@ -83,7 +76,7 @@ namespace Thingie.WPF.KeyboardShortcuts
 
 					if (shortcutHandle != null)
 					{
-						if (shortcutHandle.CanExecute == null || shortcutHandle.CanExecute())
+						if (shortcutHandle.CanExecute())
 						{
 							BeforeExecuteShortcut(shortcutHandle);
 							shortcutHandle.Execute();
@@ -106,11 +99,10 @@ namespace Thingie.WPF.KeyboardShortcuts
 		private ShortcutHandle FindShortcut()
 		{
 			return Shortcuts.FirstOrDefault(sh =>
-									sh.Execute != null &&
-									sh.KeyGesture.Key != Key.None &&
-									Keyboard.IsKeyDown(sh.KeyGesture.Key) &&
-									Keyboard.Modifiers == sh.KeyGesture.ModifierKeys &&
-									sh.IsApplicable());
+				sh.KeyGesture.Key != Key.None &&
+				Keyboard.IsKeyDown(sh.KeyGesture.Key) &&
+				Keyboard.Modifiers == sh.KeyGesture.ModifierKeys &&
+				sh.IsInScope());
 		}
 
 		protected virtual void BeforeExecuteShortcut(ShortcutHandle shortcutHandle) { }
