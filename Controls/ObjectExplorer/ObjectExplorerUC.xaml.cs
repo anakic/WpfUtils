@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -35,6 +36,13 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 : base("")
             {
                 this.childNodes = nodes;
+                if(nodes is INotifyCollectionChanged observable)
+                    observable.CollectionChanged += Observable_CollectionChanged;
+            }
+
+            private void Observable_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+            {
+                PopulateNodes(Nodes);
             }
         }
 

@@ -25,7 +25,6 @@ namespace Thingie.WPF.MarkupExtensions
         public bool GuessCanExecMember { get; set; }
 
         FrameworkElement _targetElement;
-        string _targetProperty;
         Action<object> _execMethod;
         Func<object, bool> _canExecMethod = (o) => false;
 
@@ -61,9 +60,7 @@ namespace Thingie.WPF.MarkupExtensions
             _targetElement = targetProvider.TargetObject as FrameworkElement;
             if (_targetElement != null)
             {
-                _targetProperty = targetProvider.TargetProperty.ToString();
                 _targetElement.DataContextChanged += (s, e) => { Init(); };
-
                 if (_targetElement.DataContext != null)
                     Init();
             }
