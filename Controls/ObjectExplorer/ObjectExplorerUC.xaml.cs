@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace Thingie.WPF.Controls.ObjectExplorer
 {
@@ -19,6 +20,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
     /// </summary>
     public partial class ObjectExplorerUC : UserControl
     {
+        DispatcherFrame dispatcherFrame;
         private class RootNodeVM : NodeVM
         {
             public override Uri ImageURI => default(Uri);
@@ -36,7 +38,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 : base("")
             {
                 this.childNodes = nodes;
-                if(nodes is INotifyCollectionChanged observable)
+                if (nodes is INotifyCollectionChanged observable)
                     observable.CollectionChanged += Observable_CollectionChanged;
             }
 
@@ -46,8 +48,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             }
         }
 
-        public IEnumerable<NodeVM> Nodes
-        {
+        public IEnumerable<NodeVM> Nodes {
             get { return (IEnumerable<NodeVM>)GetValue(NodesProperty); }
             set { SetValue(NodesProperty, value); }
         }
@@ -329,6 +330,32 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                     e.Effects = DragDropEffects.None;
                 e.Handled = true;
             }
+        }
+
+        private void node_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            NodeVM n = (sender as FrameworkElement).DataContext as NodeVM;
+
+            if (n != null)
+            {
+                if (e.Key == Key.Enter && n.CanActivate())
+                    n.Activate();
+            }
+        }
+
+        private void contextMenu_GotFocus(object sender, RoutedEventArgs e)
+        {
+            Dispatcher.BeginInvoke(DispatcherPriority.Normal, (DispatcherOperationCallback) delegate (object unused)
+            {
+                dispatcherFrame = new DispatcherFrame();
+                Dispatcher.PushFrame(dispatcherFrame);
+                return null;
+            }, null);
+        }
+
+        private void contextMenu_LostFocus(object sender, RoutedEventArgs e)
+        {
+            dispatcherFrame.Continue = false;
         }
     }
 }

@@ -53,9 +53,12 @@
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                         <EventSetter Event="PreviewMouseDown" Handler="node_PreviewMouseLeftButtonDown"/>
+                        <EventSetter Event="KeyDown" Handler="node_PreviewKeyDown" />
                         <Setter Property="ContextMenu">
                             <Setter.Value>
                                 <ContextMenu ItemsSource="{Binding ContextCommands}" Visibility="{Binding ContextCommands.Count, Converter={conv:MapConverter 0:Collapsed;_default:Visible}}">
+                                    <EventSetter Event="GotFocus" Handler="contextMenu_GotFocus" />
+                                    <EventSetter Event="LostFocus" Handler="contextMenu_LostFocus" />
                                     <ContextMenu.Resources>
                                         <Image x:Key="miIcon"
                                                x:Shared="false"
@@ -63,6 +66,7 @@
                                     </ContextMenu.Resources>
                                     <ContextMenu.ItemContainerStyle>
                                         <Style TargetType="MenuItem">
+                                            <Setter Property="ItemsSource" Value="{Binding SubmenuCommands}" />
                                             <Setter Property="Padding" Value="2"/>
                                             <Setter Property="Command" Value="{Binding}" />
                                             <Setter Property="CommandParameter" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType=TreeViewItem}}" />

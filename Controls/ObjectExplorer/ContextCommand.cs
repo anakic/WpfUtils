@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,8 @@ namespace Thingie.WPF.Controls.ObjectExplorer
     public abstract class ContextCommand : ICommand
     {
         public abstract string Text { get; }
+
+        public virtual ObservableCollection<ContextCommand> SubmenuCommands { get; } = new ObservableCollection<ContextCommand>();
 
         public abstract Uri ImageUri { get; }
 
