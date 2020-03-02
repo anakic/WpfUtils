@@ -113,6 +113,9 @@
     <Compile Include="Behaviors\VirtualToggleButtonBehavior.cs" />
     <Compile Include="Behaviors\WindowBehaviors.cs" />
     <Compile Include="Controls\ObjectExplorer\ContextCommand.cs" />
+    <Compile Include="Controls\ObjectExplorer\CustomControlsCommand.cs" />
+    <Compile Include="Controls\ObjectExplorer\DataTypeConverter.cs" />
+    <Compile Include="Controls\ObjectExplorer\ICustomCommand.cs" />
     <Compile Include="Controls\ObjectExplorer\NodeVM.cs" />
     <Compile Include="Controls\ObjectExplorer\ObjectExplorerUC.xaml.cs">
       <DependentUpon>ObjectExplorerUC.xaml</DependentUpon>

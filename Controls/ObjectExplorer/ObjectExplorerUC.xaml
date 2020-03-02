@@ -6,6 +6,7 @@
         xmlns:ador="clr-namespace:Thingie.WPF.Adorners"
         xmlns:conv="clr-namespace:Thingie.WPF.Converters"
         xmlns:oe="clr-namespace:Thingie.WPF.Controls.ObjectExplorer"
+        xmlns:beh="clr-namespace:Thingie.WPF.Behaviors"
         mc:Ignorable="d" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
     <Grid>
         <Grid.Resources>
@@ -58,6 +59,7 @@
                             <Setter.Value>
                                 <ContextMenu ItemsSource="{Binding ContextCommands}" Visibility="{Binding ContextCommands.Count, Converter={conv:MapConverter 0:Collapsed;_default:Visible}}">
                                     <ContextMenu.Resources>
+                                        <oe:DataTypeConverter x:Key="dataTypeConverter"></oe:DataTypeConverter>
                                         <ControlTemplate x:Key="MenuSeparatorTemplate">
                                             <Separator />
                                         </ControlTemplate>
@@ -78,7 +80,7 @@
                                             <Setter Property="Header" Value="{Binding Text}" />
                                             <Setter Property="Icon" Value="{StaticResource miIcon}"/>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding }" Value="{x:Null}" >
+                                                <DataTrigger Binding="{Binding Converter={StaticResource dataTypeConverter}}" Value="{x:Type oe:CustomControlsCommand}">
                                                     <Setter Property="Template" Value="{StaticResource MenuSeparatorTemplate}" />
                                                 </DataTrigger>
                                             </Style.Triggers>
