@@ -8,11 +8,11 @@ using System.Windows.Input;
 
 namespace Thingie.WPF.Controls.ObjectExplorer
 {
-    public abstract class ContextCommand : ICommand, ICustomCommand
+    public abstract class ContextCommand : ICommand, IContextMenuItem
     {
         public abstract string Text { get; }
 
-        public virtual ObservableCollection<ICustomCommand> SubmenuCommands { get; } = new ObservableCollection<ICustomCommand>();
+        public virtual ObservableCollection<IContextMenuItem> SubmenuCommands { get; } = new ObservableCollection<IContextMenuItem>();
 
         public abstract Uri ImageUri { get; }
 

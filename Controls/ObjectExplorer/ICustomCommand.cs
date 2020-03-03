@@ -1,9 +1,9 @@
 ﻿namespace Thingie.WPF.Controls.ObjectExplorer
 {
     /// <summary>
-    /// An empty command interface that every custom command needs to implement.
+    /// An interface that every context menu item needs to implement.
     /// </summary>
-    public interface ICustomCommand
+    public interface IContextMenuItem
     {
     }
 }
