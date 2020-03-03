@@ -144,7 +144,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         #region filter
         public void Filter(string search)
         {
-            DoFilter(new string[0], search.Split(' '));
+            DoFilter(Array.Empty<string>(), search.Split(' '));
             OnPropertyChanged(nameof(Nodes));
         }
 

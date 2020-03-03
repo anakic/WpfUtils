@@ -55,9 +55,6 @@ namespace Thingie.WPF.Behaviors
 
         private static void ToggleGrayOut(Image image)
         {
-            if (image.Source != null)
-                return;
-
             try
             {
                 if (image.IsEnabled)
