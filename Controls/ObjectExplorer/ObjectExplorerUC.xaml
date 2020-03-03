@@ -58,23 +58,39 @@
                         <Setter Property="ContextMenu">
                             <Setter.Value>
                                 <ContextMenu ItemsSource="{Binding ContextCommands}" Visibility="{Binding ContextCommands.Count, Converter={conv:MapConverter 0:Collapsed;_default:Visible}}">
-                                    <EventSetter Event="ContextMenuOpening" Handler="contextMenu_Opening" />
-                                    <EventSetter Event="ContextMenuClosing" Handler="contextMenu_Closing" />
                                     <ContextMenu.Resources>
-                                        <Image x:Key="miIcon"
-                                               x:Shared="false"
-                                               Source="{Binding ImageUri}" 
-                                               beh:GrayoutImageBehavior.GrayOutOnDisabled="True"
-                                               Height="16" Width="16" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                        <oe:DataTypeConverter x:Key="dataTypeConverter"></oe:DataTypeConverter>
+                                        <ControlTemplate x:Key="MenuSeparatorTemplate">
+                                            <Separator>
+                                                <Separator.Style>
+                                                    <Style TargetType="Separator">
+                                                        <Setter Property="Opacity" Value="0.25" />
+                                                    </Style>
+                                                </Separator.Style>
+                                            </Separator>
+                                        </ControlTemplate>
+                                        <Image  x:Key="miIcon"
+                                                x:Shared="false"
+                                                Source="{Binding ImageUri}"
+                                                beh:GrayoutImageBehavior.GrayOutOnDisabled="True"
+                                                Height="16" Width="16" RenderOptions.BitmapScalingMode="HighQuality"/>
                                     </ContextMenu.Resources>
                                     <ContextMenu.ItemContainerStyle>
                                         <Style TargetType="MenuItem">
                                             <Setter Property="ItemsSource" Value="{Binding SubmenuCommands}" />
+                                            <EventSetter Event="ContextMenuOpening" Handler="contextMenu_Opening" />
+                                            <EventSetter Event="ContextMenuClosing" Handler="contextMenu_Closing" />
                                             <Setter Property="Padding" Value="2"/>
                                             <Setter Property="Command" Value="{Binding}" />
                                             <Setter Property="CommandParameter" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType=TreeViewItem}}" />
                                             <Setter Property="Header" Value="{Binding Text}" />
                                             <Setter Property="Icon" Value="{StaticResource miIcon}"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Converter={StaticResource dataTypeConverter}}" Value="{x:Type oe:CustomControlsCommand}">
+                                                    <Setter Property="Template" Value="{StaticResource MenuSeparatorTemplate}" />
+                                                    <Setter Property="Focusable" Value="False" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
                                         </Style>
                                     </ContextMenu.ItemContainerStyle>
                                 </ContextMenu>
