@@ -61,7 +61,13 @@
                                     <ContextMenu.Resources>
                                         <oe:DataTypeConverter x:Key="dataTypeConverter"></oe:DataTypeConverter>
                                         <ControlTemplate x:Key="MenuSeparatorTemplate">
-                                            <Separator />
+                                            <Separator>
+                                                <Separator.Style>
+                                                    <Style TargetType="Separator">
+                                                        <Setter Property="Opacity" Value="0.25" />
+                                                    </Style>
+                                                </Separator.Style>
+                                            </Separator>
                                         </ControlTemplate>
                                         <Image  x:Key="miIcon"
                                                 x:Shared="false"
@@ -82,6 +88,7 @@
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding Converter={StaticResource dataTypeConverter}}" Value="{x:Type oe:CustomControlsCommand}">
                                                     <Setter Property="Template" Value="{StaticResource MenuSeparatorTemplate}" />
+                                                    <Setter Property="Focusable" Value="False" />
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
