@@ -115,7 +115,7 @@
     <Compile Include="Controls\ObjectExplorer\ContextCommand.cs" />
     <Compile Include="Controls\ObjectExplorer\SeparatorMenuItem.cs" />
     <Compile Include="Controls\ObjectExplorer\IsSeparatorConverter.cs" />
-    <Compile Include="Controls\ObjectExplorer\ICustomCommand.cs" />
+    <Compile Include="Controls\ObjectExplorer\IContextMenuItem.cs" />
     <Compile Include="Controls\ObjectExplorer\NodeVM.cs" />
     <Compile Include="Controls\ObjectExplorer\ObjectExplorerUC.xaml.cs">
       <DependentUpon>ObjectExplorerUC.xaml</DependentUpon>
