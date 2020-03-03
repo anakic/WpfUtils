@@ -343,19 +343,21 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             }
         }
 
-        private void contextMenu_GotFocus(object sender, RoutedEventArgs e)
+        private void contextMenu_Opening(object sender, RoutedEventArgs e)
         {
-            Dispatcher.BeginInvoke(DispatcherPriority.Normal, (DispatcherOperationCallback) delegate (object unused)
+            if (dispatcherFrame == null)
             {
-                dispatcherFrame = new DispatcherFrame();
-                Dispatcher.PushFrame(dispatcherFrame);
-                return null;
-            }, null);
+                Dispatcher.BeginInvoke(new Action(() => Dispatcher.PushFrame(dispatcherFrame = new DispatcherFrame())));
+            }
         }
 
-        private void contextMenu_LostFocus(object sender, RoutedEventArgs e)
+        private void contextMenu_Closing(object sender, RoutedEventArgs e)
         {
-            dispatcherFrame.Continue = false;
+            if (dispatcherFrame != null)
+            {
+                dispatcherFrame.Continue = false;
+                dispatcherFrame = null;
+            }
         }
     }
 }

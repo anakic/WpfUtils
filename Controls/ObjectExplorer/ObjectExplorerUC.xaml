@@ -58,8 +58,8 @@
                         <Setter Property="ContextMenu">
                             <Setter.Value>
                                 <ContextMenu ItemsSource="{Binding ContextCommands}" Visibility="{Binding ContextCommands.Count, Converter={conv:MapConverter 0:Collapsed;_default:Visible}}">
-                                    <EventSetter Event="GotFocus" Handler="contextMenu_GotFocus" />
-                                    <EventSetter Event="LostFocus" Handler="contextMenu_LostFocus" />
+                                    <EventSetter Event="ContextMenuOpening" Handler="contextMenu_Opening" />
+                                    <EventSetter Event="ContextMenuClosing" Handler="contextMenu_Closing" />
                                     <ContextMenu.Resources>
                                         <Image x:Key="miIcon"
                                                x:Shared="false"
