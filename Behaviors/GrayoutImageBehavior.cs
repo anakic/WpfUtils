@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
@@ -19,12 +20,31 @@ namespace Thingie.WPF.Behaviors
         private static void OnGrayOutOnDisabledChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             Image image = (Image)obj;
+
+
             image.IsEnabledChanged -= OnImageIsEnabledChanged;
+            image.SourceUpdated -= Image_SourceUpdated;
+            image.Loaded -= Image_Loaded;
 
             if ((bool)args.NewValue)
+            {
                 image.IsEnabledChanged += OnImageIsEnabledChanged;
-
+                image.SourceUpdated += Image_SourceUpdated;
+                image.Loaded += Image_Loaded;
+            }
             ToggleGrayOut(image); // initial call
+        }
+
+        private static void Image_Loaded(object sender, RoutedEventArgs e)
+        {
+            var image = (Image)sender;
+            ToggleGrayOut(image);
+        }
+
+        private static void Image_SourceUpdated(object sender, DataTransferEventArgs e)
+        {
+            var image = (Image)sender;
+            ToggleGrayOut(image);
         }
 
         private static void OnImageIsEnabledChanged(object sender, DependencyPropertyChangedEventArgs args)
@@ -35,6 +55,9 @@ namespace Thingie.WPF.Behaviors
 
         private static void ToggleGrayOut(Image image)
         {
+            if (image.Source != null)
+                return;
+
             try
             {
                 if (image.IsEnabled)
@@ -66,7 +89,7 @@ namespace Thingie.WPF.Behaviors
             }
             catch (Exception)
             {
-                
+
             }
         }
     }
