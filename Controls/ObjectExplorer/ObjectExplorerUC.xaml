@@ -53,6 +53,8 @@
                     <Style TargetType="TreeViewItem">
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                        <EventSetter Event="ContextMenuOpening" Handler="contextMenu_Opening" />
+                        <EventSetter Event="ContextMenuClosing" Handler="contextMenu_Closing" />
                         <EventSetter Event="PreviewMouseDown" Handler="node_PreviewMouseLeftButtonDown"/>
                         <EventSetter Event="KeyDown" Handler="node_PreviewKeyDown" />
                         <Setter Property="ContextMenu">
@@ -78,8 +80,6 @@
                                     <ContextMenu.ItemContainerStyle>
                                         <Style TargetType="MenuItem">
                                             <Setter Property="ItemsSource" Value="{Binding SubmenuCommands}" />
-                                            <EventSetter Event="ContextMenuOpening" Handler="contextMenu_Opening" />
-                                            <EventSetter Event="ContextMenuClosing" Handler="contextMenu_Closing" />
                                             <Setter Property="Padding" Value="2"/>
                                             <Setter Property="Command" Value="{Binding}" />
                                             <Setter Property="CommandParameter" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType=TreeViewItem}}" />
