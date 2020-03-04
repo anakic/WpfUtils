@@ -112,7 +112,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public virtual string ToolTip { get => Name; }
         public virtual object Badge { get; }
         public int Order { get => order; set { order = value; OnPropertyChanged(nameof(Order)); Parent?.OnPropertyChanged(nameof(Nodes)); } }
-        public ObservableCollection<ICustomCommand> ContextCommands { get; } = new ObservableCollection<ICustomCommand>();
+        public ObservableCollection<IContextMenuItem> ContextCommands { get; } = new ObservableCollection<IContextMenuItem>();
         #endregion
 
         public NodeVM Parent { get; private set; }
