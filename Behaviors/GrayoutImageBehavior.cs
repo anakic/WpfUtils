@@ -73,7 +73,7 @@ namespace Thingie.WPF.Behaviors
 
                     if (image.Source is BitmapImage)
                         bitmapImage = (BitmapImage)image.Source;
-                    else if (image.Source is BitmapSource) // assume uri source
+                    else if (image.Source is BitmapSource && image.Source is FormatConvertedBitmap == false) // assume uri source
                         bitmapImage = new BitmapImage(new Uri(image.Source.ToString()));
 
                     if (bitmapImage != null)
