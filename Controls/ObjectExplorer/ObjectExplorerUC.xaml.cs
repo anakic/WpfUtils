@@ -112,8 +112,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         private void tree_PreviewMouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed ||
-                e.RightButton == MouseButtonState.Pressed && !_IsDragging)
+            if (e.LeftButton == MouseButtonState.Pressed && !_IsDragging)
             {
                 Point position = e.GetPosition(null);
                 if (Math.Abs(position.X - _startPoint.X) >
