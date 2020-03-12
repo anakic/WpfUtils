@@ -48,7 +48,8 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             }
         }
 
-        public IEnumerable<NodeVM> Nodes {
+        public IEnumerable<NodeVM> Nodes
+        {
             get { return (IEnumerable<NodeVM>)GetValue(NodesProperty); }
             set { SetValue(NodesProperty, value); }
         }
@@ -344,19 +345,27 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         private void contextMenu_Opening(object sender, RoutedEventArgs e)
         {
-            if (dispatcherFrame == null)
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                Dispatcher.BeginInvoke(new Action(() => Dispatcher.PushFrame(dispatcherFrame = new DispatcherFrame())));
-            }
+                if (dispatcherFrame == null)
+                {
+                    Trace.WriteLine("Pushing frame");
+                    Dispatcher.PushFrame(dispatcherFrame = new DispatcherFrame());
+                }
+            }));
         }
 
         private void contextMenu_Closing(object sender, RoutedEventArgs e)
         {
-            if (dispatcherFrame != null)
+            Dispatcher.BeginInvoke(new Action(() =>
             {
-                dispatcherFrame.Continue = false;
-                dispatcherFrame = null;
-            }
+                if (dispatcherFrame != null)
+                {
+                    dispatcherFrame.Continue = false;
+                    dispatcherFrame = null;
+                    Trace.WriteLine("Cleared frame");
+                }
+            }));
         }
     }
 }
