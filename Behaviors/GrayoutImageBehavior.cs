@@ -148,7 +148,10 @@ namespace Thingie.WPF.Behaviors
                 else
                 {
                     var bitmapImage = default(BitmapImage);
-                    imageHashCodeBindingPairs[image.GetHashCode()] = image.GetBindingExpression(Image.SourceProperty).ParentBinding;
+                    if (image.GetBindingExpression(Image.SourceProperty) != null)
+                    {
+                        imageHashCodeBindingPairs[image.GetHashCode()] = image.GetBindingExpression(Image.SourceProperty).ParentBinding;
+                    }
 
                     if (image.Source is BitmapImage)
                         bitmapImage = (BitmapImage)image.Source;
