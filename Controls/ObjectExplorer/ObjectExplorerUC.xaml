@@ -104,6 +104,7 @@
                             <StackPanel.ToolTip>
                                 <TextBlock MaxWidth="500" Text="{Binding ToolTip}" TextWrapping="Wrap" Visibility="{Binding ToolTip, Converter={conv:MapConverter '_null:Collapsed;:Collapsed;_default:Visible'}}"/>
                             </StackPanel.ToolTip>
+                            <CheckBox IsTabStop="False" IsChecked="{Binding IsChecked}" IsThreeState="{Binding IsThreeState}" Visibility="{Binding CheckboxEnabled, Converter={conv:MapConverter 'true:Visible;false:Collapsed'}}"></CheckBox>
                             <Image Source="{Binding ImageURI}" Width="16" Height="16" Margin="0,0,2,0" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"/>
                             <TextBlock Text="{Binding DisplayText}" VerticalAlignment="Center"
 									   Visibility="{Binding IsEditing, Converter={conv:MapConverter 'false:Visible;true:Collapsed;'}}"/>

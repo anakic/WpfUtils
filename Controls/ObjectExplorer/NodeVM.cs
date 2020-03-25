@@ -11,6 +11,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
     {
         string name;
         int order = 1;
+        bool? isChecked;
         private ObservableCollection<NodeVM> nodes;
 
 
@@ -18,7 +19,6 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         /// If true, child Nodes will not be movable outside of this folder.
         /// </summary>
         public virtual bool IsScopeRoot => false;
-
 
         #region user interaction properties
         private bool isEditing;
@@ -112,6 +112,9 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public virtual string ToolTip { get => Name; }
         public virtual object Badge { get; }
         public int Order { get => order; set { order = value; OnPropertyChanged(nameof(Order)); Parent?.OnPropertyChanged(nameof(Nodes)); } }
+        public virtual bool CheckboxEnabled => false;
+        public virtual bool? IsChecked { get => isChecked; set { isChecked = value; OnPropertyChanged(nameof(IsChecked)); } }
+        public virtual bool IsThreeState { get; } = false;
         public ObservableCollection<IContextMenuItem> ContextCommands { get; } = new ObservableCollection<IContextMenuItem>();
         #endregion
 
