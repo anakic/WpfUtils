@@ -94,7 +94,8 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             _cts?.Cancel();
             _cts = new CancellationTokenSource();
 
-            Task.Delay(500, _cts.Token)
+            // todo: implement debounce as infrastrcture and just use it here
+            Task.Delay(300, _cts.Token)
                 .ContinueWith(t =>
                 {
                     if (t.Status == TaskStatus.RanToCompletion)
@@ -185,6 +186,8 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             }
             else if (e.Key == Key.Space)
             {
+                // todo: use ctrl+space to select, use space to toggle ischecked
+
                 if (node?.CanSelect() == true)
                     node.Select();
             }
