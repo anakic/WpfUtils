@@ -56,13 +56,16 @@ namespace Thingie.WPF.Behaviors
             if (image.Source == null)
                 return;
 
+            var imageHash = image.GetHashCode();
+
             try
             {
                 if (image.IsEnabled)
                 {
-                    if (image.GetBindingExpression(Image.SourceProperty) == null && imageHashCodeBindingPairs.ContainsKey(image.GetHashCode()))
+                    if (image.GetBindingExpression(Image.SourceProperty) == null && imageHashCodeBindingPairs.ContainsKey(imageHash))
                     {
-                        image.SetBinding(Image.SourceProperty, imageHashCodeBindingPairs[image.GetHashCode()]);
+                        image.SetBinding(Image.SourceProperty, imageHashCodeBindingPairs[imageHash]);
+                        imageHashCodeBindingPairs.Remove(imageHash);
                     }
 
                     image.OpacityMask = null; // Reset the Opacity Mask
@@ -73,7 +76,7 @@ namespace Thingie.WPF.Behaviors
                     var bitmapImage = default(BitmapImage);
                     if (image.GetBindingExpression(Image.SourceProperty) != null)
                     {
-                        imageHashCodeBindingPairs[image.GetHashCode()] = image.GetBindingExpression(Image.SourceProperty).ParentBinding;
+                        imageHashCodeBindingPairs[imageHash] = image.GetBindingExpression(Image.SourceProperty).ParentBinding;
                     }
 
                     if (image.Source is BitmapImage)
