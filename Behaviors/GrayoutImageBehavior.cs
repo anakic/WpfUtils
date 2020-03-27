@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,10 +14,11 @@ namespace Thingie.WPF.Behaviors
         public static void SetGrayOutOnDisabled(Image element, bool value) { element.SetValue(GrayOutOnDisabledProperty, value); }
         public static bool GetGrayOutOnDisabled(Image element) { return (bool)element.GetValue(GrayOutOnDisabledProperty); }
 
+        private static Dictionary<int, Binding> imageHashCodeBindingPairs = new Dictionary<int, Binding>();
+
         private static void OnGrayOutOnDisabledChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             Image image = (Image)obj;
-
 
             image.IsEnabledChanged -= OnImageIsEnabledChanged;
             image.SourceUpdated -= Image_SourceUpdated;
@@ -55,21 +53,31 @@ namespace Thingie.WPF.Behaviors
 
         private static void ToggleGrayOut(Image image)
         {
+            if (image.Source == null)
+                return;
+
+            var imageHash = image.GetHashCode();
+
             try
             {
                 if (image.IsEnabled)
                 {
-                    var grayImage = image.Source as FormatConvertedBitmap;
-                    if (grayImage != null)
+                    if (image.GetBindingExpression(Image.SourceProperty) == null && imageHashCodeBindingPairs.ContainsKey(imageHash))
                     {
-                        image.Source = grayImage.Source; // Set the Source property to the original value.
-                        image.OpacityMask = null; // Reset the Opacity Mask
-                        image.Opacity = 1.0;
+                        image.SetBinding(Image.SourceProperty, imageHashCodeBindingPairs[imageHash]);
+                        imageHashCodeBindingPairs.Remove(imageHash);
                     }
+
+                    image.OpacityMask = null; // Reset the Opacity Mask
+                    image.Opacity = 1.0;
                 }
                 else
                 {
                     var bitmapImage = default(BitmapImage);
+                    if (image.GetBindingExpression(Image.SourceProperty) != null)
+                    {
+                        imageHashCodeBindingPairs[imageHash] = image.GetBindingExpression(Image.SourceProperty).ParentBinding;
+                    }
 
                     if (image.Source is BitmapImage)
                         bitmapImage = (BitmapImage)image.Source;
@@ -83,6 +91,10 @@ namespace Thingie.WPF.Behaviors
                         image.Opacity = 0.3; // optional: lower opacity
                     }
                 }
+            }
+            catch (NullReferenceException)
+            {
+                throw new NullReferenceException("The specified element has no binding.");
             }
             catch (Exception)
             {
