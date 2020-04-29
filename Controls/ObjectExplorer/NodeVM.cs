@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
 
 namespace Thingie.WPF.Controls.ObjectExplorer
 {
@@ -135,6 +136,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 if (nodes == null)
                 {
                     nodes = new ObservableCollection<NodeVM>();
+                    BindingOperations.EnableCollectionSynchronization(nodes, new object());
                     nodes.CollectionChanged += (s, e) => { if (e.NewItems != null) e.NewItems.OfType<NodeVM>().ToList().ForEach(n => n.Parent = this); };
                     PopulateNodes(nodes as ObservableCollection<NodeVM>);
                 }
