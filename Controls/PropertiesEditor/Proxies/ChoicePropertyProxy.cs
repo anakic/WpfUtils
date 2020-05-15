@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
+using System.Linq;
 using Thingie.WPF.Controls.PropertiesEditor.Proxies.Base;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.Proxies
@@ -23,7 +25,18 @@ namespace Thingie.WPF.Controls.PropertiesEditor.Proxies
         public ChoicePropertyProxy(string choicePropertyName)
         {
             _choicePropertyName = choicePropertyName;
-            _getChoicesFunc = () => (IEnumerable)Target.GetType().GetProperty(choicePropertyName).GetValue(Target, null);
+            _getChoicesFunc = () => 
+            {
+                try
+                {
+                    return ((IEnumerable)Target.GetType().GetProperty(choicePropertyName).GetValue(Target, null)).OfType<object>().ToArray();
+                }
+                catch(Exception ex)
+                {
+                    Trace.WriteLine($"Exception thrown from '{choicePropertyName}' while fetching choices for '{DisplayMemberPath}'. Message = {ex.Message}");
+                    return Array.Empty<object>();
+                }
+            };
         }
         protected override void OnTargetPropertyChanged(string propertyName)
         {
