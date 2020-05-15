@@ -158,7 +158,7 @@
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\EditableFolderPathAttribute.cs" />
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\EditableMultiChoiceAttribute.cs" />
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\EditableTextAttribute.cs" />
-    <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\TypeCustomEditorAttribute.cs" />
+    <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\CustomEditorTypeAttribute.cs" />
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\ValidationAttributes.cs" />
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\ValidationAttributeBase.cs" />
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\ViewableAttribute.cs" />
@@ -175,13 +175,11 @@
     <Compile Include="Controls\PropertiesEditor\Proxies\BoolPropertyProxy.cs" />
     <Compile Include="Controls\PropertiesEditor\Proxies\BrowseFilePropertyProxy.cs" />
     <Compile Include="Controls\PropertiesEditor\Proxies\BrowseFolderPropertyProxy.cs" />
-    <Compile Include="Controls\PropertiesEditor\Proxies\CustomPropertyProxy.cs" />
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\DefaultPropertyItemsFactory.cs" />
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\EditableAttribute.cs" />
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\EditableChoiceAttribute.cs" />
     <Compile Include="Controls\PropertiesEditor\Proxies\ChoicePropertyProxy.cs" />
     <Compile Include="Controls\PropertiesEditor\CustomEditing\ICustomEditor.cs" />
-    <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\EditableCustomAttribute.cs" />
     <Compile Include="Controls\PropertiesEditor\IPropertyProxyFactory.cs" />
     <Compile Include="Controls\PropertiesEditor\Proxies\ReadonlyPropertyProxy.cs" />
     <Compile Include="Controls\PropertiesEditor\Proxies\TextPropertyProxy.cs" />

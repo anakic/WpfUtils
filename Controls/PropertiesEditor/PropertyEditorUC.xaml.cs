@@ -5,17 +5,20 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.ComponentModel;
 using Thingie.WPF.Controls.PropertiesEditor.Proxies;
 using Thingie.WPF.Controls.PropertiesEditor.DefaultFactory;
 using Thingie.WPF.Controls.PropertiesEditor.Proxies.Base;
-using Thingie.WPF.Controls.PropertiesEditor.CustomEditing;
-using System.Globalization;
 using Thingie.WPF.Attributes;
+using Thingie.WPF.Controls.PropertiesEditor.CustomEditing;
 
 namespace Thingie.WPF.Controls.PropertiesEditor
 {
-	class ProxyTemplateSelector : DataTemplateSelector
+    public interface ICustomEditorHost
+    {
+        void Show(string title, ICustomEditor controlToShow, Action okAction);
+    }
+
+    class ProxyTemplateSelector : DataTemplateSelector
     {
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
@@ -24,6 +27,7 @@ namespace Thingie.WPF.Controls.PropertiesEditor
                 key = "readonlyProxy";
             else if (item is ShortcutPropertyProxy)
                 key = "shortcutProxy";
+            
             else if (item is TextPropertyProxy)
                 key = "textProxy";
             else if (item is ChoicePropertyProxy)
@@ -42,8 +46,6 @@ namespace Thingie.WPF.Controls.PropertiesEditor
                 key = "fileProxy";
             else if (item is BrowseFolderPropertyProxy)
                 key = "folderProxy";
-            else if (item is CustomPropertyProxy)
-                key = "customProxy";
             else if (item is BoolPropertyProxy)
                 key = "boolProxy";
             else
@@ -75,15 +77,15 @@ namespace Thingie.WPF.Controls.PropertiesEditor
         public static RoutedCommand CommittCommand = new RoutedCommand();
         public static RoutedCommand CancelCommand = new RoutedCommand();
 
-        IPropertyProxyFactory _itemFactory = new DefaultPropertyItemsFactory();
         /// <summary>
         /// The factory to use to create property proxies.
         /// </summary>
-        public IPropertyProxyFactory ItemFactory
-        {
-            get { return _itemFactory; }
-            set { _itemFactory = value; }
-        }
+        public IPropertyProxyFactory ItemFactory { get; set; } = new DefaultPropertyItemsFactory();
+
+        /// <summary>
+        /// The object that is responsible for showing custom editors. Usually a window or a flyout.
+        /// </summary>
+        public ICustomEditorHost CustomEditorHost { get; set; }
 
         /// <summary>
         /// The object whose properties should be edited
@@ -138,7 +140,7 @@ namespace Thingie.WPF.Controls.PropertiesEditor
                     propItemsSource.Source = null;
                 else
                 {
-                    IPropertyProxyFactory factory = _itemFactory;
+                    IPropertyProxyFactory factory = ItemFactory;
                     ProxyFactoryAttribute custFactoryAtt = e.NewValue.GetType().GetCustomAttributes(true).OfType<ProxyFactoryAttribute>().SingleOrDefault();
                     if (custFactoryAtt != null)
                         factory = (IPropertyProxyFactory)Activator.CreateInstance(custFactoryAtt.ProxyFactoryType);
@@ -147,30 +149,6 @@ namespace Thingie.WPF.Controls.PropertiesEditor
                     _proxies.OfType<EditablePropertyProxy>().ToList().ForEach(pi => pi.AutoCommit = this.AutoCommit);
                     propItemsSource.Source = _proxies;
                 } 
-            }
-        }
-
-        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            CustomPropertyProxy propItem = (CustomPropertyProxy)e.Parameter;
-            ICustomEditor propEditorControl = propItem.CustomEditorControl;
-
-            TextBox customEditTextBox = (TextBox)LogicalTreeHelper.FindLogicalNode(FindTemplateRoot((DependencyObject)e.OriginalSource), "PART_EDIT");
-
-            CustomEditDialog editDialog = new CustomEditDialog();
-            editDialog.Title = propItem.Name;
-            editDialog.DataContext = propEditorControl;
-            editDialog.Owner = FindHostWindow(this);
-
-            try
-            {
-                propEditorControl.Value = Convert.ChangeType(customEditTextBox.Text, propItem.Property.PropertyType, CultureInfo.CurrentCulture);
-            }
-            catch { /*unparsable, can't fill the editor, but still ok to continue*/ }
-            
-            if (editDialog.ShowDialog() == true)
-            {
-                propItem.Value = TypeDescriptor.GetConverter(propItem.Property.PropertyType).ConvertToString(propEditorControl.Value);
             }
         }
 
@@ -188,6 +166,14 @@ namespace Thingie.WPF.Controls.PropertiesEditor
                 return (control as Window);
             else
                 return FindHostWindow((FrameworkElement)LogicalTreeHelper.GetParent(control));
+        }
+
+        private void customEdit_Click(object sender, RoutedEventArgs e)
+        {
+            var proxy = (e.OriginalSource as Button).DataContext as EditablePropertyProxy;
+            var editor = proxy.CustomEditorFactory(); 
+            editor.Value = proxy.RawValue;
+            this.CustomEditorHost.Show(proxy.Name, editor, () => proxy.RawValue = editor.Value);
         }
     }
 }

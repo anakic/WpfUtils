@@ -7,15 +7,16 @@ using Thingie.WPF.Controls.PropertiesEditor.Proxies;
 using Thingie.WPF.Resources;
 using Thingie.WPF.Controls.PropertiesEditor.Proxies.Base;
 using Thingie.WPF.Attributes;
+using Thingie.WPF.Controls.PropertiesEditor.CustomEditing;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory
 {
-	/// <summary>
-	/// The default implementation of the IPropertyProxyFactory interface. This implementation
-	/// uses attributes specified (Viewable, Editable, ChoiceEditable...) on types and properties
-	/// to generate the appropriate property proxies. 
-	/// </summary>
-	public class DefaultPropertyItemsFactory : IPropertyProxyFactory
+    /// <summary>
+    /// The default implementation of the IPropertyProxyFactory interface. This implementation
+    /// uses attributes specified (Viewable, Editable, ChoiceEditable...) on types and properties
+    /// to generate the appropriate property proxies. 
+    /// </summary>
+    public class DefaultPropertyItemsFactory : IPropertyProxyFactory
     {
         public virtual IEnumerable<PropertyProxy> CreatePropertyItems(object target)
         {
@@ -39,9 +40,7 @@ namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory
             //2. odluci kojeg tipa ce bit proxy za property na temelju atributa
             if (viewableAtt != null)
             {
-                if (viewableAtt is EditableCustomAttribute)
-                    proxy = new CustomPropertyProxy((viewableAtt as EditableCustomAttribute).ControlType);
-                else if (viewableAtt is EditableTextAttribute)
+                if (viewableAtt is EditableTextAttribute)
                 {
                     EditableTextAttribute edTextAtt = viewableAtt as EditableTextAttribute;
                     proxy = new TextPropertyProxy() { Big = edTextAtt.Big, AcceptsReturn = edTextAtt.AcceptsReturn, AcceptsTab = edTextAtt.AcceptsTab };
@@ -96,13 +95,13 @@ namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory
             proxy.Description = property.GetCustomAttributes().OfType<System.ComponentModel.DescriptionAttribute>().Select(att => att.Description).SingleOrDefault();
 
             //4. inicijaliziraj display propertyje (ime, kategorija, order)
-            NameAttributeBase nameAttribute = property.CustomAttributes.OfType<NameAttributeBase>().FirstOrDefault();
+            var nameAttribute = property.CustomAttributes.OfType<NameAttributeBase>().FirstOrDefault();
             if (nameAttribute != null)
                 proxy.Name = nameAttribute.Name;
             else
                 proxy.Name = property.Name;
 
-            CategoryAttributeBase categoryAttribute = property.GetCustomAttributes(true).OfType<CategoryAttributeBase>().FirstOrDefault();
+            var categoryAttribute = property.GetCustomAttributes(true).OfType<CategoryAttributeBase>().FirstOrDefault();
             if (categoryAttribute != null)
                 proxy.Category = categoryAttribute.Category;
             else
@@ -118,6 +117,33 @@ namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory
             if (viewableAtt is EditableAttribute editableAtt && !string.IsNullOrWhiteSpace(editableAtt.When))
                 (proxy as EditablePropertyProxy).SetAvailabilityCondition(editableAtt.When);
 
+            // custom editor type
+            // todo: move this to property editor so we don't have to repeat it for every type of items factory (perhaps some day)
+            if (proxy is EditablePropertyProxy editableProxy)
+            {
+                editableProxy.CustomEditorFactory = property
+                    .GetCustomAttributes<CustomEditorTypeAttribute>()
+                    .Select(cte => 
+                    {
+                        Func<ICustomEditor> editorFactory;
+                        if (cte.VmFactoryMethod != null)
+                        {
+                            editorFactory = () =>
+                            {
+                                var vm = proxy.Target.GetType().GetMethod(cte.VmFactoryMethod, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public).Invoke(proxy.Target, Array.Empty<object>());
+                                var ui = (ICustomEditor)Activator.CreateInstance(cte.EditorType, vm);
+                                return ui;
+                            };
+                        }
+                        else
+                        {
+                            editorFactory = () => (ICustomEditor)Activator.CreateInstance(cte.EditorType);
+                        }
+                        return editorFactory;
+                    })
+                    .SingleOrDefault();
+            }
+
             return proxy;
         }
 
@@ -131,18 +157,11 @@ namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory
         {
             PropertyProxy proxy;
 
-            if (property.PropertyType.IsDefined(typeof(TypeCustomEditorAttribute), true))
-            {
-                TypeCustomEditorAttribute typeEditorAtt = (TypeCustomEditorAttribute)property.PropertyType.GetCustomAttributes(typeof(TypeCustomEditorAttribute), true)[0];
-                proxy = new CustomPropertyProxy(typeEditorAtt.EditorType);
-            }
-            else
+            
             {
                 if (property.PropertyType.IsEnum)
                 {
-                    if (property.PropertyType.GetCustomAttributes(true).OfType<FlagsAttribute>().Count() > 0)
-                        proxy = new CustomPropertyProxy(typeof(FlagsEnumPicker));
-                    else
+                    
                         proxy = new ChoicePropertyProxy(Enum.GetValues(property.PropertyType));
                 }
                 else if (property.PropertyType == typeof(bool))

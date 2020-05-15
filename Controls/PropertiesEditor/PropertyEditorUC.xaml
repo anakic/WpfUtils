@@ -10,9 +10,7 @@
     xmlns:beh="clr-namespace:Thingie.WPF.Behaviors"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Validation.ErrorTemplate="{x:Null}">
-    <UserControl.CommandBindings>
-        <CommandBinding Command="loc:PropertiesEditorUC.CustomEditCommand" Executed="CommandBinding_Executed"/>
-    </UserControl.CommandBindings>
+
     <UserControl.Resources>
         <CollectionViewSource x:Key="propsCVS" Source="{Binding}">
             <CollectionViewSource.GroupDescriptions>
@@ -42,10 +40,13 @@
                             <ColumnDefinition Width="Auto" SharedSizeGroup="firstCol"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="lastCol"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <Border Padding="2,0" Margin="1,2,4,1" x:Name="borderName" CornerRadius="2" Style="{StaticResource disabledControlStyle}" IsEnabled="{Binding IsAvailable}">
-                            <TextBlock Text="{Binding Name, Converter={locconv:StringCapitalizationSeparatorConverter}}" Grid.Column="0" VerticalAlignment="Center" x:Name="lblPropertyName"></TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Name, Converter={locconv:StringCapitalizationSeparatorConverter}}" Grid.Column="0" VerticalAlignment="Center" x:Name="lblPropertyName"></TextBlock>
+                                <Image Height="10" Cursor="Help" DockPanel.Dock="Right" Margin="5" RenderOptions.BitmapScalingMode="HighQuality" Source="/Thingie.WPF;component/Resources/help.png" Visibility="{Binding Description, Converter={locconv:MapConverter '_null:Collapsed;_default:Visible'}}" ToolTip="{Binding Description}" ToolTipService.ShowDuration="60000"/>
+                            </StackPanel>
                         </Border>
                         <GridSplitter Width="5" HorizontalAlignment="Right" Background="#01000000" Focusable="False"/>
                         <DockPanel Grid.Column="1" HorizontalAlignment="Stretch">
@@ -55,7 +56,10 @@
                                 </ContentControl.ContentTemplateSelector>
                             </ContentControl>
                         </DockPanel>
-                        <Image Grid.Column="2" Height="10" Cursor="Help" DockPanel.Dock="Right" Margin="2" RenderOptions.BitmapScalingMode="HighQuality" Source="/Thingie.WPF;component/Resources/help.png" Visibility="{Binding Description, Converter={locconv:MapConverter '_null:Collapsed;_default:Visible'}}" ToolTip="{Binding Description}" ToolTipService.ShowDuration="60000"/>
+                        <Button 
+                            x:Name="customEdit" Click="customEdit_Click"
+                            Visibility="{Binding CustomEditorFactory, Converter={locconv:MapConverter _null:Collapsed;_default:Visible}}"
+                            MinWidth="30" Grid.Column="2" MinHeight="10" Content="..." Margin="1,1,1,1" HorizontalAlignment="Right"/>
                     </Grid>
                 </Border>
                 <DataTemplate.Triggers>
@@ -156,22 +160,6 @@
             <!-- bool -->
             <DataTemplate DataType="{x:Type pi:BoolPropertyProxy}" x:Key="boolProxy">
                 <CheckBox IsChecked="{Binding Value}" VerticalAlignment="Center" x:Name="PART_EDIT"/>
-            </DataTemplate>
-
-            <!-- custom -->
-            <DataTemplate DataType="{x:Type pi:CustomPropertyProxy}" x:Key="customProxy">
-                <Grid HorizontalAlignment="Stretch">
-                    <TextBox HorizontalAlignment="Stretch" Padding="0,0,24,0" x:Name="PART_EDIT" beh:TextBoxBehaviors.CancelKey="Escape">
-                        <TextBox.Text>
-                            <Binding Path="Value" ValidatesOnExceptions="True">
-                                <Binding.Converter>
-                                    <locconv:StringTypeConverter/>
-                                </Binding.Converter>
-                            </Binding>
-                        </TextBox.Text>
-                    </TextBox>
-                    <Button Width="{Binding Source={RelativeSource Self}, Path=Height}" MinHeight="10" Content="..." Margin="-25,1,1,1" HorizontalAlignment="Right" Command="loc:PropertiesEditorUC.CustomEditCommand" CommandParameter="{Binding}"/>
-                </Grid>
             </DataTemplate>
 
         </Grid.Resources>

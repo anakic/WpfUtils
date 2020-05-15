@@ -39,6 +39,16 @@ namespace Thingie.WPF.Controls.PropertiesEditor.Proxies.Base
 
         public string Description { get; set; }
 
+        public object RawValue 
+        {
+            get => Property.GetValue(Target, null);
+            set
+            {
+                Property.SetValue(Target, value);
+                OnPropertyChanged(nameof(Value));
+            }
+        }
+
         public virtual object Value
         {
             get

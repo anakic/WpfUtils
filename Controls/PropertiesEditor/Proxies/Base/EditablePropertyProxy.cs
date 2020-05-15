@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Controls;
+using Thingie.WPF.Controls.PropertiesEditor.CustomEditing;
 using Thingie.WPF.Controls.PropertiesEditor.DefaultFactory.Attributes;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.Proxies.Base
@@ -25,12 +26,9 @@ namespace Thingie.WPF.Controls.PropertiesEditor.Proxies.Base
             }
         }
 
-        private bool _AutoCommit = true;
-        public bool AutoCommit
-        {
-            get { return _AutoCommit; }
-            set { _AutoCommit = value; }
-        }
+        public bool AutoCommit { get; set; } = true;
+
+        public Func<ICustomEditor> CustomEditorFactory { get; set; }
 
         private bool _hasUnsavedChanges;
         public bool HasUnsavedChanges
