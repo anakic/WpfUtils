@@ -69,7 +69,7 @@ namespace Thingie.WPF.Behaviors
                     }
 
                     image.OpacityMask = null; // Reset the Opacity Mask
-                    //image.Opacity = 1.0;
+                    image.Opacity = 1.0;
                 }
                 else
                 {
@@ -88,7 +88,7 @@ namespace Thingie.WPF.Behaviors
                     {
                         image.Source = new FormatConvertedBitmap(bitmapImage, PixelFormats.Gray32Float, null, 0); // Get the source bitmap
                         image.OpacityMask = new ImageBrush(bitmapImage); // Create Opacity Mask for grayscale image as FormatConvertedBitmap does not keep transparency info
-                        //image.Opacity = 0.3; // optional: lower opacity
+                        image.Opacity = 0.3; // optional: lower opacity
                     }
                 }
             }

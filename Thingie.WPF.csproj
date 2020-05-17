@@ -109,6 +109,7 @@
     <Compile Include="Behaviors\DataGridBehaviors.cs" />
     <Compile Include="Attributes\ProxyFactoryAttribute.cs" />
     <Compile Include="Behaviors\GrayoutImageBehavior.cs" />
+    <Compile Include="Behaviors\GroupBoxBehaviors.cs" />
     <Compile Include="Behaviors\HyperlinkBehavior.cs" />
     <Compile Include="Behaviors\VirtualToggleButtonBehavior.cs" />
     <Compile Include="Behaviors\WindowBehaviors.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Controls\ShortcutTextbox.cs" />
     <Compile Include="Converters\EnumDescriptionConverter.cs" />
     <Compile Include="Converters\ListToStringConverter.cs" />
+    <Compile Include="Converters\MultiVisibilityToVisibilityConverter.cs" />
     <Compile Include="Converters\SingleItemToListConverter.cs" />
     <Compile Include="Converters\StringCapitalizationSeparatorConverter.cs" />
     <Compile Include="DirHelpers.cs" />

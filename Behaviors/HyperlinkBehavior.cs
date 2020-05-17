@@ -20,7 +20,7 @@ namespace Thingie.WPF.Behaviors
 
         private static void LaunchesDefaultBrowserSet(DependencyObject target, DependencyPropertyChangedEventArgs args)
         {
-            if ((bool)args.NewValue == true)
+            if ((bool)args.NewValue)
             {
                 ((Hyperlink)target).RequestNavigate += (s, e) => System.Diagnostics.Process.Start(e.Uri.ToString());
             }
