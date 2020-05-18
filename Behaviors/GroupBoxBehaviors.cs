@@ -22,69 +22,58 @@ namespace Thingie.WPF.Behaviors
 
             if (groupBox.IsLoaded)
             {
-                var multiBinding = new MultiBinding
-                {
-                    Converter = new MultiVisibilityToVisibilityConverter()
-                };
-
-                if ((bool)args.NewValue)
-                {
-                    foreach (var child in FindVisualChildren<Button>(groupBox))
-                    {
-                        multiBinding.Bindings.Add(new Binding("Visibility") { Mode = BindingMode.OneWay, Source = child });
-                    }
-                    BindingOperations.SetBinding(groupBox, UIElement.VisibilityProperty, multiBinding);
-                } 
-                else
-                {
-                    BindingOperations.ClearBinding(groupBox, UIElement.VisibilityProperty);
-                }
-                
+                SetupVisibilityBinding(groupBox, (bool)args.NewValue);
             }
             else
             {
-                groupBox.Loaded += (sender, eventArgs) =>
-                {
-                    var multiBinding = new MultiBinding
-                    {
-                        Converter = new MultiVisibilityToVisibilityConverter()
-                    };
-
-                    if ((bool)args.NewValue)
-                    {
-                        foreach (var child in FindVisualChildren<Button>(groupBox))
-                        {
-                            multiBinding.Bindings.Add(new Binding("Visibility") { Mode = BindingMode.OneWay, Source = child });
-                        }
-                        BindingOperations.SetBinding(groupBox, UIElement.VisibilityProperty, multiBinding);
-                    }
-                    else
-                    {
-                        BindingOperations.ClearBinding(groupBox, UIElement.VisibilityProperty);
-                    }
-                };
+                groupBox.Loaded += (sender, eventArgs) => SetupVisibilityBinding(groupBox, (bool)args.NewValue);
             }
+        }
 
+        private static void SetupVisibilityBinding(GroupBox groupBox, bool newBehaviorPropertyValue)
+        {
+            var multiBinding = new MultiBinding
+            {
+                Converter = new MultiVisibilityToVisibilityConverter()
+            };
+
+            if (newBehaviorPropertyValue)
+            {
+                foreach (var child in FindVisualChildren<Button>(groupBox))
+                {
+                    multiBinding.Bindings.Add(new Binding("Visibility") { Mode = BindingMode.OneWay, Source = child });
+                }
+                BindingOperations.SetBinding(groupBox, UIElement.VisibilityProperty, multiBinding);
+            }
+            else
+            {
+                BindingOperations.ClearBinding(groupBox, UIElement.VisibilityProperty);
+            }
         }
 
         public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
         {
+            List<T> childElements = new List<T>();
             if (depObj != null)
             {
                 for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
                 {
                     DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+                    var childVisibility = (Visibility)child.GetValue(UIElement.VisibilityProperty);
+                    
                     if (child != null && child is T)
                     {
-                        yield return (T)child;
+                        childElements.Add((T)child);
                     }
 
-                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                    if (VisualTreeHelper.GetChildrenCount(child) > 0 && childVisibility == Visibility.Visible)
                     {
-                        yield return childOfChild;
+                        childElements.AddRange(FindVisualChildren<T>(child));
                     }
                 }
             }
+
+            return childElements;
         }
     }
 }
