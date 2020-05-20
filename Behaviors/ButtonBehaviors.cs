@@ -35,54 +35,6 @@ namespace Thingie.WPF.Behaviors
         }
 
         /// <summary>
-        /// A <see cref="DependencyProperty"/> used to store a registered parent element of a <see cref="Button"/>. This enables the parent's properties to be binded to the property values of the child.
-        /// </summary>
-        public static readonly DependencyProperty RegisteredParentProperty =
-            DependencyProperty.RegisterAttached("RegisteredParent", typeof(FrameworkElement), typeof(ButtonBehaviors), new UIPropertyMetadata(null, new PropertyChangedCallback(OnRegisteredParentPropertySet)));
-
-        /// <summary>
-        /// Gets the <see cref="RegisteredParentProperty"/>.
-        /// </summary>
-        /// <param name="obj">The <see cref="DependencyObject"/> whose <see cref="RegisteredParentProperty"/> will be retrieved.</param>
-        /// <returns>The <see cref="RegisteredParentProperty"/> as a <see cref="FrameworkElement"/> value.</returns>
-        public static FrameworkElement GetRegisteredParent(DependencyObject obj)
-        {
-            return (FrameworkElement)obj.GetValue(RegisteredParentProperty);
-        }
-
-        /// <summary>
-        /// Sets the <see cref="RegisteredParentProperty"/>.
-        /// </summary>
-        /// <param name="obj">The <see cref="DependencyObject"/> on which the <see cref="RegisteredParentProperty"/> will be set.</param>
-        /// <param name="value">The <see cref="FrameworkElement"/> to be set on the <see cref="RegisteredParentProperty"/>.</param>
-        public static void SetRegisteredParent(DependencyObject obj, FrameworkElement value)
-        {
-            obj.SetValue(RegisteredParentProperty, value);
-        }
-
-        /// <summary>
-        /// A <see cref="PropertyChangedCallback"/> that handles <see cref="RegisteredParentProperty"/> changes. 
-        /// It sets the <see cref="Button"/> with the <see cref="RegisteredParentProperty"/> as a parent element's 
-        /// registered child that will be taken into consideration when configuring the parent's properties.
-        /// </summary>
-        /// <param name="depObj">The <see cref="DependencyObject"/> on which the <see cref="RegisteredParentProperty"/> has changed.</param>
-        /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> for <see cref="RegisteredParentProperty"/> changed events.</param>
-        private static void OnRegisteredParentPropertySet(DependencyObject depObj, DependencyPropertyChangedEventArgs e)
-        {
-            if (!(depObj is Button button) || !(GetRegisteredParent(depObj) is FrameworkElement parentElement))
-                return;
-
-            if (button.IsLoaded)
-            {
-                FrameworkElementBehaviors.SetRegisteredChildren(parentElement, button);
-            }
-            else
-            {
-                button.Loaded += (sender, eventArgs) => FrameworkElementBehaviors.SetRegisteredChildren(parentElement, button);
-            }
-        }
-
-        /// <summary>
         /// A <see cref="PropertyChangedCallback"/> that handles <see cref="FocusOnClickProperty"/> changes.
         /// It subscribes the <see cref="RoutedEventHandler"/> <see cref="ButtonBehaviors_Click(object, RoutedEventArgs)"/> to the <see cref="Button"/>'s click event.
         /// </summary>
