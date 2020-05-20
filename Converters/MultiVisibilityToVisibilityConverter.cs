@@ -5,6 +5,9 @@ using System.Windows.Data;
 
 namespace Thingie.WPF.Converters
 {
+    /// <summary>
+    /// A <see cref="Converter{TInput, TOutput}"/> that converts multiple <see cref="Visibility"/> enums to a single <see cref="Visibility"/> enum.
+    /// </summary>
     public class MultiVisibilityToVisibilityConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, System.Globalization.CultureInfo culture)
