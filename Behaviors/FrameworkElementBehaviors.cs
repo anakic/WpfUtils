@@ -13,35 +13,35 @@ namespace Thingie.WPF.Behaviors
         /// <summary>
         /// A <see cref="DependencyProperty"/> used to store the element's <see cref="FrameworkElement"/> children that impact the element's <see cref="Visibility"/>. This provides a safe and controlled way to dynamically set the element's properties based on the registered children's properties.
         /// </summary>
-        public static readonly DependencyProperty VisibilityChildrenDependenciesProperty = 
-            DependencyProperty.RegisterAttached("VisibilityChildrenDependencies", typeof(List<FrameworkElement>), typeof(FrameworkElementBehaviors), new PropertyMetadata(null, OnVisibilityChildrenDependenciesChanged));
+        public static readonly DependencyProperty VisibilityChildrenProperty = 
+            DependencyProperty.RegisterAttached("VisibilityChildren", typeof(List<FrameworkElement>), typeof(FrameworkElementBehaviors), new PropertyMetadata(null, OnVisibilityChildrenChanged));
 
         /// <summary>
-        /// Adds the specified <see cref="FrameworkElement"/> value to the element's <see cref="VisibilityChildrenDependenciesProperty"/>.
+        /// Adds the specified <see cref="FrameworkElement"/> value to the element's <see cref="VisibilityChildrenProperty"/>.
         /// </summary>
-        /// <param name="element">The element to whose <see cref="VisibilityChildrenDependenciesProperty"/> the <see cref="FrameworkElement"/> value will be added.</param>
-        /// <param name="value">The <see cref="FrameworkElement"/> to be added to the <see cref="VisibilityChildrenDependenciesProperty"/>.</param>
-        public static void AddVisibilityChildDependency(FrameworkElement element, FrameworkElement value)
+        /// <param name="element">The element to whose <see cref="VisibilityChildrenProperty"/> the <see cref="FrameworkElement"/> value will be added.</param>
+        /// <param name="value">The <see cref="FrameworkElement"/> to be added to the <see cref="VisibilityChildrenProperty"/>.</param>
+        public static void AddVisibilityChild(FrameworkElement element, FrameworkElement value)
         {
-            var children = GetVisibilityChildrenDependencies(element);
+            var children = GetVisibilityChildren(element);
             // need a copy of the list, otherwise the callback does not get called
             var newChildren = new List<FrameworkElement>(children);
             newChildren.Add(value);
-            element.SetValue(VisibilityChildrenDependenciesProperty, newChildren);
+            element.SetValue(VisibilityChildrenProperty, newChildren);
         }
 
         /// <summary>
-        /// Gets the <see cref="VisibilityChildrenDependenciesProperty"/> as a <see cref="List{T}"/> of <see cref="FrameworkElement"/>s.
+        /// Gets the <see cref="VisibilityChildrenProperty"/> as a <see cref="List{T}"/> of <see cref="FrameworkElement"/>s.
         /// </summary>
-        /// <param name="element">The <see cref="FrameworkElement"/> from which the <see cref="VisibilityChildrenDependenciesProperty"/> is being retrieved.</param>
-        /// <returns>The <see cref="VisibilityChildrenDependenciesProperty"/> as a <see cref="List{T}"/></returns>
-        public static List<FrameworkElement> GetVisibilityChildrenDependencies(FrameworkElement element) 
+        /// <param name="element">The <see cref="FrameworkElement"/> from which the <see cref="VisibilityChildrenProperty"/> is being retrieved.</param>
+        /// <returns>The <see cref="VisibilityChildrenProperty"/> as a <see cref="List{T}"/></returns>
+        public static List<FrameworkElement> GetVisibilityChildren(FrameworkElement element) 
         {
-            var collection = (List<FrameworkElement>)element.GetValue(VisibilityChildrenDependenciesProperty);
+            var collection = (List<FrameworkElement>)element.GetValue(VisibilityChildrenProperty);
             if (collection == null)
             {
                 collection = new List<FrameworkElement>();
-                element.SetValue(VisibilityChildrenDependenciesProperty, collection);
+                element.SetValue(VisibilityChildrenProperty, collection);
             }
             return collection; 
         }
@@ -86,21 +86,21 @@ namespace Thingie.WPF.Behaviors
 
             if (child.IsLoaded)
             {
-                FrameworkElementBehaviors.AddVisibilityChildDependency(parentElement, child);
+                FrameworkElementBehaviors.AddVisibilityChild(parentElement, child);
             }
             else
             {
-                child.Loaded += (sender, eventArgs) => FrameworkElementBehaviors.AddVisibilityChildDependency(parentElement, child);
+                child.Loaded += (sender, eventArgs) => FrameworkElementBehaviors.AddVisibilityChild(parentElement, child);
             }
         }
 
         /// <summary>
-        /// A <see cref="PropertyChangedCallback"/> that handles <see cref="VisibilityChildrenDependenciesProperty"/> changes.
+        /// A <see cref="PropertyChangedCallback"/> that handles <see cref="VisibilityChildrenProperty"/> changes.
         /// It sets up a <see cref="FrameworkElement"/>'s <see cref="Visibility"/> property to be binded to the <see cref="Visibility"/> properties of his children dependencies. 
         /// </summary>
-        /// <param name="obj">The <see cref="DependencyObject"/> on which the <see cref="VisibilityChildrenDependenciesProperty"/> has changed.</param>
-        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> for <see cref="VisibilityChildrenDependenciesProperty"/> changed events.</param>
-        private static void OnVisibilityChildrenDependenciesChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
+        /// <param name="obj">The <see cref="DependencyObject"/> on which the <see cref="VisibilityChildrenProperty"/> has changed.</param>
+        /// <param name="args">The <see cref="DependencyPropertyChangedEventArgs"/> for <see cref="VisibilityChildrenProperty"/> changed events.</param>
+        private static void OnVisibilityChildrenChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             if (!(obj is FrameworkElement element))
                 return;
@@ -133,7 +133,7 @@ namespace Thingie.WPF.Behaviors
                 BindingOperations.ClearBinding(element, UIElement.VisibilityProperty);
             }
 
-            foreach (var child in GetVisibilityChildrenDependencies(element))
+            foreach (var child in GetVisibilityChildren(element))
             {
                 multiBinding.Bindings.Add(new Binding("Visibility") { Mode = BindingMode.OneWay, Source = child });
             }
