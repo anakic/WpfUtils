@@ -3,6 +3,7 @@ using Thingie.WPF.Controls.PropertiesEditor.Proxies.Base;
 using System.Globalization;
 using System.Windows.Controls;
 using System.ComponentModel;
+using Thingie.WPF.Controls.PropertiesEditor.DefaultFactory.Attributes;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.Proxies
 {
@@ -11,6 +12,8 @@ namespace Thingie.WPF.Controls.PropertiesEditor.Proxies
         public bool Big { get; set; }
         public bool AcceptsReturn { get; set; }
         public bool AcceptsTab { get; set; }
+
+        public ITextConverter TextConverter { get; set; } = new TypeDescriptorTextConverter();
 
         string _conversionFailString;
         bool _conversionFailedFlag = false;
@@ -24,13 +27,13 @@ namespace Thingie.WPF.Controls.PropertiesEditor.Proxies
                 if (base.Value == null)
                     return null;
                 else
-                    return TypeDescriptor.GetConverter(base.Value).ConvertToString(null, CultureInfo.CurrentCulture, base.Value);
+                    return TextConverter.ToString(base.Value);
             }
             set
             {
                 try 
                 {
-                    base.Value = TypeDescriptor.GetConverter(Property.PropertyType).ConvertFromString(null, CultureInfo.CurrentCulture, (string)value);
+                    base.Value = TextConverter.FromString((string)value, Property.PropertyType);
                     _conversionFailedFlag = false;
                 }
                 catch (Exception ex)

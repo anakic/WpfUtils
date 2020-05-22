@@ -43,7 +43,13 @@ namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory
                 if (viewableAtt is EditableTextAttribute)
                 {
                     EditableTextAttribute edTextAtt = viewableAtt as EditableTextAttribute;
-                    proxy = new TextPropertyProxy() { Big = edTextAtt.Big, AcceptsReturn = edTextAtt.AcceptsReturn, AcceptsTab = edTextAtt.AcceptsTab };
+                    proxy = new TextPropertyProxy()
+                    {
+                        Big = edTextAtt.Big,
+                        AcceptsReturn = edTextAtt.AcceptsReturn,
+                        AcceptsTab = edTextAtt.AcceptsTab,
+                        TextConverter = (ITextConverter)Activator.CreateInstance(edTextAtt.TextConverterType)
+                    };
                 }
                 else if (viewableAtt is EditableFilePathAttribute)
                 {
@@ -123,7 +129,7 @@ namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory
             {
                 editableProxy.CustomEditorFactory = property
                     .GetCustomAttributes<CustomEditorTypeAttribute>()
-                    .Select(cte => 
+                    .Select(cte =>
                     {
                         Func<ICustomEditor> editorFactory;
                         if (cte.VmFactoryMethod != null)
@@ -156,19 +162,12 @@ namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory
         private PropertyProxy GetDefaultProxyForProperty(PropertyInfo property)
         {
             PropertyProxy proxy;
-
-            
-            {
-                if (property.PropertyType.IsEnum)
-                {
-                    
-                        proxy = new ChoicePropertyProxy(Enum.GetValues(property.PropertyType));
-                }
-                else if (property.PropertyType == typeof(bool))
-                    proxy = new BoolPropertyProxy();
-                else
-                    proxy = new TextPropertyProxy();
-            }
+            if (property.PropertyType.IsEnum)
+                proxy = new ChoicePropertyProxy(Enum.GetValues(property.PropertyType));
+            else if (property.PropertyType == typeof(bool))
+                proxy = new BoolPropertyProxy();
+            else
+                proxy = new TextPropertyProxy();
             return proxy;
         }
     }
