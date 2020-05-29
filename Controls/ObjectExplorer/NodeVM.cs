@@ -129,6 +129,18 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 return Parent?.FindNode<T>();
         }
 
+        public IEnumerable<NodeVM> GetNodesRecursive(bool includeSelf = false)
+        {
+            if(includeSelf)
+                yield return this;
+
+            foreach (NodeVM childNode in Nodes)
+            {
+                foreach (var childSubNode in childNode.GetNodesRecursive(true))
+                    yield return childSubNode;
+            }
+        }
+
         public ObservableCollection<NodeVM> Nodes
         {
             get
