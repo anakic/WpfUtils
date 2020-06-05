@@ -45,7 +45,7 @@
                         <Border Padding="2,0" Margin="1,2,4,1" x:Name="borderName" CornerRadius="2" Style="{StaticResource disabledControlStyle}" IsEnabled="{Binding IsAvailable}">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding Name, Converter={locconv:StringCapitalizationSeparatorConverter}}" Grid.Column="0" VerticalAlignment="Center" x:Name="lblPropertyName"></TextBlock>
-                                <Image Height="10" Cursor="Help" DockPanel.Dock="Right" Margin="5" RenderOptions.BitmapScalingMode="HighQuality" Source="/Thingie.WPF;component/Resources/help.png" Visibility="{Binding Description, Converter={locconv:MapConverter '_null:Collapsed;_default:Visible'}}" ToolTip="{Binding Description}" ToolTipService.ShowDuration="60000"/>
+                                <Image Height="10" Cursor="Help" DockPanel.Dock="Right" Margin="5" RenderOptions.BitmapScalingMode="HighQuality" Source="/Thingie.WPF;component/Resources/help.png" Visibility="{Binding Description, Converter={locconv:MapConverter '_null:Collapsed;_default:Visible'}}" ToolTip="{Binding Description}" ToolTipService.InitialShowDelay="500" ToolTipService.ShowDuration="60000"/>
                             </StackPanel>
                         </Border>
                         <GridSplitter Width="5" HorizontalAlignment="Right" Background="#01000000" Focusable="False"/>

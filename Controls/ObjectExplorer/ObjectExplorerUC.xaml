@@ -100,7 +100,7 @@
                 </TreeView.ItemContainerStyle>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate ItemsSource="{Binding Nodes, Converter={StaticResource sortConverter}}">
-                        <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="60000" Margin="2" AllowDrop="True" Drop="StackPanel_Drop" DragOver="StackPanel_DragOver">
+                        <StackPanel Orientation="Horizontal" ToolTipService.InitialShowDelay="500" ToolTipService.ShowDuration="60000" Margin="2" AllowDrop="True" Drop="StackPanel_Drop" DragOver="StackPanel_DragOver">
                             <StackPanel.ToolTip>
                                 <TextBlock MaxWidth="500" Text="{Binding ToolTip}" TextWrapping="Wrap" Visibility="{Binding ToolTip, Converter={conv:MapConverter '_null:Collapsed;:Collapsed;_default:Visible'}}"/>
                             </StackPanel.ToolTip>
