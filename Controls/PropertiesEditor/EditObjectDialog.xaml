@@ -8,7 +8,7 @@
         <pe:PropertiesEditorUC Target="{Binding}" x:Name="pe"/>
         <StackPanel HorizontalAlignment="Right" DockPanel.Dock="Bottom" Orientation="Horizontal" Grid.Row="4" Grid.Column="1">
             <Button Content="{x:Static res:Localizations.Ok}" Margin="0,5" IsDefault="True" x:Name="btnOk" Click="btnOk_Click" MinWidth="75"
-                    Command="{x:Static pe:PropertiesEditorUC.CommittCommand}" CommandTarget="{Binding ElementName=pe, Mode=OneWay}"/>
+                    Command="{x:Static pe:PropertiesEditorUC.CommitCommand}" CommandTarget="{Binding ElementName=pe, Mode=OneWay}"/>
             <Button Content="{x:Static res:Localizations.Cancel}" Margin="5" IsCancel="True" x:Name="btnCancel" Click="btnCancel_Click" MinWidth="75"
                     Command="{x:Static pe:PropertiesEditorUC.CancelCommand}" CommandTarget="{Binding ElementName=pe, Mode=OneWay}"/>
         </StackPanel>
