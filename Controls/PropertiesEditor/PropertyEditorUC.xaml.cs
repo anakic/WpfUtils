@@ -74,7 +74,7 @@ namespace Thingie.WPF.Controls.PropertiesEditor
             }
         }
 
-        public static RoutedCommand CommittCommand = new RoutedCommand();
+        public static RoutedCommand CommitCommand = new RoutedCommand();
         public static RoutedCommand CancelCommand = new RoutedCommand();
 
         /// <summary>
@@ -105,11 +105,11 @@ namespace Thingie.WPF.Controls.PropertiesEditor
         public PropertiesEditorUC()
         {
             InitializeComponent();
-            this.CommandBindings.Add(new CommandBinding(CommittCommand, CommittCommand_Executed, CommittCommand_CanExecute));
+            this.CommandBindings.Add(new CommandBinding(CommitCommand, CommitCommand_Executed, CommitCommand_CanExecute));
             this.CommandBindings.Add(new CommandBinding(CancelCommand, CancelCommand_Executed));
         }
 
-        void CommittCommand_Executed(object sender, ExecutedRoutedEventArgs e)
+        void CommitCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             _proxies.Where(pp=>pp is EditablePropertyProxy).Cast<EditablePropertyProxy>().ToList().ForEach(pp => pp.Commit());
         }
@@ -119,7 +119,7 @@ namespace Thingie.WPF.Controls.PropertiesEditor
             return _proxies != null && _proxies.OfType<EditablePropertyProxy>().Any(pp => !pp.ValidationResult.IsValid);
         }
 
-        void CommittCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        void CommitCommand_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = !HasErrors();
         }
