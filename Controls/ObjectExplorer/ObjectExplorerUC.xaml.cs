@@ -370,5 +370,31 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 }
             }));
         }
+
+        private void node_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            //if ((sender as FrameworkElement).DataContext is NodeVM n)
+            //{
+            //    if (!n.CanExpand)
+            //    {
+            //        e.Handled = true;
+            //        if (n.CanActivate())
+            //            n.Activate();
+            //    }
+            //}
+        }
+
+        private void TreeViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if ((sender as FrameworkElement).DataContext is NodeVM n)
+            {
+                if (!n.CanExpand)
+                {
+                    e.Handled = true;
+                    if (n.CanActivate())
+                        n.Activate();
+                }
+            }
+        }
     }
 }
