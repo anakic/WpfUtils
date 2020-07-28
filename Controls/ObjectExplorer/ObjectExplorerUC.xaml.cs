@@ -155,7 +155,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 if (e.ClickCount == 2 && n.CanActivate())
                 {
                     n.Activate();
-                    if (!n.CanExpand)
+                    if (!n.CanExpandOnDoubleClick)
                         e.Handled = true;
                 }
             }

@@ -50,7 +50,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         public virtual bool IsExpanded { get => isExpanded; set { isExpanded = value; OnPropertyChanged(nameof(IsExpanded)); } }
         public virtual bool IsSelected { get => isSelected; set { isSelected = value; OnPropertyChanged(nameof(IsSelected)); } }
-        public virtual bool CanExpand => true;
+        public virtual bool CanExpandOnDoubleClick => true;
         #endregion
 
         public NodeVM(string name)
