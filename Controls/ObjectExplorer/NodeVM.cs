@@ -130,6 +130,12 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 return Parent?.FindNode<T>();
         }
 
+        public IEnumerable<NodeVM> GetAncestors()
+        {
+            for (var current = Parent; current != null; current = current.Parent)
+                yield return current;
+        }
+
         public IEnumerable<NodeVM> GetNodesRecursive(bool includeSelf = false)
         {
             if(includeSelf)
