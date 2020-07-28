@@ -153,7 +153,11 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                     n.Select();
 
                 if (e.ClickCount == 2 && n.CanActivate())
+                {
                     n.Activate();
+                    if (!n.CanExpand)
+                        e.Handled = true;
+                }
             }
         }
 
@@ -369,32 +373,6 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                     Trace.WriteLine("Cleared frame");
                 }
             }));
-        }
-
-        private void node_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            //if ((sender as FrameworkElement).DataContext is NodeVM n)
-            //{
-            //    if (!n.CanExpand)
-            //    {
-            //        e.Handled = true;
-            //        if (n.CanActivate())
-            //            n.Activate();
-            //    }
-            //}
-        }
-
-        private void TreeViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if ((sender as FrameworkElement).DataContext is NodeVM n)
-            {
-                if (!n.CanExpand)
-                {
-                    e.Handled = true;
-                    if (n.CanActivate())
-                        n.Activate();
-                }
-            }
         }
     }
 }

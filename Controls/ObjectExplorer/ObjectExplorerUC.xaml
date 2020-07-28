@@ -57,8 +57,6 @@
                         <EventSetter Event="ContextMenuClosing" Handler="contextMenu_Closing" />
                         <EventSetter Event="PreviewMouseDown" Handler="node_PreviewMouseLeftButtonDown"/>
                         <EventSetter Event="KeyDown" Handler="node_PreviewKeyDown" />
-                        <EventSetter Event="PreviewMouseDoubleClick" Handler="node_PreviewMouseDoubleClick" />
-                        <EventSetter Event="MouseDoubleClick" Handler="TreeViewItem_MouseDoubleClick" />
                         <Setter Property="ContextMenu">
                             <Setter.Value>
                                 <ContextMenu ItemsSource="{Binding ContextCommands}" Visibility="{Binding ContextCommands.Count, Converter={conv:MapConverter 0:Collapsed;_default:Visible}}">
