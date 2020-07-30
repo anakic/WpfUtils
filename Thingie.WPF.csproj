@@ -113,6 +113,7 @@
     <Compile Include="Behaviors\HyperlinkBehavior.cs" />
     <Compile Include="Behaviors\VirtualToggleButtonBehavior.cs" />
     <Compile Include="Behaviors\WindowBehaviors.cs" />
+    <Compile Include="Controls\ObjectExplorer\AsyncObservableCollection.cs" />
     <Compile Include="Controls\ObjectExplorer\ContextCommand.cs" />
     <Compile Include="Controls\ObjectExplorer\SeparatorMenuItem.cs" />
     <Compile Include="Controls\ObjectExplorer\IsSeparatorConverter.cs" />
