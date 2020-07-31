@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace Thingie.WPF.Controls.ObjectExplorer
 {
@@ -24,7 +25,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         protected virtual void OnCanExecuteChanged()
         {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => CanExecuteChanged?.Invoke(this, EventArgs.Empty)));
         }
     }
 }
