@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Data;
 using System.Windows.Threading;
 
@@ -166,15 +167,21 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         #region filter
         public void Filter(string search)
         {
-            DoFilter(Array.Empty<string>(), search.Split(' '));
+            var filterSegments = Regex
+                .Matches(search, @"[^\s""]+|""[^""]*""") // words or quoted phrases
+                .OfType<Match>()
+                .Select(m => m.Value)
+                .ToList();
+
+            DoFilter(Array.Empty<string>(), filterSegments);
             OnPropertyChanged(nameof(Nodes));
         }
 
-        protected void DoFilter(IEnumerable<string> path, IEnumerable<string> filterSegments)
+        protected void DoFilter(IEnumerable<string> pathSegments, IEnumerable<string> filterSegments)
         {
-            List<string> myPath = new List<string>(path) { Name ?? "" };
-
-            bool satisfiesFilterDirectly = filterSegments.All(seg => myPath.Any(p => p.ToUpper().Contains(seg.ToUpper())));
+            List<string> myPath = new List<string>(pathSegments) { Name ?? "" };
+            
+            bool satisfiesFilterDirectly = SatisfiesFilter(filterSegments, myPath);
 
             bool hasChildrenThatSatisfyFilter = false;
             if (Nodes != null)
@@ -188,6 +195,12 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             }
 
             IsVisible = satisfiesFilterDirectly || hasChildrenThatSatisfyFilter;
+        }
+
+        protected virtual bool SatisfiesFilter(IEnumerable<string> filterSegments, List<string> nodePathSegments)
+        {
+            return filterSegments
+                .All(seg => nodePathSegments.Any(p => p.ToUpper().Contains(seg.ToUpper())));
         }
         #endregion
 
