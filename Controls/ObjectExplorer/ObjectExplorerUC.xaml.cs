@@ -153,7 +153,10 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                     n.Select();
 
                 if (e.ClickCount == 2 && n.CanActivate())
+                {
                     n.Activate();
+                    e.Handled = true;
+                }
             }
         }
 
