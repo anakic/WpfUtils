@@ -147,7 +147,9 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             // todo: this bubbles, check if source == e.originalsource and cancel if not
 
             NodeVM n = (sender as FrameworkElement).DataContext as NodeVM;
-            if (n != null)
+            // adding `&& n.IsSelected` to detect if it is in fact the item being clicked, rather than a child item
+            // for some reason, the source and sender originally point to the parent before the child
+            if (n != null && n.IsSelected)
             {
                 if (Keyboard.Modifiers == ModifierKeys.Control && n.CanSelect())
                     n.Select();
