@@ -87,7 +87,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             get => name;
             set
             {
-                if (CanRename())
+                if (CanRename() && name != value)
                 {
                     var oldName = name;
                     name = value;
