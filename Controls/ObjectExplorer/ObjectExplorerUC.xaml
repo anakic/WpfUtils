@@ -56,6 +56,7 @@
                         <EventSetter Event="ContextMenuOpening" Handler="contextMenu_Opening" />
                         <EventSetter Event="ContextMenuClosing" Handler="contextMenu_Closing" />
                         <EventSetter Event="PreviewMouseDown" Handler="node_PreviewMouseLeftButtonDown"/>
+                        <EventSetter Event="Selected" Handler="TreeViewItem_Selected" />
                         <EventSetter Event="KeyDown" Handler="node_PreviewKeyDown" />
                         <Setter Property="ContextMenu">
                             <Setter.Value>
