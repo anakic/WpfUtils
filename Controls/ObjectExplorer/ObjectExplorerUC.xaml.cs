@@ -144,10 +144,17 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         private void node_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            NodeVM originalEventSourceVm = (e.OriginalSource as FrameworkElement).DataContext as NodeVM;
             NodeVM n = (sender as FrameworkElement).DataContext as NodeVM;
 
-            if (n != null && n.IsSelected)
+            if (n != null && originalEventSourceVm != null && n.Equals(originalEventSourceVm))
             {
+                if (Keyboard.Modifiers == ModifierKeys.Control && n.CanSelect())
+                {
+                    n.Select();
+                    e.Handled = true;
+                }
+
                 if (e.ClickCount == 2 && n.CanActivate())
                 {
                     n.Activate();
@@ -368,16 +375,6 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                     Trace.WriteLine("Cleared frame");
                 }
             }));
-        }
-
-        private void TreeViewItem_Selected(object sender, RoutedEventArgs e)
-        {
-            var n = (sender as FrameworkElement).DataContext as NodeVM;
-            if (Keyboard.Modifiers == ModifierKeys.Control && n.CanSelect())
-            {
-                n.Select();
-                e.Handled = true;
-            }
         }
     }
 }
