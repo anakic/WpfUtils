@@ -144,15 +144,16 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         private void node_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            // todo: this bubbles, check if source == e.originalsource and cancel if not
-
+            NodeVM originalEventSourceVm = (e.OriginalSource as FrameworkElement).DataContext as NodeVM;
             NodeVM n = (sender as FrameworkElement).DataContext as NodeVM;
-            // adding `&& n.IsSelected` to detect if it is in fact the item being clicked, rather than a child item
-            // for some reason, the source and sender originally point to the parent before the child
-            if (n != null && n.IsSelected)
+
+            if (n != null && originalEventSourceVm != null && n.Equals(originalEventSourceVm))
             {
                 if (Keyboard.Modifiers == ModifierKeys.Control && n.CanSelect())
+                {
                     n.Select();
+                    e.Handled = true;
+                }
 
                 if (e.ClickCount == 2 && n.CanActivate())
                 {
