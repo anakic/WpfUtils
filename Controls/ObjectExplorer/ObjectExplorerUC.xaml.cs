@@ -152,7 +152,6 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 if (Keyboard.Modifiers == ModifierKeys.Control && n.CanSelect())
                 {
                     n.Select();
-                    e.Handled = true;
                 }
 
                 if (e.ClickCount == 2 && n.CanActivate())
