@@ -375,5 +375,17 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 }
             }));
         }
+
+        private void node_Unselected(object sender, RoutedEventArgs e)
+        {
+            NodeVM n = (sender as FrameworkElement).DataContext as NodeVM;
+
+            if (n != null)
+            {
+                if (n.IsEditing)
+                    n.IsEditing = false;
+            }
+            e.Handled = true;
+        }
     }
 }
