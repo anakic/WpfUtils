@@ -55,6 +55,7 @@
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
                         <EventSetter Event="ContextMenuOpening" Handler="contextMenu_Opening" />
                         <EventSetter Event="ContextMenuClosing" Handler="contextMenu_Closing" />
+                        <EventSetter Event="Unselected" Handler="node_Unselected" />
                         <EventSetter Event="PreviewMouseDown" Handler="node_PreviewMouseLeftButtonDown"/>
                         <EventSetter Event="KeyDown" Handler="node_PreviewKeyDown" />
                         <Setter Property="ContextMenu">
