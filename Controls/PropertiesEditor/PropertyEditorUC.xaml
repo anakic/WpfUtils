@@ -98,10 +98,20 @@
             </DataTemplate>
 
             <!-- the 4 choice modes -->
-            <!-- 1. choice default mode-->
+            <!-- 1. choice default mode, if other choice templates need to show description instead of value, apply itemtemplateselector from here to the other templates-->
             <DataTemplate DataType="{x:Type pi:ChoicePropertyProxy}" x:Key="choiceProxy">
                 <ComboBox DisplayMemberPath="{Binding DisplayMemberPath}" HorizontalAlignment="Stretch" x:Name="PART_EDIT"
-                    ItemsSource="{Binding Values}" SelectedItem="{Binding Value}"/>
+                    ItemsSource="{Binding Values}" SelectedItem="{Binding Value}">
+                    <ComboBox.ItemTemplateSelector>
+                        <loc:ComboBoxItemTemplateSelector>
+                            <loc:ComboBoxItemTemplateSelector.DescriptionDataTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={locconv:EnumDescriptionConverter}}" />
+                                </DataTemplate>
+                            </loc:ComboBoxItemTemplateSelector.DescriptionDataTemplate>
+                        </loc:ComboBoxItemTemplateSelector>
+                    </ComboBox.ItemTemplateSelector>
+                </ComboBox>
             </DataTemplate>
             <!-- choice async mode-->
             <DataTemplate DataType="{x:Type pi:ChoicePropertyProxy}" x:Key="choiceAsyncProxy">
