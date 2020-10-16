@@ -126,7 +126,8 @@
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\EditableShortcutAttribute.cs" />
     <Compile Include="Controls\PropertiesEditor\Proxies\ShortcutPropertyProxy.cs" />
     <Compile Include="Controls\ShortcutTextbox.cs" />
-    <Compile Include="Converters\EnumDescriptionConverter.cs" />
+    <Compile Include="Converters\BaseValueToAttributeConverter.cs" />
+    <Compile Include="Converters\ValueToDescriptionConverter.cs" />
     <Compile Include="Converters\ListToStringConverter.cs" />
     <Compile Include="Converters\MultiVisibilityToVisibilityConverter.cs" />
     <Compile Include="Converters\SingleItemToListConverter.cs" />

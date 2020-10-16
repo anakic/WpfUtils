@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -17,23 +16,6 @@ namespace Thingie.WPF.Controls.PropertiesEditor
     public interface ICustomEditorHost
     {
         void Show(string title, ICustomEditor controlToShow, Action okAction);
-    }
-
-    class ComboBoxItemTemplateSelector : DataTemplateSelector
-    {
-        public DataTemplate DescriptionDataTemplate { get; set; }
-        public override DataTemplate SelectTemplate(object item, DependencyObject container)
-        {
-            var itemFieldInfo = item.GetType().GetField(item.ToString());
-            if (itemFieldInfo != null)
-            {
-                var hasDescription = itemFieldInfo.IsDefined(typeof(DescriptionAttribute), false);
-                if (hasDescription)
-                    return DescriptionDataTemplate;
-            }
-            
-            return base.SelectTemplate(item, container);
-        }
     }
 
     class ProxyTemplateSelector : DataTemplateSelector
