@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Markdig;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,26 +14,32 @@ namespace Thingie.WPF.Behaviors
     {
         public static readonly DependencyProperty HtmlProperty = DependencyProperty.RegisterAttached(
                 "Html",
-                typeof(string),
+                typeof(Task<string>),
                 typeof(BrowserBehavior),
                 new FrameworkPropertyMetadata(OnHtmlChanged));
 
         [AttachedPropertyBrowsableForType(typeof(WebBrowser))]
-        public static string GetHtml(WebBrowser d)
+        public static Task<string> GetHtml(WebBrowser d)
         {
-            return (string)d.GetValue(HtmlProperty);
+            return (Task<string>)d.GetValue(HtmlProperty);
         }
 
-        public static void SetHtml(WebBrowser d, string value)
+        public static void SetHtml(WebBrowser d, Task<string> value)
         {
             d.SetValue(HtmlProperty, value);
         }
 
-        static void OnHtmlChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        static async void OnHtmlChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
             WebBrowser webBrowser = dependencyObject as WebBrowser;
             if (webBrowser != null)
-                webBrowser.NavigateToString(e.NewValue as string ?? "&nbsp;");
+            {
+                webBrowser.NavigateToString("Loading...");
+
+                var htmlTask = e.NewValue as Task<string>;
+                var html = await htmlTask;
+                await webBrowser.Dispatcher.BeginInvoke(new Action(() => webBrowser.NavigateToString(string.IsNullOrEmpty(html) ? "&nbsp;" : html)));
+            }
         }
     }
 
