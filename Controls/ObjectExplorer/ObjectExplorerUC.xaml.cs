@@ -80,6 +80,10 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 rootNode = new RootNodeVM(Nodes);
                 rootNode.Visit(n => n.Initialize());
                 tree.DataContext = rootNode;
+                
+                // Note/hack: wpf will not call Closing on menu items that belong to TreeView items 
+                // that we just trashed (by replacing them with a new rootNode)
+                contextMenu_Closing(null, null);
             }
         }
 
