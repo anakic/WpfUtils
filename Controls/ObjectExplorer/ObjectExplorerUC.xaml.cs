@@ -80,7 +80,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 rootNode = new RootNodeVM(Nodes);
                 rootNode.Visit(n => n.Initialize());
                 tree.DataContext = rootNode;
-                
+
                 // Note/hack: wpf will not call Closing on menu items that belong to TreeView items 
                 // that we just trashed (by replacing them with a new rootNode)
                 contextMenu_Closing(null, null);
@@ -220,65 +220,62 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
-                TextBox textBox = (sender as TextBox);
-                var node = (tree.SelectedItem as NodeVM);
+            TextBox textBox = (sender as TextBox);
+            var node = (tree.SelectedItem as NodeVM);
 
-                if (e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
+            {
+                node.IsEditing = false;
+                var be = textBox.GetBindingExpression(TextBox.TextProperty);
+                if (be.IsDirty)
                 {
-                    node.IsEditing = false;
-                    var be = textBox.GetBindingExpression(TextBox.TextProperty);
-                    if (be.IsDirty)
+                    be.UpdateSource();
+                    if (be.HasValidationError)
                     {
-                        be.UpdateSource();
-                        if (be.HasValidationError)
-                        {
-                            ShowError(be.ValidationError.Exception.Message);
-                            be.UpdateTarget();
-                            be.UpdateSource();
-                            Validation.ClearInvalid(be);
-                        }
-                        else
-                        {
-                            tree.Items.Refresh();
-                        }
-                    }
-                    e.Handled = true;
-                }
-                else if (e.Key == Key.Escape)
-                {
-                    var be = textBox.GetBindingExpression(TextBox.TextProperty);
-                    if (be.IsDirty)
-                    {
+                        ShowError(be.ValidationError.Exception.Message);
                         be.UpdateTarget();
                         be.UpdateSource();
+                        Validation.ClearInvalid(be);
                     }
-                    node.IsEditing = false;
-                    e.Handled = true;
+                    else
+                    {
+                        tree.Items.Refresh();
+                    }
                 }
-                else if (e.Key == Key.Subtract || e.Key == Key.Add)
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Escape)
+            {
+                var be = textBox.GetBindingExpression(TextBox.TextProperty);
+                if (be.IsDirty)
                 {
-                    e.Handled = true;
-
-                    var text = e.Key == Key.Subtract ? "-" : "+";
-                    var target = Keyboard.FocusedElement;
-                    var routedEvent = TextCompositionManager.TextInputEvent;
-
-                    target.RaiseEvent(
-                        new TextCompositionEventArgs
-                            (
-                                 InputManager.Current.PrimaryKeyboardDevice,
-                                new TextComposition(InputManager.Current, target, text)
-                            )
-                        {
-                            RoutedEvent = routedEvent
-                        });
+                    be.UpdateTarget();
+                    be.UpdateSource();
                 }
-            }));
+                node.IsEditing = false;
+                e.Handled = true;
+            }
+            else if (e.Key == Key.Subtract || e.Key == Key.Add)
+            {
+                e.Handled = true;
+
+                var text = e.Key == Key.Subtract ? "-" : "+";
+                var target = Keyboard.FocusedElement;
+                var routedEvent = TextCompositionManager.TextInputEvent;
+
+                target.RaiseEvent(
+                    new TextCompositionEventArgs
+                        (
+                             InputManager.Current.PrimaryKeyboardDevice,
+                            new TextComposition(InputManager.Current, target, text)
+                        )
+                    {
+                        RoutedEvent = routedEvent
+                    });
+            }
         }
 
-        private void TextBox_LostFocus(object sender, System.Windows.RoutedEventArgs e)
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
             Dispatcher.BeginInvoke(new Action(() =>
             {
