@@ -118,7 +118,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         private void tree_PreviewMouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed && !_IsDragging)
+            if (e.LeftButton == MouseButtonState.Pressed && !_IsDragging && !isContextMenuOpened)
             {
                 Point position = e.GetPosition(null);
                 if (Math.Abs(position.X - _startPoint.X) >
@@ -352,6 +352,10 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             }
         }
 
+        // Used to prevent node moving after opening context menu and clicking on a parent folder node
+        // Note: The PreviewMouseMove event is "faster" than the ContextMenuClosing event, which resulted in the node being processed like it is being moved
+        bool isContextMenuOpened;
+
         private void contextMenu_Opening(object sender, RoutedEventArgs e)
         {
             Dispatcher.BeginInvoke(new Action(() =>
@@ -359,6 +363,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 if (dispatcherFrame == null)
                 {
                     Trace.WriteLine("Pushing frame");
+                    isContextMenuOpened = true;
                     Dispatcher.PushFrame(dispatcherFrame = new DispatcherFrame());
                 }
             }));
@@ -370,6 +375,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             {
                 if (dispatcherFrame != null)
                 {
+                    isContextMenuOpened = false;
                     dispatcherFrame.Continue = false;
                     dispatcherFrame = null;
                     Trace.WriteLine("Cleared frame");
