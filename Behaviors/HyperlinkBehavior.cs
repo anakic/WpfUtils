@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using System.Windows.Documents;
-using System.Windows.Media;
 
 namespace Thingie.WPF.Behaviors
 {
