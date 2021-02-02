@@ -31,7 +31,7 @@ namespace Thingie.WPF.Behaviors
             {
                 webBrowser.NavigateToString("Loading...");
 
-                var htmlTask = e.NewValue as Task<string>;
+                var htmlTask = (e.NewValue as Task<string>) ?? Task.FromResult("");
                 var html = await htmlTask;
                 await webBrowser.Dispatcher.BeginInvoke(new Action(() => webBrowser.NavigateToString(string.IsNullOrEmpty(html) ? "&nbsp;" : html)));
             }
