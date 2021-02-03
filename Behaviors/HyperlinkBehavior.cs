@@ -16,7 +16,7 @@ namespace Thingie.WPF.Behaviors
         }
         
         public static readonly DependencyProperty LaunchesDefaultBrowserProperty =
-            DependencyProperty.RegisterAttached("LaunchesDefaultBrowser", typeof(bool), typeof(Hyperlink), new PropertyMetadata(false, new PropertyChangedCallback(LaunchesDefaultBrowserSet)));
+            DependencyProperty.RegisterAttached("LaunchesDefaultBrowser", typeof(bool), typeof(HyperlinkBehavior), new PropertyMetadata(false, new PropertyChangedCallback(LaunchesDefaultBrowserSet)));
 
         private static void LaunchesDefaultBrowserSet(DependencyObject target, DependencyPropertyChangedEventArgs args)
         {
