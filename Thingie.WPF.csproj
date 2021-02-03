@@ -53,8 +53,7 @@
     <SignAssembly>true</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>qssnkey.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'unlicensed|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -230,6 +229,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="qssnkey.snk" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\BusyCtrl.xaml">
