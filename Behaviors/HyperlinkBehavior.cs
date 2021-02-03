@@ -37,7 +37,7 @@ namespace Thingie.WPF.Behaviors
         }
 
         public static readonly DependencyProperty UnderlineOnlyOnMouseEnterProperty =
-            DependencyProperty.RegisterAttached("UnderlineOnlyOnMouseEnter", typeof(bool), typeof(Hyperlink), new PropertyMetadata(false, new PropertyChangedCallback(UnderlineOnlyOnMouseEnterPropertySet)));
+            DependencyProperty.RegisterAttached("UnderlineOnlyOnMouseEnter", typeof(bool), typeof(HyperlinkBehavior), new PropertyMetadata(false, new PropertyChangedCallback(UnderlineOnlyOnMouseEnterPropertySet)));
 
         private static void UnderlineOnlyOnMouseEnterPropertySet(DependencyObject target, DependencyPropertyChangedEventArgs args)
         {
