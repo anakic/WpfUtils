@@ -11,8 +11,10 @@ using Thingie.WPF.Attributes;
 
 namespace Thingie.WPF.KeyboardShortcuts
 {
-    public abstract class ShortcutHandle
+    public abstract class ShortcutHandle : MarshalByRefObject
     {
+        public override object InitializeLifetimeService() => null;
+
         public string Name { get; set; }
         public string Category { get; set; }
 
@@ -40,15 +42,27 @@ namespace Thingie.WPF.KeyboardShortcuts
     }
 
     [ProxyFactory(typeof(ShortcutServiceProxyFactory))]
-    public class ShortcutService
+    public class ShortcutService : MarshalByRefObject
     {
+        public override object InitializeLifetimeService() => null;
+
         public List<ShortcutHandle> Shortcuts { get; set; }
 
         public ShortcutService()
+            : this((uint)AppDomain.GetCurrentThreadId())
+        {
+        }
+
+        public ShortcutService(uint mainThreadId)
         {
             Shortcuts = new List<ShortcutHandle>();
             _proc = HookCallback;
-            _hookID = SetWindowsHookEx(WH_KEYBOARD, _proc, IntPtr.Zero, (uint)AppDomain.GetCurrentThreadId());
+            _hookID = SetWindowsHookEx(WH_KEYBOARD, _proc, IntPtr.Zero, mainThreadId);
+        }
+
+        public void AddShortcut(ShortcutHandle handle)
+        {
+            this.Shortcuts.Add(handle);
         }
 
         #region winapi stuff
