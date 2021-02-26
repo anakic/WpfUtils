@@ -21,25 +21,27 @@ namespace Thingie.WPF.Behaviors
             Image image = (Image)obj;
 
             image.IsEnabledChanged -= OnImageIsEnabledChanged;
-            image.SourceUpdated -= Image_SourceUpdated;
             image.Loaded -= Image_Loaded;
+            image.TargetUpdated -= Image_TargetUpdated;
 
             if ((bool)args.NewValue)
             {
                 image.IsEnabledChanged += OnImageIsEnabledChanged;
-                image.SourceUpdated += Image_SourceUpdated;
                 image.Loaded += Image_Loaded;
+                // to correctly handle this event when image is defined in a style, set NotifyOnTargetUpdated in binding to True
+                image.TargetUpdated += Image_TargetUpdated;
             }
+
             ToggleGrayOut(image); // initial call
         }
 
-        private static void Image_Loaded(object sender, RoutedEventArgs e)
+        private static void Image_TargetUpdated(object sender, DataTransferEventArgs e)
         {
             var image = (Image)sender;
             ToggleGrayOut(image);
         }
 
-        private static void Image_SourceUpdated(object sender, DataTransferEventArgs e)
+        private static void Image_Loaded(object sender, RoutedEventArgs e)
         {
             var image = (Image)sender;
             ToggleGrayOut(image);
