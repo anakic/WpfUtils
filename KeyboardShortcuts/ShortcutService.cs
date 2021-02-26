@@ -65,6 +65,11 @@ namespace Thingie.WPF.KeyboardShortcuts
             this.Shortcuts.Add(handle);
         }
 
+        public void RemoveShortcut(ShortcutHandle handle)
+        {
+            this.Shortcuts.Remove(handle);
+        }
+
         #region winapi stuff
         public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
         private readonly LowLevelKeyboardProc _proc;
