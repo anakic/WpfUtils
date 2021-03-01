@@ -1,12 +1,10 @@
 ﻿<UserControl x:Class="Thingie.WPF.Controls.PropertiesEditor.PropertiesEditorUC"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:pi="clr-namespace:Thingie.WPF.Controls.PropertiesEditor.Proxies"
-    xmlns:ce="clr-namespace:Thingie.WPF.Controls.PropertiesEditor.CustomEditing"
     xmlns:loc="clr-namespace:Thingie.WPF.Controls.PropertiesEditor"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
     xmlns:locctrl="clr-namespace:Thingie.WPF.Controls"
     xmlns:locconv="clr-namespace:Thingie.WPF.Converters"
-    xmlns:rizwpf="clr-namespace:Thingie.WPF"
     xmlns:beh="clr-namespace:Thingie.WPF.Behaviors"
     xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Validation.ErrorTemplate="{x:Null}">
@@ -89,7 +87,8 @@
 
             <!-- plain text -->
             <DataTemplate DataType="{x:Type pi:TextPropertyProxy}" x:Key="textProxy">
-                <TextBox HorizontalAlignment="Stretch" x:Name="PART_EDIT" MaxHeight="100" beh:TextBoxBehaviors.CancelKey="Escape" AcceptsReturn="{Binding AcceptsReturn}" AcceptsTab="{Binding AcceptsTab}" Text="{Binding Value}"/>
+                <TextBox HorizontalAlignment="Stretch" x:Name="PART_EDIT" 
+                         MaxHeight="100" beh:TextBoxBehaviors.CancelKey="Escape" AcceptsReturn="{Binding AcceptsReturn}" AcceptsTab="{Binding AcceptsTab}" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"/>
             </DataTemplate>
 
             <!-- shortcut -->
