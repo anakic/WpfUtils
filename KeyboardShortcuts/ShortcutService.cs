@@ -13,6 +13,7 @@ namespace Thingie.WPF.KeyboardShortcuts
 {
     public abstract class ShortcutHandle : MarshalByRefObject
     {
+        // todo: memory leak? when should we call RemotingServices.Disconnect(this)?
         public override object InitializeLifetimeService() => null;
 
         public string Name { get; set; }
@@ -44,6 +45,7 @@ namespace Thingie.WPF.KeyboardShortcuts
     [ProxyFactory(typeof(ShortcutServiceProxyFactory))]
     public class ShortcutService : MarshalByRefObject
     {
+        // todo: memory leak? when should we call RemotingServices.Disconnect(this)?
         public override object InitializeLifetimeService() => null;
 
         public List<ShortcutHandle> Shortcuts { get; set; }
