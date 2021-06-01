@@ -93,7 +93,7 @@
 
             <!-- shortcut -->
             <DataTemplate DataType="{x:Type pi:TextPropertyProxy}" x:Key="shortcutProxy">
-                <locctrl:ShortcutTextbox HorizontalAlignment="Stretch" x:Name="PART_EDIT" Text="{Binding Value}" Rules="{Binding Rules}"/>
+                <locctrl:ShortcutTextbox HorizontalAlignment="Stretch" x:Name="PART_EDIT" Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Rules="{Binding Rules}"/>
             </DataTemplate>
 
             <!-- the 4 choice modes -->
