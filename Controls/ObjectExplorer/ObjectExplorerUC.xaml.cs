@@ -311,7 +311,10 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 var proposedParentNode = (sender as StackPanel).DataContext as NodeVM;
                 try
                 {
-                    node.Move(proposedParentNode);
+                    // note: it's possible that this executes without StackPanel_DragOver being called
+                    // in case of quick drag&drop with minimal movement, so we must repeat the check
+                    if (node.CanMoveInternal(proposedParentNode) && node.CanMove(proposedParentNode))
+                        node.Move(proposedParentNode);
                 }
                 catch (Exception ex)
                 {
