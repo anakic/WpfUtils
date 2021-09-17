@@ -110,6 +110,7 @@
     <Compile Include="Behaviors\FrameworkElementBehaviors.cs" />
     <Compile Include="Behaviors\GrayoutImageBehavior.cs" />
     <Compile Include="Behaviors\HyperlinkBehavior.cs" />
+    <Compile Include="Behaviors\InputBindingsManager.cs" />
     <Compile Include="Behaviors\VirtualToggleButtonBehavior.cs" />
     <Compile Include="Behaviors\WindowBehaviors.cs" />
     <Compile Include="Controls\ObjectExplorer\AsyncObservableCollection.cs" />
