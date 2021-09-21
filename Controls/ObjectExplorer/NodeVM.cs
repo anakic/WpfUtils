@@ -110,7 +110,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         }
 
         #region core properties
-        public abstract Uri ImageURI { get; }
+        public virtual Uri ImageURI { get; } = default;
         public virtual string ToolTip { get => Name; }
         public virtual object Badge { get; }
         public int Order { get => order; set { order = value; OnPropertyChanged(nameof(Order)); Parent?.OnPropertyChanged(nameof(Nodes)); } }
