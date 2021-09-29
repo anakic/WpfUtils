@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -52,8 +53,11 @@ namespace Thingie.WPF.KeyboardShortcuts
 
         public List<ShortcutHandle> Shortcuts { get; set; }
 
+        int threadId;
         public ShortcutService()
         {
+            threadId = Thread.CurrentThread.ManagedThreadId;
+
             Shortcuts = new List<ShortcutHandle>();
             _proc = HookCallback;
             _hookID = SetWindowsHookEx(WH_KEYBOARD, _proc, IntPtr.Zero, (uint)AppDomain.GetCurrentThreadId());
@@ -71,6 +75,8 @@ namespace Thingie.WPF.KeyboardShortcuts
         /// <param name="p"></param>
         public ShortcutService(Process p)
         {
+            threadId = Thread.CurrentThread.ManagedThreadId;
+
             Shortcuts = new List<ShortcutHandle>();
             _proc = HookCallback;
             _hookID = SetWindowsHookEx(WH_KEYBOARD_LL, _proc, GetModuleHandle(p.MainModule.ModuleName), 0);
@@ -127,20 +133,12 @@ namespace Thingie.WPF.KeyboardShortcuts
 
         protected virtual void BeforeExecuteShortcut(ShortcutHandle shortcutHandle) { }
 
-        public void Dispose()
-        {
-            UnhookWindowsHookEx(_hookID);
-        }
-
-        ~ShortcutService()
-        {
-            Dispose();
-        }
 
         #region winapi stuff
         public delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
         private LowLevelKeyboardProc _proc;
         private IntPtr _hookID = IntPtr.Zero;
+        private bool disposedValue;
 
         //Declare the mouse hook constant.
         //For other hook types, you can obtain these values from Winuser.h in the Microsoft SDK.            
@@ -160,6 +158,30 @@ namespace Thingie.WPF.KeyboardShortcuts
 
         [DllImport("kernel32.dll", CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public static extern IntPtr GetModuleHandle(string lpModuleName);
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                // doesn't hurt to try, even if on wrong thread
+                UnhookWindowsHookEx(_hookID);
+                disposedValue = true;
+
+                if (threadId != Thread.CurrentThread.ManagedThreadId)
+                    throw new InvalidOperationException($"ShortcutService - unhooking from wrong thread {Thread.CurrentThread.ManagedThreadId} instead of {threadId}!");
+            }
+        }
+
+        ~ShortcutService()
+        {
+            Dispose(disposing: false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         #endregion
     }
