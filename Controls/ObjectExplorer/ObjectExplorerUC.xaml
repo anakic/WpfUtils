@@ -44,7 +44,7 @@
             </Button.Content>
         </Button>
         <AdornerDecorator Grid.Row="1" Margin="5,0,5,5">
-            <TreeView ItemsSource="{Binding Nodes, Converter={StaticResource sortConverter}}" BorderThickness="0"
+            <TreeView ItemsSource="{Binding Nodes, Converter={StaticResource sortConverter}}" BorderThickness="0" DataContext="{x:Null}"
                 x:Name="tree" VirtualizingStackPanel.IsVirtualizing="True" Background="Transparent" Focusable="False"
                 PreviewMouseMove="tree_PreviewMouseMove" PreviewMouseLeftButtonDown="tree_PreviewMouseLeftButtonDown"
                 PreviewKeyDown="TreeView_KeyDown"
