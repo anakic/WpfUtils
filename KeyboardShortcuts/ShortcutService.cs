@@ -46,11 +46,8 @@ namespace Thingie.WPF.KeyboardShortcuts
     }
 
     [ProxyFactory(typeof(ShortcutServiceProxyFactory))]
-    public class ShortcutService : MarshalByRefObject, IDisposable
+    public class ShortcutService : IDisposable
     {
-        // todo: memory leak? when should we call RemotingServices.Disconnect(this)?
-        public override object InitializeLifetimeService() => null;
-
         public List<ShortcutHandle> Shortcuts { get; set; }
 
         int threadId;
