@@ -2,23 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
-using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
 using Thingie.WPF.Attributes;
 
 namespace Thingie.WPF.KeyboardShortcuts
 {
-    public abstract class ShortcutHandle : MarshalByRefObject
+    public abstract class ShortcutHandle
     {
-        // todo: memory leak? when should we call RemotingServices.Disconnect(this)?
-        public override object InitializeLifetimeService() => null;
-
         public string Name { get; set; }
         public string Category { get; set; }
 
