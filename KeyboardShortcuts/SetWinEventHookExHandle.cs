@@ -24,6 +24,8 @@ namespace Thingie.WPF.KeyboardShortcuts
             : base(true)
         {
             ThreadId = Thread.CurrentThread.ManagedThreadId;
+            if (ThreadId != 1)
+                throw new InvalidOperationException();
         }
 
         [ReliabilityContract(Consistency.WillNotCorruptState, Cer.MayFail)]
