@@ -134,6 +134,8 @@
     <Compile Include="Converters\StringCapitalizationSeparatorConverter.cs" />
     <Compile Include="DirHelpers.cs" />
     <Compile Include="INotifyHaveChanges.cs" />
+    <Compile Include="KeyboardShortcuts\NativeMethods.cs" />
+    <Compile Include="KeyboardShortcuts\SetWinEventHookExHandle.cs" />
     <Compile Include="KeyboardShortcuts\ShortcutService.cs" />
     <Compile Include="KeyboardShortcuts\ShortcutServiceProxyFactory.cs" />
     <Compile Include="ShortcutKey.cs" />
