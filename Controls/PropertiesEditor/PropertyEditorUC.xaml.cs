@@ -109,9 +109,14 @@ namespace Thingie.WPF.Controls.PropertiesEditor
             this.CommandBindings.Add(new CommandBinding(CancelCommand, CancelCommand_Executed));
         }
 
+        public void Commit()
+        {
+            _proxies.Where(pp => pp is EditablePropertyProxy).Cast<EditablePropertyProxy>().ToList().ForEach(pp => pp.Commit());
+        }
+
         void CommitCommand_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            _proxies.Where(pp=>pp is EditablePropertyProxy).Cast<EditablePropertyProxy>().ToList().ForEach(pp => pp.Commit());
+            Commit();
         }
 
         public bool HasErrors()
