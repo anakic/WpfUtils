@@ -148,21 +148,28 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         private void node_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            NodeVM originalEventSourceVm = (e.OriginalSource as FrameworkElement).DataContext as NodeVM;
-            NodeVM n = (sender as FrameworkElement).DataContext as NodeVM;
-
-            if (n != null && originalEventSourceVm != null && n.Equals(originalEventSourceVm))
+            try
             {
-                if (Keyboard.Modifiers == ModifierKeys.Control && n.CanSelect())
-                {
-                    n.Select();
-                }
+                NodeVM originalEventSourceVm = (e.OriginalSource as FrameworkElement)?.DataContext as NodeVM;
+                NodeVM n = (sender as FrameworkElement)?.DataContext as NodeVM;
 
-                if (e.ClickCount == 2 && n.CanActivate())
+                if (n != null && originalEventSourceVm != null && n.Equals(originalEventSourceVm))
                 {
-                    n.Activate();
-                    e.Handled = true;
+                    if (Keyboard.Modifiers == ModifierKeys.Control && n.CanSelect())
+                    {
+                        n.Select();
+                    }
+
+                    if (e.ClickCount == 2 && n.CanActivate())
+                    {
+                        n.Activate();
+                        e.Handled = true;
+                    }
                 }
+            }
+            catch(Exception ex)
+            {
+                Debug.Fail(ex.Message);
             }
         }
 
