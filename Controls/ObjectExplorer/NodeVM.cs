@@ -82,6 +82,16 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         public virtual string DisplayText { get => Name; }
 
+        // used by derived classes to indicate that the underlying item has renamed.
+        // This obviates the rename checks that apply to user-initiated rename, as this
+        // is not a situation where we allow/disallow the rename, it already happened.
+        protected void OnNameUpdated(string newName)
+        {
+            name = newName;
+            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged(nameof(DisplayText));
+        }
+
         public virtual string Name
         {
             get => name;
