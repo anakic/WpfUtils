@@ -108,7 +108,7 @@
                             <CheckBox IsTabStop="False" IsChecked="{Binding IsChecked}" IsThreeState="{Binding IsThreeState}" Visibility="{Binding CheckboxEnabled, Converter={conv:MapConverter 'true:Visible;false:Collapsed'}}"></CheckBox>
                             <Image Source="{Binding ImageURI}" Width="16" Height="16" Margin="0,0,2,0" VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality"
                                    Visibility="{Binding ImageURI, Converter={conv:MapConverter _null:Collapsed;_default:Visible}}"/>
-                            <TextBlock Text="{Binding DisplayText}" VerticalAlignment="Center"
+                            <TextBlock Text="{Binding DisplayText}" VerticalAlignment="Center" FontWeight="{Binding IsBold, Converter={conv:MapConverter 'true:Bold;false:Normal'}}"
 									   Visibility="{Binding IsEditing, Converter={conv:MapConverter 'false:Visible;true:Collapsed;'}}"/>
                             <TextBlock Text="{Binding Badge}" Opacity="0.5" VerticalAlignment="Center" Margin="2,0,0,0"
 									   Visibility="{Binding IsEditing, Converter={conv:MapConverter 'false:Visible;true:Collapsed;'}}"/>
