@@ -177,7 +177,7 @@ namespace Thingie.WPF.Adorners
             this.contentPresenter = new ContentPresenter();
             this.contentPresenter.Content = watermark;
             this.contentPresenter.Opacity = 0.5;
-            this.contentPresenter.Margin = new Thickness(Control.Margin.Left + Control.Padding.Left, Control.Margin.Top + Control.Padding.Top, 0, 0);
+            this.contentPresenter.Margin = new Thickness(/*Control.Margin.Left + */Control.Padding.Left, /*Control.Margin.Top + */Control.Padding.Top, 0, 0);
 
             // Hide the control adorner when the adorned element is hidden
             Binding binding = new Binding("IsVisible");
