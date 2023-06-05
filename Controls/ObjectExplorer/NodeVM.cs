@@ -4,18 +4,17 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Data;
 using System.Windows.Threading;
 
 namespace Thingie.WPF.Controls.ObjectExplorer
 {
+
     public abstract class NodeVM : INotifyPropertyChanged
     {
         string name;
         int order = 1;
         bool? isChecked;
         private ObservableCollection<NodeVM> nodes;
-
 
         /// <summary>
         /// If true, child Nodes will not be movable outside of this folder.
@@ -73,9 +72,6 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public virtual bool CanMove(NodeVM proposedParent) => false;
         public virtual void Move(NodeVM newParent) { }
 
-
-
-
         public virtual bool CanDelete() => false;
         public virtual void Delete() { }
         #endregion
@@ -120,6 +116,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         }
 
         #region core properties
+        public virtual string SearchName => Name;
         public virtual Uri ImageURI { get; } = default;
         public virtual string ToolTip { get => Name; }
         public virtual object Badge { get; }
@@ -149,7 +146,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         public IEnumerable<NodeVM> GetNodesRecursive(bool includeSelf = false)
         {
-            if(includeSelf)
+            if (includeSelf)
                 yield return this;
 
             foreach (NodeVM childNode in Nodes)
@@ -190,8 +187,8 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         protected void DoFilter(IEnumerable<string> pathSegments, IEnumerable<string> filterSegments)
         {
-            List<string> myPath = new List<string>(pathSegments) { Name ?? "" };
-            
+            List<string> myPath = new List<string>(pathSegments) { SearchName ?? "" };
+
             bool satisfiesFilterDirectly = SatisfiesFilter(filterSegments, myPath);
 
             bool hasChildrenThatSatisfyFilter = false;
@@ -242,7 +239,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         // Internal prerequisites for allowing a node move. These need to be satisfied before CanMove is checked.
         internal bool CanMoveInternal(NodeVM proposedParent)
         {
-            return 
+            return
                 proposedParent != this // cannot move to self
                 && proposedParent != this.Parent // cannot move to the same parent
                 && FindScopeRoot(this) == FindScopeRoot(proposedParent) // move must be inside the same scope

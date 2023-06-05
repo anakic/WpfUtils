@@ -17,7 +17,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <AdornerDecorator>
-            <TextBox FontSize="9pt" x:Name="txtFilter" TextChanged="txtFilter_TextChanged" BorderThickness="1" Margin="5" Height="25" VerticalContentAlignment="Center">
+            <TextBox FontSize="9pt" x:Name="txtFilter" TextChanged="txtFilter_TextChanged" BorderThickness="1" Margin="5" Padding="2" Height="26" VerticalContentAlignment="Center">
                 <ador:WatermarkAdorner.Watermark>
                     <TextBlock>Filter</TextBlock>
                 </ador:WatermarkAdorner.Watermark>
