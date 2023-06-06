@@ -117,7 +117,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         #region core properties
         public virtual string SearchName => Name;
-        public virtual Uri ImageURI { get; } = default;
+        public virtual object Image { get; } = default;
         public virtual string ToolTip { get => Name; }
         public virtual object Badge { get; }
         public virtual bool IsBold { get; }

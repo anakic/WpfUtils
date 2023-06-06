@@ -22,7 +22,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         DispatcherFrame dispatcherFrame;
         private class RootNodeVM : NodeVM
         {
-            public override Uri ImageURI => default(Uri);
+            public override object Image => default(Uri);
 
             public override string ToolTip => null;
 

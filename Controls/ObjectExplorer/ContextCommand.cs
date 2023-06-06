@@ -13,7 +13,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         public virtual ObservableCollection<IContextMenuItem> SubmenuCommands { get; } = new ObservableCollection<IContextMenuItem>();
 
-        public abstract Uri ImageUri { get; }
+        public abstract object Image { get; }
 
         public event EventHandler CanExecuteChanged;
 
