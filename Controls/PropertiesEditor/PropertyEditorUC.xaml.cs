@@ -165,14 +165,6 @@ namespace Thingie.WPF.Controls.PropertiesEditor
                 return FindTemplateRoot(LogicalTreeHelper.GetParent(element));
         }
 
-        private static Window FindHostWindow(FrameworkElement control)
-        {
-            if (control is Window)
-                return (control as Window);
-            else
-                return FindHostWindow((FrameworkElement)LogicalTreeHelper.GetParent(control));
-        }
-
         private void customEdit_Click(object sender, RoutedEventArgs e)
         {
             var proxy = (e.OriginalSource as Button).DataContext as EditablePropertyProxy;
