@@ -31,7 +31,7 @@ namespace Thingie.WPF.Controls.PropertiesEditor.Proxies.Base
                 OnPropertyChanged(() => this.Value);
         }
 
-        public PropertyInfo Property { get; set; }
+        public virtual PropertyInfo Property { get; set; }
 
         public string Name { get; set; }
 

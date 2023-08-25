@@ -99,14 +99,7 @@
             <!-- the 4 choice modes -->
             <!-- 1. choice default mode-->
             <DataTemplate DataType="{x:Type pi:ChoicePropertyProxy}" x:Key="choiceProxy">
-                <ComboBox DisplayMemberPath="{Binding DisplayMemberPath}" HorizontalAlignment="Stretch" x:Name="PART_EDIT"
-                    ItemsSource="{Binding Values}" SelectedItem="{Binding Value}">
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Converter={locconv:ValueToDescriptionConverter}}" />
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+                <ComboBox DisplayMemberPath="{Binding DisplayMemberPath}" HorizontalAlignment="Stretch" x:Name="PART_EDIT" ItemsSource="{Binding Values}" SelectedItem="{Binding Value}"></ComboBox>
             </DataTemplate>
             <!-- choice async mode-->
             <DataTemplate DataType="{x:Type pi:ChoicePropertyProxy}" x:Key="choiceAsyncProxy">

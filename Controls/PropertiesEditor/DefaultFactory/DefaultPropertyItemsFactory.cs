@@ -78,6 +78,7 @@ namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory
 
                     var choiceProxy = proxy as ChoicePropertyProxy;
                     choiceProxy.DisplayMemberPath = choiceAtt.DisplayMemberPath;
+                    choiceProxy.DeselectItemText = choiceAtt.DeselectItemText;
                     choiceProxy.IsEditable = choiceAtt.IsTextEditable;
                     choiceProxy.IsAsync = choiceAtt.IsAsync;
                 }

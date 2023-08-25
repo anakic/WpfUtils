@@ -10,6 +10,8 @@ namespace Thingie.WPF.Controls.PropertiesEditor.DefaultFactory.Attributes
 	[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)]
     public class EditableChoiceAttribute : EditableAttribute
     {
+        public string DeselectItemText { get; set; }
+
         public IEnumerable Choices { get; private set; }
         public string ChoicesProperty { get; private set; }
         public Type TypeOfCollectionWithChoices { get; private set; }

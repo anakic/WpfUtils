@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using Thingie.WPF.Controls.PropertiesEditor.Proxies.Base;
 
 namespace Thingie.WPF.Controls.PropertiesEditor.Proxies
@@ -10,6 +11,8 @@ namespace Thingie.WPF.Controls.PropertiesEditor.Proxies
     {
         public bool IsEditable { get; set; }
         public bool IsAsync { get; set; }
+
+        public string DeselectItemText { get; set; }
 
         public string DisplayMemberPath { get; set; }
         public IEnumerable Values { get { return _getChoicesFunc(); } }
@@ -21,15 +24,55 @@ namespace Thingie.WPF.Controls.PropertiesEditor.Proxies
             _getChoicesFunc = () => choices;
         }
 
+        struct DeselectItem
+        {
+            private readonly string text;
+
+            public DeselectItem(string text)
+            {
+                this.text = text;
+            }
+
+            public override string ToString() => text;
+        }
+
+        public override object Value
+        {
+            get
+            {
+                var res = base.Value;
+                if (DeselectItemText != null && res == defaultValueLazy.Value)
+                    return new DeselectItem(DeselectItemText);
+                else
+                    return res;
+            }
+            set
+            {
+                if (value is DeselectItem)
+                    base.Value = defaultValueLazy.Value;
+                else
+                    base.Value = value;
+            }
+        }
+
+        private Lazy<object> defaultValueLazy;
+
         readonly string _choicePropertyName;
         public ChoicePropertyProxy(string choicePropertyName)
         {
+            defaultValueLazy = new Lazy<object>(() => Property.PropertyType.IsValueType ? Activator.CreateInstance(Property.PropertyType) : null);
+
             _choicePropertyName = choicePropertyName;
             _getChoicesFunc = () => 
             {
                 try
                 {
-                    return ((IEnumerable)Target.GetType().GetProperty(choicePropertyName).GetValue(Target, null)).OfType<object>().ToArray();
+                    var choices = ((IEnumerable)Target.GetType().GetProperty(choicePropertyName).GetValue(Target, null)).OfType<object>();
+                    if (!IsEditable && DeselectItemText != null)
+                    {
+                        choices = choices.Prepend(new DeselectItem(DeselectItemText));
+                    }
+                    return choices.ToArray();
                 }
                 catch(Exception ex)
                 {
