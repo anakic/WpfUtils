@@ -28,7 +28,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
-            dispatcher.Invoke(new System.Action(() => base.OnPropertyChanged(e)));
+            _ = dispatcher.BeginInvoke(new System.Action(() => base.OnPropertyChanged(e)));
         }
     }
 }
