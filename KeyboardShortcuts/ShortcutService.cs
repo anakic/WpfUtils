@@ -81,7 +81,13 @@ namespace Thingie.WPF.KeyboardShortcuts
         {
             try
             {
-                if (nCode == HC_ACTION)
+                // When pressing Enter to select an item in the windows clipboard history
+                // the following combination is true: lParam == 1, Ctrl+Enter is detected as pressed.
+                // We want to skip handling this, it's not for us. We don't want to prevent the
+                // clipboard history item to be activated. The clipboard is not a window it's an "overlay"
+                // (if ChatGPT is to be believed) so it does not have a different hwnd, so we must
+                // handle this situation here.
+                if (nCode == HC_ACTION && (lParam != new IntPtr(0x1) || !Keyboard.IsKeyDown(Key.Enter) || Keyboard.Modifiers != ModifierKeys.Control))
                 {
                     ShortcutHandle shortcutHandle = FindShortcut();
 
