@@ -136,6 +136,7 @@
     <Compile Include="Converters\MultiVisibilityToVisibilityConverter.cs" />
     <Compile Include="Converters\SingleItemToListConverter.cs" />
     <Compile Include="Converters\StringCapitalizationSeparatorConverter.cs" />
+    <Compile Include="CustomInitializeComponent.cs" />
     <Compile Include="DirHelpers.cs" />
     <Compile Include="INotifyHaveChanges.cs" />
     <Compile Include="KeyboardShortcuts\NativeMethods.cs" />

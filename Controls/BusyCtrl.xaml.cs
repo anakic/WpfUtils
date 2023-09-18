@@ -15,7 +15,7 @@ namespace Thingie.WPF.Controls
 
         public BusyCtrl()
         {
-            InitializeComponent();
+            this.AssemblySensitive_InitializeComponent("component/controls/busyctrl.xaml");
         }
     }
 }

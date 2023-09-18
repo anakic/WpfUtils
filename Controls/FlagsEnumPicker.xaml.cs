@@ -14,8 +14,7 @@ namespace Thingie.WPF.Controls
     {
         public FlagsEnumPicker()
         {
-            InitializeComponent();
-            
+            this.AssemblySensitive_InitializeComponent("component/controls/flagsenumpicker.xaml");
         }
 
         #region ICustomEditor Members

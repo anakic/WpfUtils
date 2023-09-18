@@ -9,7 +9,7 @@ namespace Thingie.WPF.Controls.PropertiesEditor
     {
         public EditObjectDialog()
         {
-            InitializeComponent();
+            this.AssemblySensitive_InitializeComponent("component/controls/propertieseditor/editobjectdialog.xaml");
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)

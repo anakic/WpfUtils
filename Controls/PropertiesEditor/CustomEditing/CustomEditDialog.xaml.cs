@@ -9,7 +9,7 @@ namespace Thingie.WPF.Controls.PropertiesEditor.CustomEditing
     {
         public CustomEditDialog()
         {
-            InitializeComponent();
+            this.AssemblySensitive_InitializeComponent("component/controls/propertieseditor/customediting/customeditdialog.xaml");
         }
 
         private void btnSave_Click(object sender, RoutedEventArgs e)

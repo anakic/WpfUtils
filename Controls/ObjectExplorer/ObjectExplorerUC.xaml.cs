@@ -66,7 +66,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
 
         public ObjectExplorerUC()
         {
-            InitializeComponent();
+            this.AssemblySensitive_InitializeComponent("component/controls/objectexplorer/objectexploreruc.xaml");
         }
 
         private void Update()

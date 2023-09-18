@@ -24,7 +24,7 @@ namespace Thingie.WPF.Controls
 
         public DbConnectionEditor()
         {
-            InitializeComponent();
+            this.AssemblySensitive_InitializeComponent("component/controls/dbconnectioneditor.xaml");
         }
 
         #region IPropertyEditor Members

@@ -104,7 +104,7 @@ namespace Thingie.WPF.Controls.PropertiesEditor
 
         public PropertiesEditorUC()
         {
-            InitializeComponent();
+            this.AssemblySensitive_InitializeComponent("component/controls/propertieseditor/propertyeditoruc.xaml");
             this.CommandBindings.Add(new CommandBinding(CommitCommand, CommitCommand_Executed, CommitCommand_CanExecute));
             this.CommandBindings.Add(new CommandBinding(CancelCommand, CancelCommand_Executed));
         }
