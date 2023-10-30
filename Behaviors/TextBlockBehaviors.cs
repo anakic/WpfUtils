@@ -6,6 +6,13 @@ namespace Thingie.WPF.Behaviors
 {
     public static class TextBlockBehaviors
     {
+        public static readonly DependencyProperty DesiredWidthProperty =
+            DependencyProperty.RegisterAttached(
+            "DesiredWidth",
+            typeof(double),
+            typeof(TextBlockBehaviors),
+            new PropertyMetadata((double)0));
+
         public static readonly DependencyProperty ShowTooltipIfTrimmedProperty =
             DependencyProperty.RegisterAttached(
             "ShowTooltipIfTrimmed",
@@ -23,10 +30,15 @@ namespace Thingie.WPF.Behaviors
             obj.SetValue(ShowTooltipIfTrimmedProperty, value);
         }
 
+        
         private static void OnShowTooltipIfTrimmedChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is TextBlock tb)
             {
+                tb.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
+                var width = tb.DesiredSize.Width;
+                tb.SetValue(DesiredWidthProperty, width);
+
                 if ((bool)e.NewValue)
                 {
                     tb.SizeChanged += TextBox_SizeChanged;
@@ -42,8 +54,7 @@ namespace Thingie.WPF.Behaviors
         {
             var tb = sender as TextBlock;
 
-            tb.Measure(new Size(Double.PositiveInfinity, Double.PositiveInfinity));
-            var width = tb.DesiredSize.Width;
+            var width = (double)tb.GetValue(DesiredWidthProperty);
 
             if (tb.ActualWidth < width)
             {
