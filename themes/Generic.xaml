@@ -29,4 +29,55 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="local:Flyout">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:Flyout">
+                    <Grid x:Name="PART_Root">
+                        <Rectangle x:Name="PART_Background"/>
+                        <Grid x:Name="PART_Content" HorizontalAlignment="Right" Width="250" Background="White" Visibility="Collapsed">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"></RowDefinition>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal" Margin="10" VerticalAlignment="Top">
+                                <Button x:Name="PART_CloseButton" HorizontalAlignment="Left" VerticalAlignment="Center" Height="32">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="Background" Value="Transparent"></Setter>
+                                            <Setter Property="Opacity" Value="0.5"></Setter>
+                                            <Setter Property="FontSize" Value="15" />
+                                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type Button}">
+                                                        <Border Background="{TemplateBinding Background}" Padding="2">
+                                                            <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" />
+                                                        </Border>
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Opacity" Value="1" />
+                                                            </Trigger>
+                                                            <Trigger Property="IsPressed" Value="True">
+                                                                <Setter Property="Background" Value="WhiteSmoke" />
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Button.Style>
+                                    <Image Source="/Thingie.WPF;component/Resources/Arrow_Right_32.png" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                                </Button>
+                                <TextBlock FontSize="22" VerticalAlignment="Center" Margin="5,0,0,0" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Header}"></TextBlock>
+                            </StackPanel>
+                            <ContentPresenter Margin="10,0,10,10" Grid.Row="1" Content="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Content}"/>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
 </ResourceDictionary>

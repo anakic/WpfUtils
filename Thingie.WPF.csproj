@@ -116,6 +116,7 @@
     <Compile Include="Behaviors\TextBlockBehaviors.cs" />
     <Compile Include="Behaviors\VirtualToggleButtonBehavior.cs" />
     <Compile Include="Behaviors\WindowBehaviors.cs" />
+    <Compile Include="Controls\Flyout.cs" />
     <Compile Include="Controls\ObjectExplorer\AsyncObservableCollection.cs" />
     <Compile Include="Controls\ObjectExplorer\ContextCommand.cs" />
     <Compile Include="Controls\ObjectExplorer\GroupNode.cs" />
@@ -292,6 +293,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\help.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Arrow_Right_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
