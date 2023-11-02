@@ -128,6 +128,9 @@
       <DependentUpon>ObjectExplorerUC.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ObjectExplorer\SortConverter.cs" />
+    <Compile Include="Controls\ProgressRing.xaml.cs">
+      <DependentUpon>ProgressRing.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PropertiesEditor\DefaultFactory\Attributes\EditableShortcutAttribute.cs" />
     <Compile Include="Controls\PropertiesEditor\Proxies\ShortcutPropertyProxy.cs" />
     <Compile Include="Controls\PropertiesEditor\WindowHelpers.cs" />
@@ -259,6 +262,10 @@
     <Page Include="Controls\ObjectExplorer\ObjectExplorerUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ProgressRing.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\PropertiesEditor\CustomEditing\CustomEditDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
