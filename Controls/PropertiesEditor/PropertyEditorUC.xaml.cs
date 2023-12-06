@@ -96,6 +96,8 @@ namespace Thingie.WPF.Controls.PropertiesEditor
             set { SetValue(TargetProperty, value); }
         }
 
+        public string NoPropertiesToShowMessage { get => txtNoPropertiesMsg.Text; set => txtNoPropertiesMsg.Text = value; }
+
         public static RoutedCommand CustomEditCommand = new RoutedCommand("Edit", typeof(PropertiesEditorUC));
 
         // Using a DependencyProperty as the backing store for Target.  This enables animation, styling, binding, etc...

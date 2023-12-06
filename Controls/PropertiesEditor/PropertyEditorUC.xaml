@@ -189,5 +189,8 @@
                 </GroupStyle>
             </ItemsControl.GroupStyle>
         </ItemsControl>
+        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="txtNoPropertiesMsg" Text="No properties to show or configure" Opacity="0.4"
+                   Visibility="{Binding Path=Count, Source={StaticResource propsCVS}, Converter={locconv:MapConverter '0:Visible;_default:Collapsed'}}">
+        </TextBlock>
     </Grid>
 </UserControl>
