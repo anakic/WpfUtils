@@ -62,11 +62,29 @@ namespace Thingie.WPF.Controls.ObjectExplorer
             (target as ObjectExplorerUC).Update();
         }
 
+        public NodeVM SelectedNode
+        {
+            get { return (NodeVM)GetValue(SelectedNodeProperty); }
+            set { SetValue(SelectedNodeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for SelectedNode.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty SelectedNodeProperty =
+            DependencyProperty.Register("SelectedNode", typeof(NodeVM), typeof(ObjectExplorerUC), new FrameworkPropertyMetadata(defaultValue: null, flags: FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, propertyChangedCallback: new PropertyChangedCallback(SelectedNodeeSet)));
+
+        public static void SelectedNodeeSet(DependencyObject target, DependencyPropertyChangedEventArgs args)
+        {
+            var tree = (target as ObjectExplorerUC).tree;
+            if (args.NewValue != tree.SelectedItem)
+                tree.SelectItem(args.NewValue);
+        }
+
         private NodeVM rootNode;
 
         public ObjectExplorerUC()
         {
             this.AssemblySensitive_InitializeComponent("component/controls/objectexplorer/objectexploreruc.xaml");
+            tree.SelectedItemChanged += (s, e) => SelectedNode = (NodeVM)tree.SelectedItem;
         }
 
         private void Update()

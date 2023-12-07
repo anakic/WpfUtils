@@ -8,11 +8,11 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         string searchName = string.Empty;
         public override string SearchName => searchName;
 
-        public override bool CheckboxEnabled => true;
+        public override bool CheckboxEnabled { get; }
 
         public override bool IsThreeState => false;
 
-        public GroupNode(string groupName, bool participatesInSearch)
+        public GroupNode(string groupName, bool participatesInSearch, bool checkboxEnabled = true)
             : base(groupName)
         {
             IsExpanded = true;
@@ -21,6 +21,7 @@ namespace Thingie.WPF.Controls.ObjectExplorer
                 searchName = groupName;
 
             this.Nodes.CollectionChanged += Nodes_CollectionChanged;
+            CheckboxEnabled = checkboxEnabled;
         }
 
         private void Nodes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
