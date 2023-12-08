@@ -75,8 +75,24 @@ namespace Thingie.WPF.Controls.ObjectExplorer
         public static void SelectedNodeeSet(DependencyObject target, DependencyPropertyChangedEventArgs args)
         {
             var tree = (target as ObjectExplorerUC).tree;
+
             if (args.NewValue != tree.SelectedItem)
-                tree.SelectItem(args.NewValue);
+            {
+                if (tree.IsLoaded)
+                    tree.SelectItem(args.NewValue);
+                else
+                {
+                    var selectedValue = args.NewValue;
+                    RoutedEventHandler loadHandler = null;
+                    loadHandler = (s, e) => 
+                    {
+                        tree.SelectItem(selectedValue);
+                        tree.Loaded -= loadHandler;
+                    };
+                    tree.Loaded += loadHandler;
+                }
+
+            }
         }
 
         private NodeVM rootNode;
